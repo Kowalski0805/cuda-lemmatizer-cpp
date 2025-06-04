@@ -17,9 +17,6 @@
 #include <cudf/wrappers/durations.hpp>
 #include <rmm/exec_policy.hpp>
 
-#include "lemmatizer_kernel.h"
-#include "../../include/icu_lowercase.h"
-
 struct GpuState;
 struct GpuTransition;
 static bool is_initialized = false;
@@ -79,41 +76,81 @@ std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
 
     auto strings_count = strs.size();
     if (strings_count == 0) {
-        return cudf::make_empty_column(cudf::data_type{cudf::type_id::INT32});
+        return cudf::make_empty_column(cudf::data_type{cudf::type_id::STRING});
     }
 
-    // the validity of the output matches the validity of the input
     rmm::device_buffer null_mask = cudf::copy_bitmask(strs);
 
-    // allocate the column that will contain the word count results
-    std::unique_ptr<cudf::column> result =
-      cudf::make_numeric_column(
-        cudf::data_type{cudf::type_id::INT32},
-        strs.size(),
-        std::move(null_mask),
-        strs.null_count());
-
-
-    // compute the word counts, writing into the result column data buffer
     auto stream = rmm::cuda_stream_default;
-    rmm::device_uvector<thrust::pair<char const*, cudf::size_type>> d_output(strs.size(), stream);
+    rmm::device_uvector<const char*> d_ptrs(strings_count, stream);
+    rmm::device_uvector<int32_t> d_lengths(strings_count, stream);
 
     auto strs_device_view = cudf::column_device_view::create(strs, stream);
     auto d_strs_view = *strs_device_view;
-    thrust::transform(
-      rmm::exec_policy(stream),
-      thrust::make_counting_iterator<cudf::size_type>(0),
-      thrust::make_counting_iterator<cudf::size_type>(strings_count),
-      result->mutable_view().data<cudf::size_type>(),
-      [d_strs_view, strs, d_output_ptr = d_output.data()] __device__(cudf::size_type idx) { d_output_ptr[idx] = d_lookup_kernel(d_strs_view, strs.size(), d_states, d_transitions, d_lemmas); }
+    auto policy = rmm::exec_policy(stream);
+
+    thrust::for_each_n(
+        d_ptrs.begin(),
+        d_ptrs.size(),
+        [d_strs_view, ptrs = d_ptrs.data(), lens = d_lengths.data()] __device__ (size_t idx) {
+            auto const word = d_strs_view.element<cudf::string_view>(idx);
+            int state = 0;
+            bool fail = false;
+
+            for (int i = 0; i < word.size_bytes(); ++i) {
+                char ch = word.data()[i];
+                const GpuState& s = d_states[state];
+                bool found = false;
+
+                for (int j = 0; j < s.num_transitions; ++j) {
+                    const GpuTransition& t = d_transitions[s.transition_start_idx + j];
+                    if (t.c == ch) {
+                        state = t.next_state;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    fail = true;
+                    break;
+                }
+            }
+
+            if (!fail) {
+                const GpuState& final_state = d_states[state];
+                if (final_state.lemma_offset >= 0) {
+                    for (int i = 0; i < MAX_WORD_LEN; ++i) {
+                        if (char c = d_lemmas[final_state.lemma_offset + i]; c == '\0') {
+                            ptrs[idx] = d_lemmas + final_state.lemma_offset;
+                            lens[idx] = i;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Fallback if lemma not found
+            ptrs[idx] = word.data();
+            lens[idx] = word.size_bytes();
+        }
+    );
+
+    auto offsets_col = std::make_unique<cudf::column>(
+        cudf::data_type{cudf::type_id::INT32},
+        strings_count + 1,
+        d_lengths.release(),
+        rmm::device_buffer{0, stream}, // no null mask
+        0
     );
 
     auto result_column = cudf::make_strings_column(
-        cudf::device_span<thrust::pair<char const*, cudf::size_type>>(d_output.data(), strs.size()),
-        stream,
-        rmm::mr::get_current_device_resource()
+        strings_count,
+        std::move(offsets_col),
+        d_ptrs.release(),
+        0,
+        rmm::device_buffer{0, stream}
     );
 
-
-    return result;
+    return result_column;
 }

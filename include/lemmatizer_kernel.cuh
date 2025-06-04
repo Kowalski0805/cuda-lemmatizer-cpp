@@ -11,7 +11,7 @@ __global__ void normalize_kernel(char* d_input, char* d_output,
                                  const char* dict_keys, const char* dict_vals,
                                  int num_words, int dict_size);
 
-__device__ void lookup_kernel(
+__global__ void lookup_kernel(
     cudf::column_device_view d_input,
     int num_words,
     const GpuState* states,
@@ -20,14 +20,13 @@ __device__ void lookup_kernel(
     thrust::pair<char const*, cudf::size_type>* d_output
 );
 
-__device__ void d_lookup_kernel(
+__device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     cudf::column_device_view d_input,
-    const int idx,
     const int num_words,
     const GpuState* states,
     const GpuTransition* transitions,
     const char* lemmas,
-    thrust::pair<char const*, cudf::size_type>* d_output
-)
+    const int idx
+);
 
 #endif //LEMMATIZER_KERNEL_CUH
