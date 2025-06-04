@@ -1,0 +1,5256 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "_deps/cudf-build/libcudf.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"target_link_options",
+			"target_link_libraries",
+			"rapids_cuda_set_runtime",
+			"find_package",
+			"rapids_find_package",
+			"add_dependencies",
+			"target_compile_options",
+			"target_compile_definitions",
+			"target_include_directories",
+			"set_source_files_properties",
+			"set_property"
+		],
+		"files" : 
+		[
+			"_deps/cudf-src/cpp/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/cuda/set_runtime.cmake",
+			"/opt/cmake-3.30.5/share/cmake-3.30/Modules/FindCUDAToolkit.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/find/package.cmake",
+			"_deps/rmm-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 331,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1168,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 967,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 943,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 955,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 69,
+				"parent" : 5
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 251,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 125,
+				"parent" : 7
+			},
+			{
+				"file" : 2,
+				"parent" : 8
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 1196,
+				"parent" : 9
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 4,
+				"line" : 102,
+				"parent" : 11
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 940,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 847,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 928,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 897,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 937,
+				"parent" : 0
+			},
+			{
+				"command" : 10,
+				"file" : 0,
+				"line" : 878,
+				"parent" : 0
+			},
+			{
+				"command" : 11,
+				"file" : 0,
+				"line" : 798,
+				"parent" : 0
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 809,
+				"parent" : 0
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 903,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++17 -fPIC -fvisibility=hidden -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-unknown-pragmas"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-error=deprecated-declarations"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				2,
+				3,
+				4,
+				5,
+				40,
+				43,
+				46,
+				48,
+				51,
+				56,
+				63,
+				70,
+				91,
+				95,
+				120,
+				121,
+				133,
+				134,
+				135,
+				142,
+				143,
+				146,
+				147,
+				149,
+				150,
+				153,
+				156,
+				162,
+				170,
+				173,
+				175,
+				179,
+				184,
+				186,
+				188,
+				189,
+				197,
+				198,
+				199,
+				201,
+				203,
+				205,
+				209,
+				210,
+				212,
+				214,
+				215,
+				217,
+				219,
+				220,
+				221,
+				225,
+				226,
+				227,
+				270,
+				283,
+				286,
+				297,
+				314,
+				320,
+				323,
+				324,
+				378,
+				379,
+				380,
+				402,
+				403,
+				411,
+				412,
+				414,
+				416,
+				448,
+				450,
+				451,
+				452,
+				453,
+				454,
+				455,
+				456,
+				457,
+				458,
+				459,
+				460
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-extended-lambda"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-relaxed-constexpr"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror=all-warnings"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-Wall,-Werror,-Wno-error=deprecated-declarations"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-diag-suppress=1407"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xfatbin=-compress-all"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-rdynamic"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CUDA",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				1,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				41,
+				42,
+				44,
+				45,
+				47,
+				49,
+				50,
+				52,
+				53,
+				54,
+				55,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				92,
+				93,
+				94,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				144,
+				145,
+				148,
+				151,
+				152,
+				154,
+				155,
+				157,
+				158,
+				159,
+				160,
+				161,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				171,
+				172,
+				174,
+				176,
+				177,
+				178,
+				180,
+				181,
+				182,
+				183,
+				185,
+				187,
+				190,
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				200,
+				202,
+				206,
+				207,
+				208,
+				211,
+				213,
+				216,
+				218,
+				222,
+				223,
+				228,
+				229,
+				230,
+				231,
+				232,
+				233,
+				234,
+				235,
+				236,
+				237,
+				238,
+				239,
+				240,
+				241,
+				242,
+				243,
+				244,
+				245,
+				246,
+				247,
+				248,
+				249,
+				250,
+				251,
+				252,
+				253,
+				254,
+				255,
+				256,
+				257,
+				258,
+				259,
+				260,
+				261,
+				262,
+				263,
+				264,
+				265,
+				266,
+				267,
+				268,
+				269,
+				271,
+				272,
+				273,
+				274,
+				275,
+				276,
+				277,
+				278,
+				279,
+				280,
+				281,
+				282,
+				284,
+				285,
+				287,
+				288,
+				289,
+				290,
+				291,
+				292,
+				293,
+				294,
+				295,
+				296,
+				298,
+				299,
+				300,
+				301,
+				302,
+				303,
+				304,
+				305,
+				306,
+				307,
+				308,
+				309,
+				310,
+				311,
+				312,
+				313,
+				315,
+				319,
+				322,
+				325,
+				326,
+				327,
+				328,
+				329,
+				330,
+				331,
+				332,
+				333,
+				334,
+				335,
+				336,
+				337,
+				338,
+				339,
+				340,
+				341,
+				342,
+				343,
+				344,
+				345,
+				346,
+				347,
+				348,
+				349,
+				350,
+				351,
+				352,
+				353,
+				354,
+				355,
+				356,
+				357,
+				358,
+				359,
+				360,
+				361,
+				362,
+				363,
+				364,
+				365,
+				366,
+				367,
+				368,
+				369,
+				370,
+				371,
+				372,
+				373,
+				374,
+				375,
+				376,
+				377,
+				381,
+				382,
+				383,
+				384,
+				385,
+				386,
+				387,
+				388,
+				389,
+				390,
+				391,
+				392,
+				393,
+				394,
+				395,
+				396,
+				397,
+				398,
+				399,
+				400,
+				401,
+				404,
+				405,
+				406,
+				407,
+				408,
+				409,
+				410,
+				413,
+				415,
+				417,
+				418,
+				419,
+				420,
+				421,
+				422,
+				423,
+				424,
+				425,
+				426,
+				427,
+				428,
+				429,
+				430,
+				431,
+				432,
+				433,
+				434,
+				435,
+				436,
+				437,
+				438,
+				439,
+				440,
+				441,
+				443,
+				444,
+				445,
+				446,
+				447,
+				449
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++17 -fPIC -fvisibility=hidden -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-unknown-pragmas"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-error=deprecated-declarations"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"backtrace" : 19,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				6,
+				442
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-extended-lambda"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-relaxed-constexpr"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror=all-warnings"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-Wall,-Werror,-Wno-error=deprecated-declarations"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-diag-suppress=1407"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xfatbin=-compress-all"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-rdynamic"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 20,
+					"define" : "CUDF_VERSION=25.04.00"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CUDA",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				204
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++17 -fPIC -fvisibility=hidden -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-unknown-pragmas"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Wno-error=deprecated-declarations"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 21,
+					"define" : "CUDF_VERSION=25.04.00"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 21,
+					"define" : "JITIFY_USE_CACHE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"backtrace" : 19,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				224
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-extended-lambda"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "--expt-relaxed-constexpr"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Werror=all-warnings"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-Wall,-Werror,-Wno-error=deprecated-declarations"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-diag-suppress=1407"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xfatbin=-compress-all"
+				},
+				{
+					"backtrace" : 14,
+					"fragment" : "-Xcompiler=-rdynamic"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "CUDF_LOG_ACTIVE_LEVEL=CUDF_LOG_LEVEL_INFO"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "JITIFY_PRINT_LOG=0"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUDA_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_BATCH_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_STREAM_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "KVIKIO_CUFILE_VERSION_API_FOUND"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NANOARROW_DEBUG"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "THRUST_FORCE_32_BIT_OFFSET_TYPE=1"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "ZSTD_STATIC_LINKING_ONLY=0N"
+				},
+				{
+					"backtrace" : 19,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"define" : "cudf_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/flatbuffers-src/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-src/cpp/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-build/src"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/zstd-src/build/cmake/../../lib"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/include"
+				}
+			],
+			"language" : "CUDA",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					4
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				316,
+				317,
+				318,
+				321
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 13,
+			"id" : "jitify_preprocess_run::@bfade8c76be598b1caff"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "rapids_logger::@17e9b7e9cda1654104ca"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "kvikio::@35a9db8654c7a6409b09"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "nanoarrow::@221da79c8235d262d78b"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "libzstd_static::@ce257b546cf505c1d048"
+		}
+	],
+	"id" : "cudf::@bfade8c76be598b1caff",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,--exclude-libs,libzstd.a",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/fatbin.ld",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "-L/usr/local/cuda-12.8/lib64",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-L/usr/local/cuda-12.8/targets/x86_64-linux/lib/stubs",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-L/usr/local/cuda-12.8/targets/x86_64-linux/lib",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,\"\\$$ORIGIN:/usr/local/cuda-12.8/lib64:/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/lib:/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-build:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-build:\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libz.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../nvcomp_proprietary_binary-src/lib/libnvcomp.so.4.2.0.11",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../kvikio-build/libkvikio.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../nanoarrow-build/libnanoarrow.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../zstd-build/lib/libzstd.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcudart.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../rapids_logger-build/librapids_logger.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/librt.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lcudadevrt",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lcudart",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "cudf",
+	"nameOnDisk" : "libcudf.so",
+	"paths" : 
+	{
+		"build" : "_deps/cudf-build",
+		"source" : "_deps/cudf-src/cpp"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				181,
+				182,
+				183,
+				184,
+				185,
+				186,
+				187,
+				188,
+				189,
+				190,
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				197,
+				198,
+				199,
+				200,
+				201,
+				202,
+				203,
+				204,
+				205,
+				206,
+				207,
+				208,
+				209,
+				210,
+				211,
+				212,
+				213,
+				214,
+				215,
+				216,
+				217,
+				218,
+				219,
+				220,
+				221,
+				222,
+				223,
+				224,
+				225,
+				226,
+				227,
+				228,
+				229,
+				230,
+				231,
+				232,
+				233,
+				234,
+				235,
+				236,
+				237,
+				238,
+				239,
+				240,
+				241,
+				242,
+				243,
+				244,
+				245,
+				246,
+				247,
+				248,
+				249,
+				250,
+				251,
+				252,
+				253,
+				254,
+				255,
+				256,
+				257,
+				258,
+				259,
+				260,
+				261,
+				262,
+				263,
+				264,
+				265,
+				266,
+				267,
+				268,
+				269,
+				270,
+				271,
+				272,
+				273,
+				274,
+				275,
+				276,
+				277,
+				278,
+				279,
+				280,
+				281,
+				282,
+				283,
+				284,
+				285,
+				286,
+				287,
+				288,
+				289,
+				290,
+				291,
+				292,
+				293,
+				294,
+				295,
+				296,
+				297,
+				298,
+				299,
+				300,
+				301,
+				302,
+				303,
+				304,
+				305,
+				306,
+				307,
+				308,
+				309,
+				310,
+				311,
+				312,
+				313,
+				314,
+				315,
+				316,
+				317,
+				318,
+				319,
+				320,
+				321,
+				322,
+				323,
+				324,
+				325,
+				326,
+				327,
+				328,
+				329,
+				330,
+				331,
+				332,
+				333,
+				334,
+				335,
+				336,
+				337,
+				338,
+				339,
+				340,
+				341,
+				342,
+				343,
+				344,
+				345,
+				346,
+				347,
+				348,
+				349,
+				350,
+				351,
+				352,
+				353,
+				354,
+				355,
+				356,
+				357,
+				358,
+				359,
+				360,
+				361,
+				362,
+				363,
+				364,
+				365,
+				366,
+				367,
+				368,
+				369,
+				370,
+				371,
+				372,
+				373,
+				374,
+				375,
+				376,
+				377,
+				378,
+				379,
+				380,
+				381,
+				382,
+				383,
+				384,
+				385,
+				386,
+				387,
+				388,
+				389,
+				390,
+				391,
+				392,
+				393,
+				394,
+				395,
+				396,
+				397,
+				398,
+				399,
+				400,
+				401,
+				402,
+				403,
+				404,
+				405,
+				406,
+				407,
+				408,
+				409,
+				410,
+				411,
+				412,
+				413,
+				414,
+				415,
+				416,
+				417,
+				418,
+				419,
+				420,
+				421,
+				422,
+				423,
+				424,
+				425,
+				426,
+				427,
+				428,
+				429,
+				430,
+				431,
+				432,
+				433,
+				434,
+				435,
+				436,
+				437,
+				438,
+				439,
+				440,
+				441,
+				442,
+				443,
+				444,
+				445,
+				446,
+				447,
+				448,
+				449,
+				450,
+				451,
+				452,
+				453,
+				454,
+				455,
+				456,
+				457,
+				458,
+				459,
+				460
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/aggregation/aggregation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/aggregation/aggregation.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/aggregation/result_cache.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/ast/expression_parser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/ast/expressions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/ast/operators.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 2,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/binaryop.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/ATan2.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Add.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/BitwiseAnd.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/BitwiseOr.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/BitwiseXor.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Div.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/FloorDiv.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Greater.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/GreaterEqual.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/IntPow.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Less.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/LessEqual.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/LogBase.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/LogicalAnd.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/LogicalOr.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Mod.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Mul.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullEquals.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullNotEquals.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullLogicalAnd.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullLogicalOr.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullMax.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/NullMin.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/PMod.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Pow.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/PyMod.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/ShiftLeft.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/ShiftRight.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/ShiftRightUnsigned.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/Sub.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/TrueDiv.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/binary_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/equality_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/binaryop/compiled/util.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/labeling/label_bins.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/bitmask/null_mask.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/bitmask/is_element_valid.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/column/column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/column/column_device_view.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/column/column_factories.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/column/column_factories.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/column/column_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/contiguous_split.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/copying/copy.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/copy.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/copy_range.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/gather.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/get_element.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/copying/pack.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/purge_nonempty_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/reverse.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/sample.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/scatter.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/shift.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/slice.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/copying/split.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/copying/segmented_shift.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/datetime/datetime_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/add_keys.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/decode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/detail/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/detail/merge.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/dictionary_column_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/dictionary_factories.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/encode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/remove_keys.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/replace.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/search.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/dictionary/set_keys.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/filling/calendrical_month_sequence.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/filling/fill.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/filling/repeat.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/filling/sequence.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/groupby.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_aggregations.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_aggregations_null.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_global_memory_aggs.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_global_memory_aggs_null.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_groupby.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_mapping_indices.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_mapping_indices_null.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/compute_shared_memory_aggs.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/create_sparse_results_table.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/flatten_single_pass_aggs.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/groupby.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/hash_compound_agg_finalizer.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/hash/sparse_to_dense_results.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/aggregate.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_argmax.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_argmin.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_collect.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_correlation.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_count.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_histogram.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_m2.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_max.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_min.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_merge_lists.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_merge_m2.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_nth_element.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_nunique.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_product.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_quantiles.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_std.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_sum.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_count_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_max_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_min_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_product_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_rank_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_replace_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/group_sum_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/host_udf_aggregation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/scan.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/groupby/sort/sort_helper.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/md5_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/murmurhash3_x86_32.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/murmurhash3_x64_128.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/sha1_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/sha224_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/sha256_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/sha384_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/sha512_hash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/xxhash_32.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/hash/xxhash_64.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/interop/dlpack.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/interop/arrow_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/interop/arrow_data_structures.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/to_arrow_device.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/to_arrow_host.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/from_arrow_device.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/from_arrow_host.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/from_arrow_host_strings.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/interop/from_arrow_stream.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/interop/to_arrow_schema.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/avro/avro.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/avro/avro_gpu.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/avro/reader_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/brotli_dict.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/comp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/comp.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/common.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/cpu_unbz2.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/debrotli.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/gpuinflate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/nvcomp_adapter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/nvcomp_adapter.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/snap.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/uncomp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/comp/unsnap.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/csv/csv_gpu.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/csv/durations.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/csv/reader_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/csv/writer_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/functions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/host_tree_algorithms.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/json_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/column_tree_construction.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/json_normalization.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/json_tree.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/nested_json_gpu.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/read_json.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/json/parser_features.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/process_tokens.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/json/write_json.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/aggregate_orc_metadata.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/dict_enc.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/orc.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/reader_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/reader_impl_chunking.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/reader_impl_decode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/reader_impl_helpers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/stats_enc.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/stripe_data.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/stripe_enc.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/stripe_init.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/datetime/timezone.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/orc/writer_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/arrow_schema_writer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/bloom_filter_reader.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/compact_protocol_reader.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/compact_protocol_writer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/decode_preprocess.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/page_data.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/chunk_dict.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/page_enc.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/page_hdr.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/page_delta_decode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/page_string_decode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/predicate_pushdown.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/reader.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/reader_impl.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/reader_impl_chunking.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/reader_impl_helpers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/reader_impl_preprocess.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/stats_filter_helpers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 3,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/writer_impl.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/writer_impl_helpers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/parquet/decode_fixed.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/statistics/orc_column_statistics.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/statistics/parquet_column_statistics.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/text/byte_range_info.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/text/data_chunk_source_factories.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/text/bgzip_data_chunk_source.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/text/bgzip_utils.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/text/multibyte_split.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/base64_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/column_buffer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/column_buffer_strings.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/config_utils.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/data_casting.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/data_sink.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/datasource.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/row_selection.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/type_inference.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/io/utilities/trie.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 4,
+			"path" : "_deps/cudf-src/cpp/src/jit/cache.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/jit/parser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/jit/runtime_support.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/jit/util.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/conditional_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/cross_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/distinct_hash_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/hash_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/join_utils.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_kernel.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_kernel_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_kernels_semi.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_semi.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_size_kernel.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/mixed_join_size_kernel_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/join/semi_join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/json/json_path.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/contains.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/combine/concatenate_list_elements.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/combine/concatenate_rows.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/copying/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/copying/copying.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/copying/gather.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/copying/segmented_gather.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/copying/scatter_helper.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/count_elements.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/dremel.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/explode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/extract.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/interleave_columns.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/lists_column_factories.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/lists_column_view.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/reverse.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/segmented_sort.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/sequences.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/set_operations.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/stream_compaction/apply_boolean_mask.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/stream_compaction/distinct.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/lists/utilities.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/merge/merge.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/partitioning/partitioning.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/partitioning/round_robin.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/quantiles/tdigest/tdigest.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/quantiles/tdigest/tdigest_aggregation.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/quantiles/tdigest/tdigest_column_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/quantiles/quantile.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/quantiles/quantiles.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/all.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/any.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/collect_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/histogram.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/max.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/mean.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/min.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/minmax.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/nth_element.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/product.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/reductions/reductions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/scan/rank_scan.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/scan/ewm.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/reductions/scan/scan.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/scan/scan_exclusive.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/scan/scan_inclusive.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/all.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/any.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/counts.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/max.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/mean.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/min.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/nunique.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/product.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/reductions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/std.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/sum.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/sum_of_squares.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/update_validity.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/segmented/var.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/std.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/sum.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/sum_of_squares.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reductions/var.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/replace/clamp.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/replace/nans.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/replace/nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/replace/replace.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reshape/byte_cast.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reshape/interleave_columns.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/reshape/tile.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/rolling/detail/optimized_unbounded_window.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/rolling/detail/rolling_collect_list.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 5,
+			"path" : "_deps/cudf-src/cpp/src/rolling/detail/rolling_fixed_window.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 5,
+			"path" : "_deps/cudf-src/cpp/src/rolling/detail/rolling_variable_window.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 5,
+			"path" : "_deps/cudf-src/cpp/src/rolling/grouped_rolling.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/rolling/range_rolling.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/rolling/range_window_bounds.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 5,
+			"path" : "_deps/cudf-src/cpp/src/rolling/rolling.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/round/round.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/scalar/scalar.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/scalar/scalar_factories.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/search/contains_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/search/contains_scalar.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/search/contains_table.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/search/search_ordered.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/is_sorted.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/rank.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/segmented_sort.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/sort_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/sort.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/stable_segmented_sort.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/stable_sort_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/sort/stable_sort.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/apply_boolean_mask.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/distinct.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/distinct_count.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/distinct_helpers.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/drop_nans.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/drop_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/stable_distinct.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/unique.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/unique_count.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/stream_compaction/unique_count_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/attributes.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/capitalize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/case.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/char_types/char_cases.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/char_types/char_types.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/combine/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/combine/join.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/combine/join_list_elements.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/contains.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_booleans.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_datetime.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_durations.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_fixed_point.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_floats.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_hex.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_integers.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_ipv4.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_urls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/convert/convert_lists.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/copying/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/copying/copying.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/copying/copy_range.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/copying/shift.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/count_matches.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/extract/extract.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/extract/extract_all.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/filling/fill.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/filter_chars.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/like.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/merge/merge.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/padding.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/strings/regex/regcomp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/strings/regex/regexec.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/strings/regex/regex_program.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/repeat_strings.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/backref_re.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/find_replace.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/multi.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/multi_re.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/replace.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/replace_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/replace_re.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/replace/replace_slice.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/reverse.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/scan/scan_inclusive.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/search/contains_multiple.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/search/findall.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/search/find.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/search/find_multiple.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/slice.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/split/partition.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/split/split.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/split/split_re.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/split/split_record.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/strings_column_factories.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/strings/strings_column_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/strings/strings_scalar_factories.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/strip.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/translate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/utilities.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/strings/wrap.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/structs/copying/concatenate.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/structs/scan/scan_inclusive.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/structs/structs_column_factories.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/structs/structs_column_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/structs/utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/table/row_operators.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/table/table.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/table/table_device_view.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/table/table_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/detokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/edit_distance.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/generate_ngrams.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/jaccard.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/minhash.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/ngrams_tokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/normalize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/replace.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/stemmer.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/bpe/byte_pair_encoding.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/bpe/load_merge_pairs.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/subword/data_normalizer.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/subword/load_hash_file.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/subword/subword_tokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/subword/wordpiece_tokenizer.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/tokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/vocabulary_tokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/text/wordpiece_tokenize.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/bools_to_mask.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/compute_column.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/encode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/mask_to_bools.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/nans_to_nulls.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/one_hot_encode.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transform/row_bit_count.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 2,
+			"path" : "_deps/cudf-src/cpp/src/transform/transform.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/transpose/transpose.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/unary/cast_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/unary/math_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/unary/nan_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/unary/null_ops.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/cuda.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/src/utilities/cuda_memcpy.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/default_stream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/host_memory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/host_worker_pool.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/linked_column.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/logger.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/prefetch.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/stacktrace.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/stream_pool.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/traits.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/type_checks.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/src/utilities/type_dispatcher.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

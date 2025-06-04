@@ -1,0 +1,237 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"rapids_cpm_bs_thread_pool",
+			"find_and_configure_thread_pool",
+			"include",
+			"rapids_export"
+		],
+		"files" : 
+		[
+			"_deps/rapids-cmake-src/rapids-cmake/cpm/bs_thread_pool.cmake",
+			"_deps/kvikio-src/cpp/cmake/thirdparty/get_thread_pool.cmake",
+			"_deps/kvikio-src/cpp/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/export/export.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 133,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 25,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 21,
+				"parent" : 3
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 116,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 119,
+				"parent" : 4
+			},
+			{
+				"command" : 0,
+				"file" : 3,
+				"line" : 297,
+				"parent" : 6
+			},
+			{
+				"command" : 0,
+				"file" : 3,
+				"line" : 322,
+				"parent" : 6
+			},
+			{
+				"command" : 0,
+				"file" : 2,
+				"line" : 249,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 2,
+				"line" : 255,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 2,
+				"line" : 256,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 286,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 3,
+				"line" : 297,
+				"parent" : 12
+			},
+			{
+				"command" : 0,
+				"file" : 3,
+				"line" : 322,
+				"parent" : 12
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/bs_thread_pool-src/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "bs_thread_pool",
+			"destination" : "lib/cmake/bs_thread_pool",
+			"exportName" : "bs_thread_pool-targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "rapids_bs_thread_pool::@35a9db8654c7a6409b09",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"_deps/kvikio-build/CMakeFiles/Export/263bafde5fb5df0605a4029d144a1d7d/bs_thread_pool-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "bs_thread_pool",
+			"destination" : "lib/cmake/bs_thread_pool",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/kvikio-build/rapids-cmake/bs_thread_pool/export/bs_thread_pool",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "kvikio",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/kvikio-build/libkvikio.so"
+			],
+			"targetId" : "kvikio::@35a9db8654c7a6409b09",
+			"targetIndex" : 52,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "kvikio",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "kvikio::@35a9db8654c7a6409b09",
+				"index" : 52
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 10,
+			"component" : "kvikio",
+			"destination" : "include/kvikio",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/kvikio-src/cpp/include/kvikio",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 11,
+			"component" : "kvikio",
+			"destination" : "include/kvikio",
+			"paths" : 
+			[
+				"_deps/kvikio-build/include/kvikio/version_config.hpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 13,
+			"component" : "kvikio",
+			"destination" : "lib/cmake/kvikio",
+			"exportName" : "kvikio-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "kvikio::@35a9db8654c7a6409b09",
+					"index" : 52
+				}
+			],
+			"paths" : 
+			[
+				"_deps/kvikio-build/CMakeFiles/Export/c0f23b84159189714b40c684d28cf46a/kvikio-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 14,
+			"component" : "kvikio",
+			"destination" : "lib/cmake/kvikio",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/kvikio-build/rapids-cmake/kvikio/export/kvikio",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/kvikio-build",
+		"source" : "_deps/kvikio-src/cpp"
+	}
+}

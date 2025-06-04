@@ -1,0 +1,3 @@
+include("/home/kowalski0805/UANLP/cuda_exe/cmake/CPM_0.40.0.cmake")
+CPMAddPackage("NAME;spdlog;VERSION;1.14.1;OPTIONS;BUILD_SHARED_LIBS OFF;SPDLOG_BUILD_SHARED OFF;GIT_REPOSITORY;https://github.com/gabime/spdlog.git;GIT_TAG;v1.14.1;GIT_SHALLOW;ON;EXCLUDE_FROM_ALL;ON;OPTIONS;SPDLOG_INSTALL OFF")
+set(spdlog_FOUND TRUE)

@@ -6,6 +6,7 @@
 #define LEMMATIZER_H
 // lemmatizer.h
 #pragma once
+#include <cudf/column/column.hpp>
 
 void init_trie_data();  // if you expose it too
 
@@ -13,7 +14,7 @@ void init_trie_data();  // if you expose it too
 extern "C" {
 #endif
 
-    void lemmatize_batch(const char** input_words, int num_words, char** output_words);
+    std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs);
 
 #ifdef __cplusplus
 }

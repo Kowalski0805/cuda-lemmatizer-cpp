@@ -2,50 +2,56 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <memory>
+#include <cudf/column/column.hpp>
 
 #include "icu_lowercase.h"
 #include "lemmatizer.h"  // includes lemmatize_batch()
 #include "structs.h"
 
-extern "C"
-JNIEXPORT jobjectArray JNICALL Java_org_example_GpuLemmatizer_lemmatize
-  (JNIEnv* env, jobject obj, jobjectArray jWords) {
+namespace {
 
-    int num_words = env->GetArrayLength(jWords);
+    constexpr char const* RUNTIME_ERROR_CLASS = "java/lang/RuntimeException";
 
-    // Prepare input: extract strings from jWords
-    std::vector<std::string> input_words(num_words);
-    const char** c_input = new const char*[num_words];
-
-    for (int i = 0; i < num_words; ++i) {
-        jstring jstr = (jstring)env->GetObjectArrayElement(jWords, i);
-        const char* utf = env->GetStringUTFChars(jstr, nullptr);
-        input_words[i] = std::string(utf);
-        env->ReleaseStringUTFChars(jstr, utf);
-        env->DeleteLocalRef(jstr);
-        c_input[i] = input_words[i].c_str();
+    /**
+     * @brief Throw a Java exception
+     *
+     * @param env The Java environment
+     * @param class_name The fully qualified Java class name of the exception
+     * @param msg The message string to associate with the exception
+     */
+    void throw_java_exception(JNIEnv* env, char const* class_name, char const* msg) {
+        jclass ex_class = env->FindClass(class_name);
+        if (ex_class != NULL) {
+            env->ThrowNew(ex_class, msg);
+        }
     }
 
-    // Allocate output array
-    char** c_output = new char*[num_words];
-    for (int i = 0; i < num_words; ++i)
-        c_output[i] = new char[MAX_WORD_LEN];
+}  // anonymous namespace
 
-    // Call CUDA-backed lemmatizer
-    lemmatize_batch(c_input, num_words, c_output);
 
-    // Create Java string array
-    jclass stringClass = env->FindClass("java/lang/String");
-    jobjectArray result = env->NewObjectArray(num_words, stringClass, nullptr);
+extern "C" {
+    JNIEXPORT jlong JNICALL
+    Java_org_example_GpuLemmatizer_lemmatize(JNIEnv* env, jclass, jlong jWords) {
+        // Use a try block to translate C++ exceptions into Java exceptions to avoid
+        // crashing the JVM if a C++ exception occurs.
+        try {
+            // turn the addresses into column_view pointers
+            auto strs = reinterpret_cast<cudf::column_view const*>(jWords);
 
-    for (int i = 0; i < num_words; ++i) {
-        jstring jlemma = env->NewStringUTF(c_output[i]);
-        env->SetObjectArrayElement(result, i, jlemma);
-        delete[] c_output[i];
+            // run the GPU kernel to compute the word counts
+            std::unique_ptr<cudf::column> result = lemmatize_batch(*strs);
+
+            // take ownership of the column and return the column address to Java
+            return reinterpret_cast<jlong>(result.release());
+        } catch (std::bad_alloc const& e) {
+            auto msg = std::string("Unable to allocate native memory: ") +
+                (e.what() == nullptr ? "" : e.what());
+            throw_java_exception(env, RUNTIME_ERROR_CLASS, msg.c_str());
+        } catch (std::exception const& e) {
+            auto msg = e.what() == nullptr ? "" : e.what();
+            throw_java_exception(env, RUNTIME_ERROR_CLASS, msg);
+        }
+        return 0;
     }
-
-    delete[] c_output;
-    delete[] c_input;
-
-    return result;
 }

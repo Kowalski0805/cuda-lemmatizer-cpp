@@ -1,0 +1,155 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"rapids_export"
+		],
+		"files" : 
+		[
+			"_deps/rapids_logger-src/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/export/export.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 105,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 110,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 117,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 120,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 160,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 297,
+				"parent" : 5
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 322,
+				"parent" : 5
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/rapids_logger-build/librapids_logger.so"
+			],
+			"targetId" : "rapids_logger::@17e9b7e9cda1654104ca",
+			"targetIndex" : 56,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "rapids_logger::@17e9b7e9cda1654104ca",
+				"index" : 56
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"_deps/rapids_logger-src/include/rapids_logger"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/rapids_logger",
+			"paths" : 
+			[
+				"_deps/rapids_logger-src/cmake/logger_macros.hpp.in"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/rapids_logger",
+			"paths" : 
+			[
+				"_deps/rapids_logger-src/cmake/create_logger_macros.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "rapids_logger",
+			"destination" : "lib/cmake/rapids_logger",
+			"exportName" : "rapids-logger-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "rapids_logger::@17e9b7e9cda1654104ca",
+					"index" : 56
+				}
+			],
+			"paths" : 
+			[
+				"_deps/rapids_logger-build/CMakeFiles/Export/362125c6f669085783c9e03abbae3e4a/rapids_logger-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "rapids_logger",
+			"destination" : "lib/cmake/rapids_logger",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/rapids_logger-build/rapids-cmake/rapids_logger/export/rapids_logger",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/rapids_logger-build",
+		"source" : "_deps/rapids_logger-src"
+	}
+}

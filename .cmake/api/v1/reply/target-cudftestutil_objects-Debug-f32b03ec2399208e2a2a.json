@@ -1,0 +1,462 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/io/metadata_utilities.cpp.o"
+		},
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/utilities/column_utilities.cu.o"
+		},
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/utilities/debug_utilities.cu.o"
+		},
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/utilities/random_seed.cpp.o"
+		},
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/utilities/table_utilities.cu.o"
+		},
+		{
+			"path" : "_deps/cudf-build/CMakeFiles/cudftestutil_objects.dir/tests/utilities/tdigest_utilities.cu.o"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries"
+		],
+		"files" : 
+		[
+			"_deps/cudf-src/cpp/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1059,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1060,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fPIC -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wno-unknown-pragmas"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wno-error=deprecated-declarations"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googlemock/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googlemock"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googletest/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googletest"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				3
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=c++20 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "--expt-extended-lambda"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "--expt-relaxed-constexpr"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Werror=all-warnings"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Xcompiler=-Wall,-Werror,-Wno-error=deprecated-declarations"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-diag-suppress=1407"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Xfatbin=-compress-all"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Xcompiler=-rdynamic"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/src"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cuco-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googlemock/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googlemock"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googletest/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/gtest-src/googletest"
+				}
+			],
+			"language" : "CUDA",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				4,
+				5
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "cudf::@bfade8c76be598b1caff"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "cudftest_default_stream::@bfade8c76be598b1caff"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "rapids_logger::@17e9b7e9cda1654104ca"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "gmock::@95dbcf5448046478eda4"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "gmock_main::@95dbcf5448046478eda4"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "gtest::@11ce2936600882345026"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "gtest_main::@11ce2936600882345026"
+		}
+	],
+	"id" : "cudftestutil_objects::@bfade8c76be598b1caff",
+	"name" : "cudftestutil_objects",
+	"paths" : 
+	{
+		"build" : "_deps/cudf-build",
+		"source" : "_deps/cudf-src/cpp"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/tests/io/metadata_utilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/column_utilities.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/debug_utilities.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/random_seed.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/table_utilities.cu",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/tdigest_utilities.cu",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "OBJECT_LIBRARY"
+}

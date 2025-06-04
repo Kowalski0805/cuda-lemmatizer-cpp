@@ -9,11 +9,11 @@
 #include "structs.h"
 
 extern "C" void launch_lookup_kernel(
-    const char* d_input,
+    cudf::column_device_view const &d_input,
     int num_words,
     const GpuState* d_states,
     const GpuTransition* d_transitions,
     const char* d_lemmas,
-    char* d_output
+    thrust::pair<char const*, cudf::size_type>* d_output
 );
 #endif //LEMMATIZER_KERNEL_H

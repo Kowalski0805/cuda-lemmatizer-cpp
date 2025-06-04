@@ -8,6 +8,9 @@
 #include <vector>
 #include <cstring>
 #include <fstream>
+#include <cudf/column/column_device_view.cuh>
+#include <cudf/strings/string_view.hpp>
+
 #include "structs.h"
 
 
@@ -88,24 +91,22 @@ __global__ void normalize_kernel(char* d_input, char* d_output, const char* dict
 }
 
 __global__ void lookup_kernel(
-    const char* input,  // input words (flat array)
-    int num_words,
+    cudf::column_device_view d_input,
+    const int num_words,
     const GpuState* states,
     const GpuTransition* transitions,
     const char* lemmas,
-    char* output         // output buffer (flat array)
+    thrust::pair<char const*, cudf::size_type>* d_output
 ) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= num_words) return;
 
-    const char* word = input + idx * MAX_WORD_LEN;
-    char* result = output + idx * MAX_WORD_LEN;
-
+    auto const word = d_input.element<cudf::string_view>(idx);
     int state = 0;
 
     // Traverse the trie
-    for (int i = 0; i < MAX_WORD_LEN && word[i] != '\0'; ++i) {
-        char ch = word[i];
+    for (int i = 0; i < word.size_bytes(); ++i) {
+        char ch = word.byte_offset(i);
         const GpuState& s = states[state];
         bool found = false;
 
@@ -120,10 +121,8 @@ __global__ void lookup_kernel(
 
         if (!found) {
             // Fallback to input if word not found
-            for (int k = 0; k < MAX_WORD_LEN; ++k) {
-                result[k] = word[k];
-                if (word[k] == '\0') break;
-            }
+            cudf::string_view s = d_input.element<cudf::string_view>(idx);
+            d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
             return;
         }
     }
@@ -132,23 +131,72 @@ __global__ void lookup_kernel(
     const GpuState& final_state = states[state];
     if (final_state.lemma_offset >= 0) {
         for (int i = 0; i < MAX_WORD_LEN; ++i) {
-            char c = lemmas[final_state.lemma_offset + i];
-            result[i] = c;
-            if (c == '\0') break;
+            if (char c = lemmas[final_state.lemma_offset + i]; c == '\0') {
+                d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, i);
+            }
         }
     } else {
         // No lemma — fallback
-        for (int k = 0; k < MAX_WORD_LEN; ++k) {
-            result[k] = word[k];
-            if (word[k] == '\0') break;
-        }
+        cudf::string_view s = d_input.element<cudf::string_view>(idx);
+        d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
     }
 }
 
+__device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
+    cudf::column_device_view d_input,
+    const int num_words,
+    const GpuState* states,
+    const GpuTransition* transitions,
+    const char* lemmas,
+    const int idx
+) {
+    if (idx >= num_words) return thrust::make_pair(nullptr, 0);
+
+    auto const word = d_input.element<cudf::string_view>(idx);
+    int state = 0;
+
+    // Traverse the trie
+    for (int i = 0; i < word.size_bytes(); ++i) {
+        char ch = word.byte_offset(i);
+        const GpuState& s = states[state];
+        bool found = false;
+
+        for (int j = 0; j < s.num_transitions; ++j) {
+            const GpuTransition& t = transitions[s.transition_start_idx + j];
+            if (t.c == ch) {
+                state = t.next_state;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            // Fallback to input if word not found
+            cudf::string_view s = d_input.element<cudf::string_view>(idx);
+            return thrust::make_pair(s.data(), s.size_bytes());
+        }
+    }
+
+    // Final state reached — copy lemma if found
+    const GpuState& final_state = states[state];
+    if (final_state.lemma_offset >= 0) {
+        for (int i = 0; i < MAX_WORD_LEN; ++i) {
+            if (char c = lemmas[final_state.lemma_offset + i]; c == '\0') {
+                return thrust::make_pair(lemmas + final_state.lemma_offset, i);
+            }
+        }
+    } else {
+        // No lemma — fallback
+        cudf::string_view s = d_input.element<cudf::string_view>(idx);
+        return thrust::make_pair(s.data(), s.size_bytes());
+    }
+    return thrust::make_pair(nullptr, 0);
+}
+
 extern "C" void launch_lookup_kernel(
-    const char* d_input, int num_words,
+    cudf::column_device_view const &d_input, int num_words,
     const GpuState* d_states, const GpuTransition* d_transitions,
-    const char* d_lemmas, char* d_output)
+    const char* d_lemmas, thrust::pair<char const*, cudf::size_type>* d_output)
 {
     int threads = 128;
     int blocks = (num_words + threads - 1) / threads;

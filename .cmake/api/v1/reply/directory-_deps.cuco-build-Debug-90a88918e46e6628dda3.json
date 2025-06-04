@@ -1,0 +1,113 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"rapids_export"
+		],
+		"files" : 
+		[
+			"_deps/cuco-src/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/export/export.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 139,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 140,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 142,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 297,
+				"parent" : 3
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 322,
+				"parent" : 3
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include/cuco",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cuco-src/include/cuco",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include/cuco",
+			"paths" : 
+			[
+				"_deps/cuco-build/include/cuco/version_config.hpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "cuco",
+			"destination" : "lib/cmake/cuco",
+			"exportName" : "cuco-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "cuco::@5371f96da57212545bc6",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"_deps/cuco-build/CMakeFiles/Export/a859f1bba42d9b2f1dc9b3f54e012f27/cuco-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "cuco",
+			"destination" : "lib/cmake/cuco",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cuco-build/rapids-cmake/cuco/export/cuco",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/cuco-build",
+		"source" : "_deps/cuco-src"
+	}
+}

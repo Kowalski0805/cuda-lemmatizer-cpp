@@ -1,0 +1,318 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "_deps/cudf-build/libcudftest_default_stream.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"target_link_libraries",
+			"rapids_cuda_set_runtime",
+			"find_package",
+			"rapids_find_package"
+		],
+		"files" : 
+		[
+			"_deps/cudf-src/cpp/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/cuda/set_runtime.cmake",
+			"/opt/cmake-3.30.5/share/cmake-3.30/Modules/FindCUDAToolkit.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/find/package.cmake",
+			"_deps/rmm-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 979,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1179,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 998,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 1003,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 69,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 251,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 125,
+				"parent" : 6
+			},
+			{
+				"file" : 2,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 1196,
+				"parent" : 8
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 943,
+				"parent" : 0
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 102,
+				"parent" : 11
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++17 -fPIC -fdiagnostics-color=always"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "BS_THREAD_POOL_ENABLE_PAUSE=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "THRUST_DISABLE_ABI_NAMESPACE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "THRUST_HOST_SYSTEM=THRUST_HOST_SYSTEM_CPP"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "THRUST_IGNORE_ABI_NAMESPACE_ERROR"
+				},
+				{
+					"define" : "cudftest_default_stream_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/dlpack-src/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/jitify-src"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-src/cpp/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/thrust/thrust/cmake/../.."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx/../../../include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/cccl-src/cub/cub/cmake/../.."
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-src/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-src/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/rmm-build/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvtx3-src/c/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/kowalski0805/UANLP/cuda_exe/_deps/bs_thread_pool-src/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					3
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "cudf::@bfade8c76be598b1caff"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "rapids_logger::@17e9b7e9cda1654104ca"
+		}
+	],
+	"id" : "cudftest_default_stream::@bfade8c76be598b1caff",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,\"\\$$ORIGIN:/home/kowalski0805/UANLP/cuda_exe/_deps/cudf-build:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/home/kowalski0805/UANLP/cuda_exe/_deps/rapids_logger-build:/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/lib:/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-build:\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "libcudf.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcudart.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcudart.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/librt.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "../rapids_logger-build/librapids_logger.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-Wl,-rpath-link,/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/lib:/home/kowalski0805/UANLP/cuda_exe/_deps/kvikio-build",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "cudftest_default_stream",
+	"nameOnDisk" : "libcudftest_default_stream.so",
+	"paths" : 
+	{
+		"build" : "_deps/cudf-build",
+		"source" : "_deps/cudf-src/cpp"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "_deps/cudf-src/cpp/tests/utilities/default_stream.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

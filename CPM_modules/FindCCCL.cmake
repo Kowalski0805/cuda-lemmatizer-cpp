@@ -1,0 +1,3 @@
+include("/home/kowalski0805/UANLP/cuda_exe/cmake/CPM_0.40.0.cmake")
+CPMAddPackage("NAME;CCCL;VERSION;2.7.0;FIND_PACKAGE_ARGUMENTS;EXACT;GIT_REPOSITORY;https://github.com/NVIDIA/cccl.git;GIT_TAG;v2.7.0;GIT_SHALLOW;OFF;PATCH_COMMAND;/opt/cmake-3.30.5/bin/cmake;-P;/home/kowalski0805/UANLP/cuda_exe/rapids-cmake/patches/CCCL/patch.cmake;EXCLUDE_FROM_ALL;OFF;OPTIONS;CCCL_TOPLEVEL_PROJECT OFF;CCCL_ENABLE_INSTALL_RULES ON")
+set(CCCL_FOUND TRUE)

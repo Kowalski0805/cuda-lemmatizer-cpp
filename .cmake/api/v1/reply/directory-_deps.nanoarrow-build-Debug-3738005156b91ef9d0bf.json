@@ -1,0 +1,156 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"_deps/nanoarrow-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 79,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 145,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 159,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 407,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 729,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 730,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "nanoarrow_coverage_config::@221da79c8235d262d78b",
+				"index" : 0
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include/nanoarrow/common",
+			"paths" : 
+			[
+				"_deps/nanoarrow-src/src/nanoarrow/common/inline_array.h",
+				"_deps/nanoarrow-src/src/nanoarrow/common/inline_buffer.h",
+				"_deps/nanoarrow-src/src/nanoarrow/common/inline_types.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include/nanoarrow",
+			"paths" : 
+			[
+				"_deps/nanoarrow-src/src/nanoarrow/nanoarrow.h",
+				"_deps/nanoarrow-src/src/nanoarrow/nanoarrow.hpp",
+				"_deps/nanoarrow-build/src/nanoarrow/nanoarrow_config.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/nanoarrow-build/libnanoarrow.a"
+			],
+			"targetId" : "nanoarrow::@221da79c8235d262d78b",
+			"targetIndex" : 55,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "nanoarrow::@221da79c8235d262d78b",
+				"index" : 55
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/nanoarrow",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nanoarrow-build/lib/cmake/nanoarrow",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/nanoarrow",
+			"exportName" : "nanoarrow-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "nanoarrow_coverage_config::@221da79c8235d262d78b",
+					"index" : 0
+				},
+				{
+					"id" : "nanoarrow::@221da79c8235d262d78b",
+					"index" : 55
+				}
+			],
+			"paths" : 
+			[
+				"_deps/nanoarrow-build/CMakeFiles/Export/ec5a217663361a61cc4eea76cfc6cbdf/nanoarrow-targets.cmake"
+			],
+			"type" : "export"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/nanoarrow-build",
+		"source" : "_deps/nanoarrow-src"
+	}
+}

@@ -1,0 +1,3 @@
+include("/home/kowalski0805/UANLP/cuda_exe/cmake/CPM_0.40.0.cmake")
+CPMAddPackage("NAME;zstd;VERSION;1.5.7;GIT_REPOSITORY;https://github.com/facebook/zstd.git;GIT_TAG;v1.5.7;GIT_SHALLOW;FALSE;SOURCE_SUBDIR;build/cmake;OPTIONS;ZSTD_BUILD_STATIC ON;ZSTD_BUILD_SHARED OFF;ZSTD_BUILD_TESTS OFF;ZSTD_BUILD_PROGRAMS OFF")
+set(zstd_FOUND TRUE)

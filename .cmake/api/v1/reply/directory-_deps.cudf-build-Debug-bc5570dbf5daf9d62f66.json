@@ -1,0 +1,795 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"create_logger_macros",
+			"rapids_cpm_nvtx3",
+			"find_and_configure_nvtx",
+			"include",
+			"rapids_export",
+			"rapids_cpm_nvcomp",
+			"find_and_configure_nvcomp",
+			"rapids_cpm_cccl",
+			"find_and_configure_cccl",
+			"rapids_export_component"
+		],
+		"files" : 
+		[
+			"_deps/rapids_logger-src/cmake/create_logger_macros.cmake",
+			"_deps/cudf-src/cpp/CMakeLists.txt",
+			"_deps/rapids-cmake-src/rapids-cmake/cpm/nvtx3.cmake",
+			"_deps/cudf-src/cpp/cmake/thirdparty/get_nvtx.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/export/export.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/cpm/nvcomp.cmake",
+			"_deps/cudf-src/cpp/cmake/thirdparty/get_nvcomp.cmake",
+			"_deps/cccl-src/thrust/cmake/ThrustInstallRules.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/cpm/cccl.cmake",
+			"_deps/cudf-src/cpp/cmake/thirdparty/get_cccl.cmake",
+			"_deps/cccl-src/cub/cmake/CubInstallRules.cmake",
+			"_deps/cccl-src/libcudacxx/cmake/libcudacxxInstallRules.cmake",
+			"_deps/rapids-cmake-src/rapids-cmake/export/detail/component.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 278,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 29,
+				"parent" : 1
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 283,
+				"parent" : 0
+			},
+			{
+				"file" : 3,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 3,
+				"line" : 25,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 21,
+				"parent" : 5
+			},
+			{
+				"command" : 0,
+				"file" : 2,
+				"line" : 107,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 109,
+				"parent" : 6
+			},
+			{
+				"command" : 0,
+				"file" : 4,
+				"line" : 297,
+				"parent" : 8
+			},
+			{
+				"command" : 0,
+				"file" : 4,
+				"line" : 322,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 285,
+				"parent" : 0
+			},
+			{
+				"file" : 6,
+				"parent" : 11
+			},
+			{
+				"command" : 7,
+				"file" : 6,
+				"line" : 31,
+				"parent" : 12
+			},
+			{
+				"command" : 6,
+				"file" : 6,
+				"line" : 23,
+				"parent" : 13
+			},
+			{
+				"command" : 0,
+				"file" : 5,
+				"line" : 226,
+				"parent" : 14
+			},
+			{
+				"command" : 0,
+				"file" : 5,
+				"line" : 227,
+				"parent" : 14
+			},
+			{
+				"command" : 0,
+				"file" : 5,
+				"line" : 230,
+				"parent" : 14
+			},
+			{
+				"command" : 0,
+				"file" : 5,
+				"line" : 231,
+				"parent" : 14
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 287,
+				"parent" : 0
+			},
+			{
+				"file" : 9,
+				"parent" : 19
+			},
+			{
+				"command" : 9,
+				"file" : 9,
+				"line" : 41,
+				"parent" : 20
+			},
+			{
+				"command" : 8,
+				"file" : 9,
+				"line" : 37,
+				"parent" : 21
+			},
+			{
+				"command" : 4,
+				"file" : 8,
+				"line" : 119,
+				"parent" : 22
+			},
+			{
+				"file" : 7,
+				"parent" : 23
+			},
+			{
+				"command" : 0,
+				"file" : 7,
+				"line" : 7,
+				"parent" : 24
+			},
+			{
+				"command" : 0,
+				"file" : 7,
+				"line" : 14,
+				"parent" : 24
+			},
+			{
+				"command" : 0,
+				"file" : 7,
+				"line" : 42,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 8,
+				"line" : 120,
+				"parent" : 22
+			},
+			{
+				"file" : 10,
+				"parent" : 28
+			},
+			{
+				"command" : 0,
+				"file" : 10,
+				"line" : 7,
+				"parent" : 29
+			},
+			{
+				"command" : 0,
+				"file" : 10,
+				"line" : 14,
+				"parent" : 29
+			},
+			{
+				"command" : 0,
+				"file" : 10,
+				"line" : 41,
+				"parent" : 29
+			},
+			{
+				"command" : 4,
+				"file" : 8,
+				"line" : 124,
+				"parent" : 22
+			},
+			{
+				"file" : 11,
+				"parent" : 33
+			},
+			{
+				"command" : 0,
+				"file" : 11,
+				"line" : 13,
+				"parent" : 34
+			},
+			{
+				"command" : 0,
+				"file" : 11,
+				"line" : 17,
+				"parent" : 34
+			},
+			{
+				"command" : 0,
+				"file" : 11,
+				"line" : 23,
+				"parent" : 34
+			},
+			{
+				"command" : 0,
+				"file" : 11,
+				"line" : 53,
+				"parent" : 34
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1067,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1068,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1168,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1173,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1179,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1187,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1192,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 1193,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 1225,
+				"parent" : 0
+			},
+			{
+				"command" : 10,
+				"file" : 4,
+				"line" : 257,
+				"parent" : 47
+			},
+			{
+				"command" : 0,
+				"file" : 12,
+				"line" : 52,
+				"parent" : 48
+			},
+			{
+				"command" : 0,
+				"file" : 12,
+				"line" : 58,
+				"parent" : 48
+			},
+			{
+				"command" : 0,
+				"file" : 4,
+				"line" : 297,
+				"parent" : 47
+			},
+			{
+				"command" : 0,
+				"file" : 4,
+				"line" : 322,
+				"parent" : 47
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include/cudf",
+			"paths" : 
+			[
+				"_deps/cudf-build/include/cudf/logger_macros.hpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nvtx3-src/c/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "nvtx3",
+			"destination" : "lib/cmake/nvtx3",
+			"exportName" : "nvtx3-targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "nvtx3-c::@23b3d61197575d4c2fb3",
+					"index" : 0
+				},
+				{
+					"id" : "nvtx3-cpp::@23b3d61197575d4c2fb3",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"_deps/cudf-build/CMakeFiles/Export/fdf31b5e8b73156b1a31a2824d386426/nvtx3-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 10,
+			"component" : "nvtx3",
+			"destination" : "lib/cmake/nvtx3",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cudf-build/rapids-cmake/nvtx3/export/nvtx3",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 15,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nvcomp_proprietary_binary-src/lib",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 16,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nvcomp_proprietary_binary-src/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 17,
+			"component" : "Unspecified",
+			"destination" : "info",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nvcomp_proprietary_binary-src/NOTICE",
+					"to" : "NVCOMP_NOTICE"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 18,
+			"component" : "Unspecified",
+			"destination" : "info",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/nvcomp_proprietary_binary-src/LICENSE",
+					"to" : "NVCOMP_LICENSE"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 25,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/rapids",
+			"paths" : 
+			[
+				"_deps/cccl-src/thrust/thrust"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 26,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake/thrust",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cccl-src/thrust/thrust/cmake",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 27,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake/thrust",
+			"paths" : 
+			[
+				"_deps/cccl-build/thrust/cmake/thrust-header-search.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 30,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/rapids",
+			"paths" : 
+			[
+				"_deps/cccl-src/cub/cub"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 31,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake/cub",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cccl-src/cub/cub/cmake",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 32,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake/cub",
+			"paths" : 
+			[
+				"_deps/cccl-build/cub/cmake/cub-header-search.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 35,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/rapids/libcudacxx",
+			"paths" : 
+			[
+				"_deps/cccl-src/libcudacxx/include/cuda"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 36,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/rapids/libcudacxx",
+			"paths" : 
+			[
+				"_deps/cccl-src/libcudacxx/include/nv"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 37,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake",
+			"paths" : 
+			[
+				"_deps/cccl-src/libcudacxx/lib/cmake/libcudacxx"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 38,
+			"component" : "Unspecified",
+			"destination" : "include/libcudf/lib/rapids/cmake/libcudacxx",
+			"paths" : 
+			[
+				"_deps/cccl-build/lib/cmake/libcudacxx/libcudacxx-header-search.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 39,
+			"component" : "Unspecified",
+			"destination" : "src/cudftestutil/io",
+			"paths" : 
+			[
+				"_deps/cudf-src/cpp/tests/io/metadata_utilities.cpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 40,
+			"component" : "Unspecified",
+			"destination" : "src/cudftestutil/utilities",
+			"paths" : 
+			[
+				"_deps/cudf-src/cpp/tests/utilities/column_utilities.cu",
+				"_deps/cudf-src/cpp/tests/utilities/debug_utilities.cu",
+				"_deps/cudf-src/cpp/tests/utilities/random_seed.cpp",
+				"_deps/cudf-src/cpp/tests/utilities/table_utilities.cu",
+				"_deps/cudf-src/cpp/tests/utilities/tdigest_utilities.cu"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 41,
+			"component" : "cudf",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/cudf-build/libcudf.so"
+			],
+			"targetId" : "cudf::@bfade8c76be598b1caff",
+			"targetIndex" : 33,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 41,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudf::@bfade8c76be598b1caff",
+				"index" : 33
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 42,
+			"component" : "cudf",
+			"destination" : "include/cudf",
+			"paths" : 
+			[
+				"_deps/cudf-build/include/cudf/version_config.hpp"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 43,
+			"component" : "cudf",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/cudf-build/libcudftest_default_stream.so"
+			],
+			"targetId" : "cudftest_default_stream::@bfade8c76be598b1caff",
+			"targetIndex" : 36,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 43,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudftest_default_stream::@bfade8c76be598b1caff",
+				"index" : 36
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 43,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudftestutil::@bfade8c76be598b1caff",
+				"index" : 0
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 43,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudftestutil_impl::@bfade8c76be598b1caff",
+				"index" : 0
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 44,
+			"component" : "cudf",
+			"destination" : "include",
+			"paths" : 
+			[
+				"_deps/cudf-src/cpp/include/cudf",
+				"_deps/cudf-src/cpp/include/cudf_test",
+				"_deps/cudf-src/cpp/include/nvtext"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 45,
+			"component" : "cudf",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/cudf-build/libcudf_identify_stream_usage_mode_cudf.so"
+			],
+			"targetId" : "cudf_identify_stream_usage_mode_cudf::@bfade8c76be598b1caff",
+			"targetIndex" : 34,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 45,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudf_identify_stream_usage_mode_cudf::@bfade8c76be598b1caff",
+				"index" : 34
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 46,
+			"component" : "cudf",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/cudf-build/libcudf_identify_stream_usage_mode_testing.so"
+			],
+			"targetId" : "cudf_identify_stream_usage_mode_testing::@bfade8c76be598b1caff",
+			"targetIndex" : 35,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 46,
+			"component" : "cudf",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "cudf_identify_stream_usage_mode_testing::@bfade8c76be598b1caff",
+				"index" : 35
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 49,
+			"component" : "testing",
+			"destination" : "lib/cmake/cudf",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cudf-build/rapids-cmake/cudf/export/testing",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 50,
+			"component" : "testing",
+			"destination" : "lib/cmake/cudf",
+			"exportName" : "cudf-testing-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "cudftest_default_stream::@bfade8c76be598b1caff",
+					"index" : 36
+				},
+				{
+					"id" : "cudftestutil::@bfade8c76be598b1caff",
+					"index" : 0
+				},
+				{
+					"id" : "cudftestutil_impl::@bfade8c76be598b1caff",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"_deps/cudf-build/CMakeFiles/Export/6206975a57f9e7d23984489081b4db43/cudf-testing-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 51,
+			"component" : "cudf",
+			"destination" : "lib/cmake/cudf",
+			"exportName" : "cudf-exports",
+			"exportTargets" : 
+			[
+				{
+					"id" : "cudf::@bfade8c76be598b1caff",
+					"index" : 33
+				}
+			],
+			"paths" : 
+			[
+				"_deps/cudf-build/CMakeFiles/Export/6206975a57f9e7d23984489081b4db43/cudf-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 52,
+			"component" : "cudf",
+			"destination" : "lib/cmake/cudf",
+			"paths" : 
+			[
+				{
+					"from" : "_deps/cudf-build/rapids-cmake/cudf/export/cudf",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/cudf-build",
+		"source" : "_deps/cudf-src/cpp"
+	}
+}

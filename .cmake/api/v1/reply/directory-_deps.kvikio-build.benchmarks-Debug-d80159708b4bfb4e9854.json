@@ -1,0 +1,65 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"kvikio_add_benchmark"
+		],
+		"files" : 
+		[
+			"_deps/kvikio-src/cpp/benchmarks/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 62,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 54,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "testing",
+			"destination" : "bin/benchmarks/libkvikio",
+			"isExcludeFromAll" : true,
+			"paths" : 
+			[
+				"_deps/kvikio-build/benchmarks/THREADPOOL_BENCHMARK"
+			],
+			"targetId" : "THREADPOOL_BENCHMARK::@00b95f0a311907cfc3b1",
+			"targetIndex" : 28,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "testing",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "THREADPOOL_BENCHMARK::@00b95f0a311907cfc3b1",
+				"index" : 28
+			},
+			"destination" : "bin/benchmarks/libkvikio",
+			"isExcludeFromAll" : true,
+			"type" : "cxxModuleBmi"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/kvikio-build/benchmarks",
+		"source" : "_deps/kvikio-src/cpp/benchmarks"
+	}
+}

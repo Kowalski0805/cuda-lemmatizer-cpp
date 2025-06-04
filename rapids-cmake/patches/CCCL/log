@@ -1,0 +1,2 @@
+rapids-cmake [CCCL]: applied diff thrust_faster_sort_compile_times.diff to fix issue: 'Improve Thrust sort compile times by not unrolling loops for inlined comparators [https://github.com/rapidsai/cudf/pull/10577]'
+rapids-cmake [CCCL]: applied diff thrust_faster_scan_compile_times.diff to fix issue: 'Improve Thrust scan compile times by reducing the number of kernels generated [https://github.com/rapidsai/cudf/pull/8183]'
