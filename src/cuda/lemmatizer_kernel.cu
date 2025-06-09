@@ -106,7 +106,7 @@ __global__ void lookup_kernel(
 
     // Traverse the trie
     for (int i = 0; i < word.size_bytes(); ++i) {
-        char ch = word.byte_offset(i);
+        char ch = word.data()[i];
         const GpuState& s = states[state];
         bool found = false;
 
@@ -130,11 +130,11 @@ __global__ void lookup_kernel(
     // Final state reached — copy lemma if found
     const GpuState& final_state = states[state];
     if (final_state.lemma_offset >= 0) {
-        for (int i = 0; i < MAX_WORD_LEN; ++i) {
-            if (char c = lemmas[final_state.lemma_offset + i]; c == '\0') {
-                d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, i);
-            }
+        int len = 0;
+        while (lemmas[final_state.lemma_offset + len] != '\0' && len < MAX_WORD_LEN) {
+            ++len;
         }
+        d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, len);
     } else {
         // No lemma — fallback
         cudf::string_view s = d_input.element<cudf::string_view>(idx);
@@ -201,5 +201,46 @@ extern "C" void launch_lookup_kernel(
     int threads = 128;
     int blocks = (num_words + threads - 1) / threads;
     lookup_kernel<<<blocks, threads>>>(d_input, num_words, d_states, d_transitions, d_lemmas, d_output);
-    cudaDeviceSynchronize();
+    // cudaDeviceSynchronize();
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        fprintf(stderr, "Kernel launch failed: %s\n", cudaGetErrorString(err));
+    }
+}
+
+__global__ void sizes_kernel(cudf::column_device_view d_words,
+                             cudf::size_type* d_sizes) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= d_words.size()) return;
+
+    auto word = d_words.element<cudf::string_view>(idx);
+
+    // TODO: обчисли потрібну довжину результату для word
+    d_sizes[idx] = word.size_bytes();  // (тимчасово просто повертає оригінал)
+}
+
+
+__global__ void lemmatize_kernel(cudf::column_device_view d_words,
+                                 cudf::size_type const* d_offsets,
+                                 char* d_chars) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= d_words.size()) return;
+
+    auto word = d_words.element<cudf::string_view>(idx);
+    char* out = d_chars + d_offsets[idx];
+
+    // TODO: заміни на результат лематизації (тимчасово — копія входу)
+    memcpy(out, word.data(), word.size_bytes());
+}
+
+void launch_sizes_kernel(cudf::column_device_view d_words, int* d_sizes, cudaStream_t stream) {
+    int block_size = 256;
+    int num_blocks = (d_words.size() + block_size - 1) / block_size;
+    sizes_kernel<<<num_blocks, block_size, 0, stream>>>(d_words, d_sizes);
+}
+
+void launch_lemmatize_kernel(cudf::column_device_view d_words, const int* d_offsets, char* d_chars, cudaStream_t stream) {
+    int block_size = 256;
+    int num_blocks = (d_words.size() + block_size - 1) / block_size;
+    lemmatize_kernel<<<num_blocks, block_size, 0, stream>>>(d_words, d_offsets, d_chars);
 }

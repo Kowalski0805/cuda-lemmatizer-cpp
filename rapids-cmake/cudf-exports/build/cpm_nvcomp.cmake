@@ -18,7 +18,7 @@
 # CPM Search for nvcomp
 #
 # Make sure we search for a build-dir config module for the CPM project
-set(possible_package_dir "")
+set(possible_package_dir "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/lib/cmake/nvcomp")
 if(possible_package_dir AND NOT DEFINED nvcomp_DIR)
   set(nvcomp_DIR "${possible_package_dir}")
 endif()

@@ -10,12 +10,16 @@
 #include <string>
 #include <cstring>
 #include <memory>
+#include <cudf/copying.hpp>
 #include <cudf/column/column.hpp>
 #include <cudf/column/column_device_view.cuh>
 #include <cudf/column/column_factories.hpp>
+#include <cudf/detail/get_value.cuh>
 #include <cudf/scalar/scalar_factories.hpp>
 #include <cudf/wrappers/durations.hpp>
 #include <rmm/exec_policy.hpp>
+#include "lemmatizer_kernel.cuh"
+#include "lemmatizer_kernel.h"
 
 struct GpuState;
 struct GpuTransition;
@@ -46,31 +50,6 @@ void init_trie_data() {
     is_initialized = true;
 }
 
-// std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
-//     init_trie_data();
-//
-//     auto strings_count = strs.size();
-//     if (strings_count == 0) {
-//         return cudf::make_empty_column(cudf::data_type{cudf::type_id::STRING});
-//     }
-//
-//     auto stream = rmm::cuda_stream_default;
-//     rmm::device_uvector<thrust::pair<char const*, cudf::size_type>> d_output(strings_count, stream);
-//
-//     auto strs_device_view = cudf::column_device_view::create(strs, stream);
-//     auto d_strs_view = *strs_device_view;
-//
-//     // 🔥 запуск ядра один раз
-//     launch_lookup_kernel(d_strs_view, strings_count, d_states, d_transitions, d_lemmas, d_output.data());
-//
-//     // ✅ формування стовпця з готових результатів
-//     return cudf::make_strings_column(
-//         cudf::device_span<thrust::pair<char const*, cudf::size_type>>(d_output.data(), strings_count),
-//         stream,
-//         rmm::mr::get_current_device_resource()
-//     );
-// }
-
 std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
     init_trie_data();
 
@@ -79,78 +58,84 @@ std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
         return cudf::make_empty_column(cudf::data_type{cudf::type_id::STRING});
     }
 
-    rmm::device_buffer null_mask = cudf::copy_bitmask(strs);
-
     auto stream = rmm::cuda_stream_default;
-    rmm::device_uvector<const char*> d_ptrs(strings_count, stream);
-    rmm::device_uvector<int32_t> d_lengths(strings_count, stream);
+    rmm::device_uvector<thrust::pair<char const*, cudf::size_type>> d_output(strings_count, stream);
 
     auto strs_device_view = cudf::column_device_view::create(strs, stream);
     auto d_strs_view = *strs_device_view;
-    auto policy = rmm::exec_policy(stream);
 
-    thrust::for_each_n(
-        d_ptrs.begin(),
-        d_ptrs.size(),
-        [d_strs_view, ptrs = d_ptrs.data(), lens = d_lengths.data()] __device__ (size_t idx) {
-            auto const word = d_strs_view.element<cudf::string_view>(idx);
-            int state = 0;
-            bool fail = false;
+    // 🔥 запуск ядра один раз
+    launch_lookup_kernel(d_strs_view, strings_count, d_states, d_transitions, d_lemmas, d_output.data());
 
-            for (int i = 0; i < word.size_bytes(); ++i) {
-                char ch = word.data()[i];
-                const GpuState& s = d_states[state];
-                bool found = false;
-
-                for (int j = 0; j < s.num_transitions; ++j) {
-                    const GpuTransition& t = d_transitions[s.transition_start_idx + j];
-                    if (t.c == ch) {
-                        state = t.next_state;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    fail = true;
-                    break;
-                }
-            }
-
-            if (!fail) {
-                const GpuState& final_state = d_states[state];
-                if (final_state.lemma_offset >= 0) {
-                    for (int i = 0; i < MAX_WORD_LEN; ++i) {
-                        if (char c = d_lemmas[final_state.lemma_offset + i]; c == '\0') {
-                            ptrs[idx] = d_lemmas + final_state.lemma_offset;
-                            lens[idx] = i;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            // Fallback if lemma not found
-            ptrs[idx] = word.data();
-            lens[idx] = word.size_bytes();
-        }
+    // ✅ формування стовпця з готових результатів
+    return cudf::make_strings_column(
+        cudf::device_span<thrust::pair<char const*, cudf::size_type>>(d_output.data(), strings_count),
+        stream,
+        rmm::mr::get_current_device_resource()
     );
-
-    auto offsets_col = std::make_unique<cudf::column>(
-        cudf::data_type{cudf::type_id::INT32},
-        strings_count + 1,
-        d_lengths.release(),
-        rmm::device_buffer{0, stream}, // no null mask
-        0
-    );
-
-    auto result_column = cudf::make_strings_column(
-        strings_count,
-        std::move(offsets_col),
-        d_ptrs.release(),
-        0,
-        rmm::device_buffer{0, stream}
-    );
-
-    return result_column;
 }
+
+// std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& words) {
+
+    // std::unique_ptr<cudf::column> output = cudf::reverse(words);
+    // return output;
+
+    // auto stream = cudf::get_default_stream();
+    // int32_t num_rows = words.size();
+    // int block_size = 256;
+    // int num_blocks = (num_rows + block_size - 1) / block_size;
+    //
+    // // GPU view на вхідні слова
+    // auto d_words = cudf::column_device_view::create(words, stream);
+    //
+    // // Перший прохід: обчислити розміри
+    // rmm::device_uvector<cudf::size_type> offsets(num_rows + 1, stream);
+    // launch_sizes_kernel(*d_words, offsets.data(), stream.value());
+    //
+    // // Ексклюзивна сума → offset-и для chars
+    // thrust::exclusive_scan(
+    //     rmm::exec_policy(stream),
+    //     offsets.begin(),
+    //     offsets.end(),
+    //     offsets.begin());
+    //
+    // // Розрахунок загального розміру chars buffer
+    // auto total_chars = *(offsets.data() + num_rows);
+    //
+    // // Виділяємо chars
+    // rmm::device_uvector<char> chars(total_chars, stream);
+    //
+    // // Другий прохід: запис лематизованих слів
+    // launch_lemmatize_kernel(*d_words, offsets.data(), chars.data(), stream.value());
+    //
+    // auto offsets_column = cudf::make_numeric_column(
+    //     cudf::data_type{cudf::type_id::INT32},
+    //     num_rows + 1,
+    //     cudf::mask_state::UNALLOCATED,
+    //     stream,
+    //     rmm::mr::get_current_device_resource_ref()
+    // );
+
+    // CUDA_TRY(cudaMemcpyAsync(
+    //     offsets_column->mutable_view().data<int32_t>(),
+    //     offsets.data(),
+    //     sizeof(int32_t) * (num_rows + 1),
+    //     cudaMemcpyDeviceToDevice,
+    //     stream.value()
+    // ));
+
+    // auto chars_buf = rmm::device_buffer{
+    //     std::move(chars).release(), // raw pointer
+    //     total_chars,                // size
+    //     stream                      // stream
+    // };
+    //
+    //
+    // return cudf::make_strings_column(
+    //     num_rows,
+    //     std::move(offsets_column),
+    //     std::move(chars),
+    //     0,
+    //     rmm::device_buffer{}
+    // );
+// }

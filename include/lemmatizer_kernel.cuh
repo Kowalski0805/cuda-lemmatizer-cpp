@@ -29,4 +29,14 @@ __device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     const int idx
 );
 
+__global__ void lemmatize_kernel(cudf::column_device_view d_words,
+                                 cudf::size_type const* d_offsets,
+                                 char* d_chars);
+
+__global__ void sizes_kernel(cudf::column_device_view d_words,
+                             cudf::size_type* d_sizes);
+
+void launch_sizes_kernel(cudf::column_device_view d_words, int* d_sizes, cudaStream_t stream);
+void launch_lemmatize_kernel(cudf::column_device_view d_words, const int* d_offsets, char* d_chars, cudaStream_t stream);
+
 #endif //LEMMATIZER_KERNEL_CUH

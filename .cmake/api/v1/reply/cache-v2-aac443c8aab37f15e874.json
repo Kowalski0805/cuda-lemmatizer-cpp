@@ -2859,7 +2859,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "cudf;rapids_logger;spdlog;jitify;nvtx3;CCCL;rmm;rapids_logger;flatbuffers;dlpack;cuco;GTest;kvikio;bs_thread_pool;benchmark;nanoarrow;zstd"
+			"value" : "cudf;rapids_logger;spdlog;jitify;nvtx3;nvcomp;CCCL;rmm;rapids_logger;flatbuffers;dlpack;cuco;GTest;kvikio;bs_thread_pool;benchmark;nanoarrow;zstd"
 		},
 		{
 			"name" : "CPM_PACKAGE_CCCL_BINARY_DIR",
@@ -3758,6 +3758,22 @@
 			"value" : "/usr/local/cuda-12.8/targets/x86_64-linux/include"
 		},
 		{
+			"name" : "CUDAToolkit_NVCC_EXECUTABLE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : ""
+		},
+		{
 			"name" : "CUDAToolkit_ROOT",
 			"properties" : 
 			[
@@ -3768,6 +3784,22 @@
 			],
 			"type" : "UNINITIALIZED",
 			"value" : "/usr/local/cuda-12.8"
+		},
+		{
+			"name" : "CUDAToolkit_SENTINEL_FILE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : ""
 		},
 		{
 			"name" : "CUDAToolkit_rt_LIBRARY",
@@ -9384,6 +9416,18 @@
 			],
 			"type" : "STATIC",
 			"value" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nanoarrow-src"
+		},
+		{
+			"name" : "nvcomp_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for nvcomp."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/home/kowalski0805/UANLP/cuda_exe/_deps/nvcomp_proprietary_binary-src/lib/cmake/nvcomp"
 		},
 		{
 			"name" : "nvcomp_INCLUDE_DIR",
