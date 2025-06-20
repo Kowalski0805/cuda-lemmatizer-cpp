@@ -64,8 +64,24 @@ std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
     auto strs_device_view = cudf::column_device_view::create(strs, stream);
     auto d_strs_view = *strs_device_view;
 
+    // 🕒 CUDA event timing
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, stream.value());
+
     // 🔥 запуск ядра один раз
     launch_lookup_kernel(d_strs_view, strings_count, d_states, d_transitions, d_lemmas, d_output.data());
+
+    cudaEventRecord(stop, stream.value());
+    cudaEventSynchronize(stop);
+
+    float milliseconds = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    std::cout << "Kernel execution time: " << milliseconds << " ms" << std::endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
     // ✅ формування стовпця з готових результатів
     return cudf::make_strings_column(

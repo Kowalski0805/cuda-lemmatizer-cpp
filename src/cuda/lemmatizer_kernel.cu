@@ -201,7 +201,7 @@ extern "C" void launch_lookup_kernel(
     int threads = 128;
     int blocks = (num_words + threads - 1) / threads;
     lookup_kernel<<<blocks, threads>>>(d_input, num_words, d_states, d_transitions, d_lemmas, d_output);
-    // cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess) {
         fprintf(stderr, "Kernel launch failed: %s\n", cudaGetErrorString(err));
