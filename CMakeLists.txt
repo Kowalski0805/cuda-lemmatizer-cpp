@@ -2,19 +2,22 @@ cmake_minimum_required(VERSION 3.28)
 # ================================
 # CUDA Setup
 # ================================
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_STANDARD 20)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_ARCHITECTURES 89)
 
 # Optional: make sure CUDA path is correct
 set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
+set(rapids-cmake-version 25.08)
 
 project(cuda_lemmatizer LANGUAGES CXX CUDA)
 
 # ================================
 # RAPIDS CMake Init (cuDF, RMM)
 # ================================
-file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-25.04/RAPIDS.cmake
+file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-25.08/RAPIDS.cmake
         ${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 include(${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 
@@ -24,10 +27,10 @@ include(rapids-cuda)
 rapids_cuda_init_architectures(cuda_lemmatizer)
 
 rapids_cpm_init()
-rapids_cpm_find(cudf 25.04.00
+rapids_cpm_find(cudf 25.08.00
         CPM_ARGS
         GIT_REPOSITORY https://github.com/rapidsai/cudf.git
-        GIT_TAG branch-25.04
+        GIT_TAG branch-25.08
         GIT_SHALLOW TRUE
         SOURCE_SUBDIR cpp
         OPTIONS
