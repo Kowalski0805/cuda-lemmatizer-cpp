@@ -6,6 +6,7 @@
 #define LEMMATIZER_KERNEL_CUH
 #pragma once
 #include "structs.h"
+#include <cudf/column/column_device_view.cuh>
 
 __global__ void normalize_kernel(char* d_input, char* d_output,
                                  const char* dict_keys, const char* dict_vals,

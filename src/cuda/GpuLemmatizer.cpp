@@ -1,22 +1,18 @@
 #include <jni.h>
 #include <vector>
 #include <string>
-#include <cstring>
 #include <memory>
 #include <cudf/groupby.hpp>
 #include <cudf/column/column.hpp>
 #include <cudf/detail/get_value.cuh>
 #include <cudf/detail/aggregation/aggregation.hpp>
-#include <cudf/lists/combine.hpp>
 #include <cudf/lists/explode.hpp>
 #include <cudf/lists/gather.hpp>
 #include <cudf/lists/lists_column_view.hpp>
 #include <cudf/strings/combine.hpp>
 #include <cudf/strings/split/split.hpp>
 
-#include "icu_lowercase.h"
 #include "lemmatizer.h"  // includes lemmatize_batch()
-#include "structs.h"
 
 namespace {
 

@@ -27,6 +27,11 @@ bool load_csv_dict_to_dawg(const std::string& path,
 bool load_csv_dict_to_dawg(const std::string& path,
                             dawgdic::Dictionary& dict,
                             std::vector<char>& dict_vals);
+void build_gpu_trie_from_csv(
+    const std::string& path,
+    std::vector<GpuState>& states,
+    std::vector<GpuTransition>& transitions,
+    std::vector<char>& lemma_buffer);
 
 void save_dawg(const std::string& path, const dawgdic::Dictionary& dawg);
 void load_dawg(const std::string& path, dawgdic::Dictionary& dawg);

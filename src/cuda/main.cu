@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstring>
 #include <fstream>
+#include <cudf/column/column_factories.hpp>
 #include <dawgdic/dictionary.h>
 #include "icu_lowercase.h"
 #include "lemmatizer_kernel.cuh"
@@ -179,123 +180,149 @@ int main_dawg() {
 }
 
 int main_gpu() {
-        // Build from CSV
+    // --- 1. Load Trie Data from Disk ---
     std::vector<GpuState> h_states;
     std::vector<GpuTransition> h_transitions;
     std::vector<char> h_lemmas;
 
-    // build_gpu_trie_from_csv("ukr_morph_dict.csv", h_states, h_transitions, h_lemmas);
-    // save_bin_vector("gpu_states.bin", h_states);
-    // save_bin_vector("gpu_transitions.bin", h_transitions);
-    // save_bin_vector("gpu_lemmas.bin", h_lemmas);
+    build_gpu_trie_from_csv("ukr_morph_dict.csv", h_states, h_transitions, h_lemmas);
+    save_bin_vector("gpu_states.bin", h_states);
+    save_bin_vector("gpu_transitions.bin", h_transitions);
+    save_bin_vector("gpu_lemmas.bin", h_lemmas);
     auto start_load = std::chrono::high_resolution_clock::now();
     load_bin_vector("gpu_states.bin", h_states);
     load_bin_vector("gpu_transitions.bin", h_transitions);
     load_bin_vector("gpu_lemmas.bin", h_lemmas);
+
     auto end_load = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed_load = end_load - start_load;
-    std::cout << "Time taken to load GPU data: " << elapsed_load.count() << " seconds\n";
+    std::cout << "Data loaded in " << std::chrono::duration<double>(end_load - start_load).count() << "s\n";
 
-    // Input words
+    // --- 2. Prepare Input via cuDF ---
     std::vector<std::string> input_words = {
-        "теплому",     // adjective: masc, dat
-        "ящірки",      // noun: gen sg
-        "синього",     // adjective: masc, gen
-        "українська",  // adjective: fem nom
-        "ходив",       // verb: masc past
-
-        // More noun forms
-        "двері",       // noun: nom pl
-        "чоловіка",    // noun: gen sg
-        "жінці",       // noun: dat sg
-        "вікном",      // noun: ins sg
-        "містах",      // noun: loc pl
-
-        // Verb forms
-        "читала",      // verb: fem past
-        "пишемо",      // verb: 1pl pres
-        "розмовляєш",  // verb: 2sg pres
-        "поїхав",      // verb: masc past
-        "буду",        // verb: 1sg fut
-
-        // Adjective/participle/etc.
-        "старіший",    // comparative
-        "найбільший",  // superlative
-        "відомому",    // adjective: masc, loc
-        "знайдену",     // participle/adjective
-
-        // Random test cases
-        "невідоме",    // neuter adjective
-        "новини",      // noun: pl nom/acc
-        "книжками",    // noun: ins pl
-        "допомагаючи", // gerund
-        "бігатимеш"    // verb: 2sg fut
+        "теплому", "ящірки", "синього", "українська", "ходив",
+        "двері", "чоловіка", "жінці", "вікном", "містах",
+        "читала", "пишемо", "розмовляєш", "поїхав", "буду",
+        "старіший", "найбільший", "відомому", "знайдену",
+        "невідоме", "новини", "книжками", "допомагаючи", "бігатимеш"
     };
-    int num_words = input_words.size();
-    std::vector<char> h_input(num_words * MAX_WORD_LEN, 0);
-    std::vector<char> h_output(num_words * MAX_WORD_LEN, 0);
 
-    for (int i = 0; i < num_words; ++i) {
-        std::string lower = lowercase_ukr(input_words[i]);
-        strncpy(&h_input[i * MAX_WORD_LEN], lower.c_str(), MAX_WORD_LEN);
+    std::vector<std::string> lower_input;
+    for (const auto& w : input_words) {
+        lower_input.push_back(lowercase_ukr(w));
     }
 
-    auto start1 = std::chrono::high_resolution_clock::now();
+    std::vector<char> h_chars;
+    std::vector<int32_t> h_offsets = {0};
+    for (const auto& s : lower_input) {
+        h_chars.insert(h_chars.end(), s.begin(), s.end());
+        h_offsets.push_back(static_cast<int32_t>(h_chars.size()));
+    }
 
-    // Allocate device memory
-    GpuState* d_states;
-    GpuTransition* d_transitions;
-    char *d_lemmas, *d_input, *d_output;
+    rmm::device_uvector<char> d_chars_raw(h_chars.size(), rmm::cuda_stream_default);
+    rmm::device_uvector<int32_t> d_offsets_raw(h_offsets.size(), rmm::cuda_stream_default);
 
-    cudaMalloc(&d_states, h_states.size() * sizeof(GpuState));
-    cudaMalloc(&d_transitions, h_transitions.size() * sizeof(GpuTransition));
-    cudaMalloc(&d_lemmas, h_lemmas.size());
-    cudaMalloc(&d_input, h_input.size());
-    cudaMalloc(&d_output, h_output.size());
+    cudaMemcpy(d_chars_raw.data(), h_chars.data(), h_chars.size(), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_offsets_raw.data(), h_offsets.data(), h_offsets.size() * sizeof(int32_t), cudaMemcpyHostToDevice);
 
-    cudaMemcpy(d_states, h_states.data(), h_states.size() * sizeof(GpuState), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_transitions, h_transitions.data(), h_transitions.size() * sizeof(GpuTransition), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_lemmas, h_lemmas.data(), h_lemmas.size(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_input, h_input.data(), h_input.size(), cudaMemcpyHostToDevice);
+    // Build the offsets column required by the [3/3] factory
+    auto offsets_column = cudf::make_numeric_column(
+        cudf::data_type{cudf::type_id::INT32}, h_offsets.size(), cudf::mask_state::UNALLOCATED
+    );
+    cudaMemcpy(offsets_column->mutable_view().data<int32_t>(), d_offsets_raw.data(),
+               h_offsets.size() * sizeof(int32_t), cudaMemcpyDeviceToHost); // Actually, we copy to the column's device memory
 
-    // Launch kernel
+    // Construct the string column using [3/3]
+    auto input_col = cudf::make_strings_column(
+        lower_input.size(),
+        std::move(offsets_column),
+        rmm::device_buffer{d_chars_raw.data(), d_chars_raw.size(), rmm::cuda_stream_default},
+        0, // null_count
+        rmm::device_buffer{} // empty null_mask
+    );
+    auto d_input_view = cudf::column_device_view::create(input_col->view());
+
+    int num_words = static_cast<int>(input_words.size());
+
+    // --- 3. Allocate Trie & Output Memory via RMM ---
+    // rmm::device_uvector is like std::vector for GPU (RAII, no manual cudaFree needed)
+    rmm::device_uvector<GpuState> d_states(h_states.size(), rmm::cuda_stream_default);
+    rmm::device_uvector<GpuTransition> d_transitions(h_transitions.size(), rmm::cuda_stream_default);
+    rmm::device_uvector<char> d_lemmas(h_lemmas.size(), rmm::cuda_stream_default);
+
+    // Output buffer: using your existing fixed-width logic for the result
+    rmm::device_uvector<thrust::pair<const char*, cudf::size_type>> d_output(num_words, rmm::cuda_stream_default);
+    cudaMemset(d_output.data(), 0, d_output.size());
+
+    // --- 4. Copy Trie Data to Device ---
+    cudaMemcpy(d_states.data(), h_states.data(), h_states.size() * sizeof(GpuState), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_transitions.data(), h_transitions.data(), h_transitions.size() * sizeof(GpuTransition), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_lemmas.data(), h_lemmas.data(), h_lemmas.size(), cudaMemcpyHostToDevice);
+
+    // --- 5. Launch Kernel ---
     int threads = 128;
     int blocks = (num_words + threads - 1) / threads;
 
+    auto* d_trans_ptr = d_transitions.data();
 
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
+    auto start_proc = std::chrono::high_resolution_clock::now();
     cudaEventRecord(start);
-    lookup_kernel<<<blocks, threads>>>(d_input, num_words, d_states, d_transitions, d_lemmas, d_output);
+
+    // Pass the de-referenced view object (*d_input_view)
+    lookup_kernel<<<blocks, threads>>>(
+        *d_input_view,
+        num_words,
+        d_states.data(),
+        d_trans_ptr,
+        d_lemmas.data(),
+        d_output.data()
+    );
+
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
+
     float milliseconds = 0;
     cudaEventElapsedTime(&milliseconds, start, stop);
-    std::cout << "GPU processing time: " << milliseconds << " ms\n";
-    cudaDeviceSynchronize();
+    std::cout << "Kernel Execution time: " << milliseconds << " ms\n";
 
-    // Copy back results
-    cudaMemcpy(h_output.data(), d_output, h_output.size(), cudaMemcpyDeviceToHost);
+    // --- 6. Results & Cleanup ---
+    std::vector<thrust::pair<const char*, cudf::size_type>> h_results(num_words);
 
-    // Show results
-    std::cout << "GPU-normalized output:\n";
+    // 2. Копіюємо дані (пам'ятай про sizeof!)
+    cudaMemcpy(h_results.data(), d_output.data(),
+               num_words * sizeof(thrust::pair<const char*, cudf::size_type>),
+               cudaMemcpyDeviceToHost);
+
+    std::cout << "\nGPU-normalized output:\n";
     for (int i = 0; i < num_words; ++i) {
-        std::cout << "- " << &h_input[i * MAX_WORD_LEN]
-                  << " → " << &h_output[i * MAX_WORD_LEN] << "\n";
+        const char* gpu_ptr = h_results[i].first;
+        int length = h_results[i].second;
+
+        if (gpu_ptr == nullptr || length <= 0) {
+            std::cout << "- " << lower_input[i] << " → NOT FOUND\n";
+            continue;
+        }
+
+        // РАХУЄМО ОФСЕТ: де ця лема лежить відносно початку масиву d_lemmas
+        // Ми знаємо, що d_lemmas.data() — це початок масиву на GPU
+        size_t offset = gpu_ptr - d_lemmas.data();
+
+        // Тепер беремо цей офсет і застосовуємо його до нашого хост-вектора h_lemmas
+        // h_lemmas — це той вектор, який ми завантажили з gpu_lemmas.bin на самому початку
+        if (offset < h_lemmas.size()) {
+            std::string lemma(h_lemmas.data() + offset, length);
+            std::cout << "- " << lower_input[i] << " → " << lemma << "\n";
+        } else {
+            std::cout << "- " << lower_input[i] << " → ERROR: Invalid offset\n";
+        }
     }
 
-    // Cleanup
-    cudaFree(d_states);
-    cudaFree(d_transitions);
-    cudaFree(d_lemmas);
-    cudaFree(d_input);
-    cudaFree(d_output);
-
-    auto end1 = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end1 - start1;
-    std::cout << "Time taken for GPU processing with copy: " << elapsed.count() << " seconds\n";
+    auto end_proc = std::chrono::high_resolution_clock::now();
+    std::cout << "Total processing (inc. H2D/D2H): "
+              << std::chrono::duration<double>(end_proc - start_proc).count() << "s\n";
 
     return 0;
 }

@@ -13,34 +13,13 @@ set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
 set(rapids-cmake-version 25.08)
 
 project(cuda_lemmatizer LANGUAGES CXX CUDA)
+add_compile_definitions(LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE)
 
 # ================================
-# RAPIDS CMake Init (cuDF, RMM)
+# cuDF, RMM
 # ================================
-file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-25.08/RAPIDS.cmake
-        ${CMAKE_BINARY_DIR}/RAPIDS.cmake)
-include(${CMAKE_BINARY_DIR}/RAPIDS.cmake)
-
-include(rapids-cmake)
-include(rapids-cpm)
-include(rapids-cuda)
-rapids_cuda_init_architectures(cuda_lemmatizer)
-
-rapids_cpm_init()
-rapids_cpm_find(cudf 25.08.00
-        CPM_ARGS
-        GIT_REPOSITORY https://github.com/rapidsai/cudf.git
-        GIT_TAG branch-25.08
-        GIT_SHALLOW TRUE
-        SOURCE_SUBDIR cpp
-        OPTIONS
-        "BUILD_TESTS OFF"
-        "BUILD_BENCHMARKS OFF"
-        "CUDF_USE_ARROW_STATIC ON"
-        "JITIFY_USE_CACHE ON"
-        "AUTO_DETECT_CUDA_ARCHITECTURES OFF"
-        "CUDF_KVIKIO_REMOTE_IO OFF"
-)
+find_package(cudf REQUIRED)
+find_package(rmm REQUIRED)
 
 # ================================
 # ICU (Unchanged)
@@ -98,4 +77,6 @@ target_include_directories(cuda_exe PRIVATE
 
 target_link_libraries(cuda_exe PRIVATE
         ${ICU_LIBRARIES}
+        cudf::cudf
+        lemmatizer
 )
