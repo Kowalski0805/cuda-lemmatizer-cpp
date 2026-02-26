@@ -80,3 +80,46 @@ target_link_libraries(cuda_exe PRIVATE
         cudf::cudf
         lemmatizer
 )
+
+# ================================
+# CPU baseline lemmatizer benchmark
+# ================================
+add_executable(lemmatize_cpu
+        src/cuda/bench_cpu.cpp
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_cpu PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_cpu PRIVATE
+        ${ICU_LIBRARIES}
+)
+
+# ================================
+# GPU lemmatizer benchmark
+# ================================
+add_executable(lemmatize_gpu
+        src/cuda/bench_gpu.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
