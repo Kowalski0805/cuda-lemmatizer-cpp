@@ -123,3 +123,79 @@ target_link_libraries(lemmatize_gpu PRIVATE
 set_target_properties(lemmatize_gpu PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )
+
+# ================================
+# GPU stride lemmatizer benchmark
+# ================================
+add_executable(lemmatize_gpu_stride
+        src/cuda/bench_gpu_stride.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_stride PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_stride PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_stride PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# GPU bsearch lemmatizer benchmark
+# ================================
+add_executable(lemmatize_gpu_bsearch
+        src/cuda/bench_gpu_bsearch.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/trie.cpp
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_bsearch PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_bsearch PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_bsearch PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# GPU loop (max-throughput) benchmark
+# ================================
+add_executable(lemmatize_gpu_loop
+        src/cuda/bench_gpu_loop.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_loop PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_loop PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_loop PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)

@@ -32,6 +32,11 @@ void build_gpu_trie_from_csv(
     std::vector<GpuState>& states,
     std::vector<GpuTransition>& transitions,
     std::vector<char>& lemma_buffer);
+void build_flat_sorted_dict_from_csv(
+    const std::string& path,
+    std::vector<char>& keys,
+    std::vector<char>& vals,
+    int& num_entries);
 
 void save_dawg(const std::string& path, const dawgdic::Dictionary& dawg);
 void load_dawg(const std::string& path, dawgdic::Dictionary& dawg);

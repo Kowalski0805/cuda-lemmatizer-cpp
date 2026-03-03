@@ -254,6 +254,49 @@ bool load_csv_dict_to_dawg(const std::string& path,
     return load_csv_dict_to_dawg(path, dawg, dict, dict_vals);
 }
 
+void build_flat_sorted_dict_from_csv(
+    const std::string& path,
+    std::vector<char>& keys,
+    std::vector<char>& vals,
+    int& num_entries)
+{
+    std::ifstream file(path);
+    if (!file) throw std::runtime_error("Cannot open: " + path);
+
+    std::string line;
+    std::getline(file, line);  // skip header
+
+    std::unordered_map<std::string, std::string> seen;  // wordform → first lemma
+
+    while (std::getline(file, line)) {
+        std::istringstream ss(line);
+        std::string wordform, lemma;
+        if (!std::getline(ss, wordform, ',') || !std::getline(ss, lemma, ',')) continue;
+        if (wordform.empty() || lemma.empty()) continue;
+        if (wordform.find('-') != std::string::npos) continue;
+
+        std::string key = lowercase_ukr(wordform);
+        if (key.size() >= static_cast<size_t>(MAX_WORD_LEN)) continue;
+        if (lemma.size() >= static_cast<size_t>(MAX_WORD_LEN)) continue;
+
+        seen.emplace(key, lemma);  // first-lemma-wins: emplace only inserts if absent
+    }
+
+    std::vector<std::pair<std::string, std::string>> entries(seen.begin(), seen.end());
+    std::sort(entries.begin(), entries.end());
+
+    num_entries = static_cast<int>(entries.size());
+    keys.assign(static_cast<size_t>(num_entries) * MAX_WORD_LEN, '\0');
+    vals.assign(static_cast<size_t>(num_entries) * MAX_WORD_LEN, '\0');
+
+    for (int i = 0; i < num_entries; ++i) {
+        std::memcpy(keys.data() + i * MAX_WORD_LEN, entries[i].first.c_str(),  entries[i].first.size());
+        std::memcpy(vals.data() + i * MAX_WORD_LEN, entries[i].second.c_str(), entries[i].second.size());
+    }
+
+    std::cout << "Built flat sorted dict: " << num_entries << " entries\n";
+}
+
 
 void save_dawg(const std::string& path, const dawgdic::Dictionary& dawg) {
     std::ofstream file(path, std::ios::binary);

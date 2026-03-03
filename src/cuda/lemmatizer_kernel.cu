@@ -193,6 +193,62 @@ __device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     return thrust::make_pair(nullptr, 0);
 }
 
+// Fixed-stride variant: input/output are flat char arrays, MAX_WORD_LEN bytes per word,
+// null-terminated within each slot. No cuDF types needed at the call site.
+__global__ void lookup_kernel_stride(
+    const char* d_input,   // [num_words * MAX_WORD_LEN], null-padded
+    int num_words,
+    const GpuState* states,
+    const GpuTransition* transitions,
+    const char* lemmas,
+    char* d_output         // [num_words * MAX_WORD_LEN]
+) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_words) return;
+
+    const char* word = d_input + (size_t)idx * MAX_WORD_LEN;
+    char*       out  = d_output + (size_t)idx * MAX_WORD_LEN;
+
+    int state = 0;
+    for (int i = 0; i < MAX_WORD_LEN && word[i] != '\0'; ++i) {
+        char ch = word[i];
+        const GpuState& s = states[state];
+        bool found = false;
+
+        for (int j = 0; j < s.num_transitions; ++j) {
+            const GpuTransition& t = transitions[s.transition_start_idx + j];
+            if (t.c == ch) {
+                state = t.next_state;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            for (int k = 0; k < MAX_WORD_LEN; ++k) {
+                out[k] = word[k];
+                if (word[k] == '\0') break;
+            }
+            return;
+        }
+    }
+
+    const GpuState& fs = states[state];
+    if (fs.lemma_offset >= 0) {
+        int len = 0;
+        while (len < MAX_WORD_LEN - 1 && lemmas[fs.lemma_offset + len] != '\0') {
+            out[len] = lemmas[fs.lemma_offset + len];
+            ++len;
+        }
+        out[len] = '\0';
+    } else {
+        for (int k = 0; k < MAX_WORD_LEN; ++k) {
+            out[k] = word[k];
+            if (word[k] == '\0') break;
+        }
+    }
+}
+
 extern "C" void launch_lookup_kernel(
     cudf::column_device_view const &d_input, int num_words,
     const GpuState* d_states, const GpuTransition* d_transitions,
@@ -205,6 +261,53 @@ extern "C" void launch_lookup_kernel(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess) {
         fprintf(stderr, "Kernel launch failed: %s\n", cudaGetErrorString(err));
+    }
+}
+
+__device__ int strncmp_dev(const char* a, const char* b) {
+    for (int i = 0; i < MAX_WORD_LEN; ++i) {
+        unsigned char ca = static_cast<unsigned char>(a[i]);
+        unsigned char cb = static_cast<unsigned char>(b[i]);
+        if (ca != cb) return static_cast<int>(ca) - static_cast<int>(cb);
+        if (ca == '\0') break;
+    }
+    return 0;
+}
+
+__global__ void lookup_kernel_bsearch(
+    const char* d_input,    // [num_words * MAX_WORD_LEN], null-padded
+    int num_words,
+    const char* d_keys,     // [num_entries * MAX_WORD_LEN], sorted lexicographically
+    const char* d_vals,     // [num_entries * MAX_WORD_LEN]
+    int num_entries,
+    char* d_output          // [num_words * MAX_WORD_LEN]
+) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_words) return;
+
+    const char* word = d_input + (size_t)idx * MAX_WORD_LEN;
+    char*       out  = d_output + (size_t)idx * MAX_WORD_LEN;
+
+    int lo = 0, hi = num_entries - 1, found = -1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+        int cmp = strncmp_dev(word, d_keys + (size_t)mid * MAX_WORD_LEN);
+        if (cmp == 0) { found = mid; break; }
+        else if (cmp < 0) hi = mid - 1;
+        else              lo = mid + 1;
+    }
+
+    if (found >= 0) {
+        const char* lemma = d_vals + (size_t)found * MAX_WORD_LEN;
+        for (int k = 0; k < MAX_WORD_LEN; ++k) {
+            out[k] = lemma[k];
+            if (lemma[k] == '\0') break;
+        }
+    } else {
+        for (int k = 0; k < MAX_WORD_LEN; ++k) {
+            out[k] = word[k];
+            if (word[k] == '\0') break;
+        }
     }
 }
 
