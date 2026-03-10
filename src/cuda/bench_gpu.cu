@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + build arrays) ---
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase_ukr) ---
     auto preprocess_start = std::chrono::high_resolution_clock::now();
 
     // Read and tokenize input
@@ -66,6 +66,10 @@ int main(int argc, char* argv[]) {
     }
     const int num_words = static_cast<int>(words.size());
 
+    auto preprocess_end = std::chrono::high_resolution_clock::now();
+    double preprocess_ms = std::chrono::duration<double, std::milli>(preprocess_end - preprocess_start).count();
+    // --- PREPROCESS TIMER END ---
+
     // Handle empty input
     if (num_words == 0) {
         std::ostream* out_ptr = &std::cout;
@@ -75,7 +79,9 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    // Build flat char arrays for cuDF strings column
+    // --- PACK TIMER START (build flat char/offset arrays) ---
+    auto pack_start = std::chrono::high_resolution_clock::now();
+
     std::vector<char> h_chars;
     std::vector<int32_t> h_offsets = {0};
     h_chars.reserve(static_cast<size_t>(num_words) * 16);
@@ -84,9 +90,9 @@ int main(int argc, char* argv[]) {
         h_offsets.push_back(static_cast<int32_t>(h_chars.size()));
     }
 
-    auto preprocess_end = std::chrono::high_resolution_clock::now();
-    double preprocess_ms = std::chrono::duration<double, std::milli>(preprocess_end - preprocess_start).count();
-    // --- PREPROCESS TIMER END ---
+    double pack_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - pack_start).count();
+    // --- PACK TIMER END ---
 
     // --- TOTAL TIMER START (includes H2D, kernel, D2H) ---
     auto total_start = std::chrono::high_resolution_clock::now();
@@ -193,13 +199,14 @@ int main(int argc, char* argv[]) {
 
     double throughput = (kernel_ms > 0.f) ? (num_words / (kernel_ms / 1000.0)) : 0.0;
     std::cerr << "Words: " << num_words << "\n"
-              << "  Preprocess (I/O+tokenize+lowercase+arrays): " << preprocess_ms << " ms\n"
+              << "  Preprocess (I/O+tokenize+lowercase):        " << preprocess_ms << " ms\n"
+              << "  Pack (build flat char/offset arrays):       " << pack_ms << " ms\n"
               << "  H2D (upload words+trie):                    " << h2d_ms << " ms\n"
               << "  Kernel:                                     " << kernel_ms << " ms"
               << "  (" << static_cast<long long>(throughput) << " words/sec)\n"
               << "  D2H (download results):                     " << d2h_ms << " ms\n"
               << "  GPU total (H2D+kernel+D2H):                 " << total_ms << " ms\n"
-              << "  End-to-end (preprocess+GPU):                " << (preprocess_ms + total_ms) << " ms\n";
+              << "  End-to-end (preprocess+pack+GPU):           " << (preprocess_ms + pack_ms + total_ms) << " ms\n";
 
     // Write output, preserving line structure
     std::ostream* out_ptr = &std::cout;

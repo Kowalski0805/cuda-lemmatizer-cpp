@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + build arrays) ---
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase_ukr) ---
     auto preprocess_start = std::chrono::high_resolution_clock::now();
 
     // Read and tokenize input
@@ -64,7 +64,13 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Build flat char arrays for cuDF strings column
+    double preprocess_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - preprocess_start).count();
+    // --- PREPROCESS TIMER END ---
+
+    // --- PACK TIMER START (build flat char/offset arrays) ---
+    auto pack_start = std::chrono::high_resolution_clock::now();
+
     std::vector<char> h_chars;
     std::vector<int32_t> h_offsets = {0};
     h_chars.reserve(static_cast<size_t>(num_words) * 16);
@@ -73,9 +79,9 @@ int main(int argc, char* argv[]) {
         h_offsets.push_back(static_cast<int32_t>(h_chars.size()));
     }
 
-    double preprocess_ms = std::chrono::duration<double, std::milli>(
-        std::chrono::high_resolution_clock::now() - preprocess_start).count();
-    // --- PREPROCESS TIMER END ---
+    double pack_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - pack_start).count();
+    // --- PACK TIMER END ---
 
     // Upload chars to device
     rmm::device_uvector<char> d_chars_raw(h_chars.size(), rmm::cuda_stream_default);
@@ -124,7 +130,8 @@ int main(int argc, char* argv[]) {
     int num_iters = 0;
     double total_kernel_ms = 0.0, peak_kernel_ms = 0.0;
 
-    std::cerr << "Preprocess (I/O+tokenize+lowercase+arrays): " << preprocess_ms << " ms\n";
+    std::cerr << "Preprocess (I/O+tokenize+lowercase):        " << preprocess_ms << " ms\n";
+    std::cerr << "Pack (build flat char/offset arrays):       " << pack_ms << " ms\n";
     std::cerr << "Running for " << run_duration_s << "s  words=" << num_words
               << "  blocks=" << blocks << "  threads=" << threads << "\n";
 

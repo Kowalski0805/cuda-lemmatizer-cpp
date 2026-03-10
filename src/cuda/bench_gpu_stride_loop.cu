@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + pack stride buffer) ---
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase_ukr) ---
     auto preprocess_start = std::chrono::high_resolution_clock::now();
 
     // Read and tokenize input
@@ -67,6 +67,13 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    double preprocess_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - preprocess_start).count();
+    // --- PREPROCESS TIMER END ---
+
+    // --- PACK TIMER START (build fixed-stride buffer) ---
+    auto pack_start = std::chrono::high_resolution_clock::now();
+
     // Pack words into fixed-stride buffer: [num_words * MAX_WORD_LEN], zero-padded
     const size_t stride_bytes = static_cast<size_t>(num_words) * MAX_WORD_LEN;
     std::vector<char> h_input(stride_bytes, 0);
@@ -81,9 +88,9 @@ int main(int argc, char* argv[]) {
         std::cerr << "[warn] " << truncated << " word(s) truncated to "
                   << MAX_WORD_LEN - 1 << " bytes\n";
 
-    double preprocess_ms = std::chrono::duration<double, std::milli>(
-        std::chrono::high_resolution_clock::now() - preprocess_start).count();
-    // --- PREPROCESS TIMER END ---
+    double pack_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - pack_start).count();
+    // --- PACK TIMER END ---
 
     // Upload inputs to device
     char* d_input_dev   = nullptr;
@@ -113,7 +120,8 @@ int main(int argc, char* argv[]) {
     int    num_iters       = 0;
     double total_kernel_ms = 0.0, peak_kernel_ms = 0.0;
 
-    std::cerr << "Preprocess (I/O+tokenize+lowercase+pack):   " << preprocess_ms << " ms\n";
+    std::cerr << "Preprocess (I/O+tokenize+lowercase):        " << preprocess_ms << " ms\n";
+    std::cerr << "Pack (build fixed-stride buffer):           " << pack_ms << " ms\n";
     std::cerr << "Running for " << run_duration_s << "s  words=" << num_words
               << "  blocks=" << blocks << "  threads=" << threads << "\n";
 
