@@ -199,3 +199,28 @@ target_link_libraries(lemmatize_gpu_loop PRIVATE
 set_target_properties(lemmatize_gpu_loop PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )
+
+# ================================
+# GPU stride loop (max-throughput) benchmark
+# ================================
+add_executable(lemmatize_gpu_stride_loop
+        src/cuda/bench_gpu_stride_loop.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_stride_loop PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_stride_loop PRIVATE
+        ${ICU_LIBRARIES}
+        rmm::rmm
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_stride_loop PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)

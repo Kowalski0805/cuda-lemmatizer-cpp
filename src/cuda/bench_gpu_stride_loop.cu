@@ -7,15 +7,18 @@
 #include <vector>
 
 #include <cuda_runtime.h>
-#include <cudf/column/column_factories.hpp>
-#include <cudf/column/column_device_view.cuh>
-#include <rmm/device_uvector.hpp>
-#include <rmm/device_buffer.hpp>
 
 #include "structs.h"
 #include "trie.h"
 #include "icu_lowercase.h"
-#include "lemmatizer_kernel.cuh"
+
+__global__ void lookup_kernel_stride(
+    const char* d_input,
+    int num_words,
+    const GpuState* states,
+    const GpuTransition* transitions,
+    const char* lemmas,
+    char* d_output);
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -38,7 +41,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + build arrays) ---
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + pack stride buffer) ---
     auto preprocess_start = std::chrono::high_resolution_clock::now();
 
     // Read and tokenize input
@@ -64,67 +67,53 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Build flat char arrays for cuDF strings column
-    std::vector<char> h_chars;
-    std::vector<int32_t> h_offsets = {0};
-    h_chars.reserve(static_cast<size_t>(num_words) * 16);
-    for (const auto& w : words) {
-        h_chars.insert(h_chars.end(), w.begin(), w.end());
-        h_offsets.push_back(static_cast<int32_t>(h_chars.size()));
+    // Pack words into fixed-stride buffer: [num_words * MAX_WORD_LEN], zero-padded
+    const size_t stride_bytes = static_cast<size_t>(num_words) * MAX_WORD_LEN;
+    std::vector<char> h_input(stride_bytes, 0);
+    int truncated = 0;
+    for (int i = 0; i < num_words; ++i) {
+        const auto& w = words[i];
+        if (w.size() >= static_cast<size_t>(MAX_WORD_LEN)) ++truncated;
+        const size_t copy_len = std::min(w.size(), static_cast<size_t>(MAX_WORD_LEN - 1));
+        std::memcpy(h_input.data() + i * MAX_WORD_LEN, w.data(), copy_len);
     }
+    if (truncated > 0)
+        std::cerr << "[warn] " << truncated << " word(s) truncated to "
+                  << MAX_WORD_LEN - 1 << " bytes\n";
 
     double preprocess_ms = std::chrono::duration<double, std::milli>(
         std::chrono::high_resolution_clock::now() - preprocess_start).count();
     // --- PREPROCESS TIMER END ---
 
-    // Upload chars to device
-    rmm::device_uvector<char> d_chars_raw(h_chars.size(), rmm::cuda_stream_default);
-    cudaMemcpy(d_chars_raw.data(), h_chars.data(), h_chars.size(), cudaMemcpyHostToDevice);
+    // Upload inputs to device
+    char* d_input_dev   = nullptr;
+    char* d_output_dev  = nullptr;
+    GpuState*      d_states      = nullptr;
+    GpuTransition* d_transitions = nullptr;
+    char*          d_lemmas_dev  = nullptr;
 
-    // Build cuDF strings column
-    auto offsets_col = cudf::make_numeric_column(
-        cudf::data_type{cudf::type_id::INT32},
-        static_cast<cudf::size_type>(h_offsets.size()),
-        cudf::mask_state::UNALLOCATED);
-    cudaMemcpy(offsets_col->mutable_view().data<int32_t>(),
-               h_offsets.data(),
-               h_offsets.size() * sizeof(int32_t),
-               cudaMemcpyHostToDevice);
+    cudaMalloc(&d_input_dev,    stride_bytes);
+    cudaMalloc(&d_output_dev,   stride_bytes);
+    cudaMalloc(&d_states,       h_states.size()      * sizeof(GpuState));
+    cudaMalloc(&d_transitions,  h_transitions.size() * sizeof(GpuTransition));
+    cudaMalloc(&d_lemmas_dev,   h_lemmas.size());
 
-    auto input_col = cudf::make_strings_column(
-        static_cast<cudf::size_type>(num_words),
-        std::move(offsets_col),
-        rmm::device_buffer{d_chars_raw.data(), h_chars.size(), rmm::cuda_stream_default},
-        0,
-        rmm::device_buffer{});
-    auto d_input_view = cudf::column_device_view::create(input_col->view());
-
-    // Upload trie to device
-    rmm::device_uvector<GpuState> d_states(h_states.size(), rmm::cuda_stream_default);
-    rmm::device_uvector<GpuTransition> d_transitions(h_transitions.size(), rmm::cuda_stream_default);
-    rmm::device_uvector<char> d_lemmas(h_lemmas.size(), rmm::cuda_stream_default);
-    cudaMemcpy(d_states.data(), h_states.data(),
-               h_states.size() * sizeof(GpuState), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_transitions.data(), h_transitions.data(),
-               h_transitions.size() * sizeof(GpuTransition), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_lemmas.data(), h_lemmas.data(), h_lemmas.size(), cudaMemcpyHostToDevice);
-
-    // Allocate output (zeroed once, reused each iteration)
-    rmm::device_uvector<thrust::pair<const char*, cudf::size_type>> d_output(
-        num_words, rmm::cuda_stream_default);
-    cudaMemset(d_output.data(), 0,
-               static_cast<size_t>(num_words) * sizeof(thrust::pair<const char*, cudf::size_type>));
+    cudaMemcpy(d_input_dev,   h_input.data(),       stride_bytes,                                 cudaMemcpyHostToDevice);
+    cudaMemcpy(d_states,      h_states.data(),      h_states.size() * sizeof(GpuState),           cudaMemcpyHostToDevice);
+    cudaMemcpy(d_transitions, h_transitions.data(), h_transitions.size() * sizeof(GpuTransition), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_lemmas_dev,  h_lemmas.data(),      h_lemmas.size(),                              cudaMemcpyHostToDevice);
+    cudaMemset(d_output_dev, 0, stride_bytes);
 
     cudaEvent_t ev_start, ev_stop;
     cudaEventCreate(&ev_start);
     cudaEventCreate(&ev_stop);
 
-    int threads = 128;
-    int blocks = (num_words + threads - 1) / threads;
-    int num_iters = 0;
+    const int threads = 128;
+    const int blocks  = (num_words + threads - 1) / threads;
+    int    num_iters       = 0;
     double total_kernel_ms = 0.0, peak_kernel_ms = 0.0;
 
-    std::cerr << "Preprocess (I/O+tokenize+lowercase+arrays): " << preprocess_ms << " ms\n";
+    std::cerr << "Preprocess (I/O+tokenize+lowercase+pack):   " << preprocess_ms << " ms\n";
     std::cerr << "Running for " << run_duration_s << "s  words=" << num_words
               << "  blocks=" << blocks << "  threads=" << threads << "\n";
 
@@ -135,13 +124,8 @@ int main(int argc, char* argv[]) {
         if (elapsed >= run_duration_s) break;
 
         cudaEventRecord(ev_start);
-        lookup_kernel<<<blocks, threads>>>(
-            *d_input_view,
-            num_words,
-            d_states.data(),
-            d_transitions.data(),
-            d_lemmas.data(),
-            d_output.data());
+        lookup_kernel_stride<<<blocks, threads>>>(
+            d_input_dev, num_words, d_states, d_transitions, d_lemmas_dev, d_output_dev);
         cudaEventRecord(ev_stop);
         cudaEventSynchronize(ev_stop);
 
@@ -160,6 +144,12 @@ int main(int argc, char* argv[]) {
 
     cudaEventDestroy(ev_start);
     cudaEventDestroy(ev_stop);
+
+    cudaFree(d_input_dev);
+    cudaFree(d_output_dev);
+    cudaFree(d_states);
+    cudaFree(d_transitions);
+    cudaFree(d_lemmas_dev);
 
     double avg_ms = total_kernel_ms / num_iters;
     double tp = (double)num_words * num_iters / (total_kernel_ms / 1000.0);

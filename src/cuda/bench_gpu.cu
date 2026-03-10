@@ -39,6 +39,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase + build arrays) ---
+    auto preprocess_start = std::chrono::high_resolution_clock::now();
+
     // Read and tokenize input
     std::ifstream fin(input_path);
     if (!fin) {
@@ -81,8 +84,15 @@ int main(int argc, char* argv[]) {
         h_offsets.push_back(static_cast<int32_t>(h_chars.size()));
     }
 
+    auto preprocess_end = std::chrono::high_resolution_clock::now();
+    double preprocess_ms = std::chrono::duration<double, std::milli>(preprocess_end - preprocess_start).count();
+    // --- PREPROCESS TIMER END ---
+
     // --- TOTAL TIMER START (includes H2D, kernel, D2H) ---
     auto total_start = std::chrono::high_resolution_clock::now();
+
+    // --- H2D TIMER START ---
+    auto h2d_start = std::chrono::high_resolution_clock::now();
 
     // Upload chars to device
     rmm::device_uvector<char> d_chars_raw(h_chars.size(), rmm::cuda_stream_default);
@@ -122,6 +132,11 @@ int main(int argc, char* argv[]) {
     cudaMemset(d_output.data(), 0,
                static_cast<size_t>(num_words) * sizeof(thrust::pair<const char*, cudf::size_type>));
 
+    cudaDeviceSynchronize();
+    auto h2d_end = std::chrono::high_resolution_clock::now();
+    double h2d_ms = std::chrono::duration<double, std::milli>(h2d_end - h2d_start).count();
+    // --- H2D TIMER END ---
+
     // --- KERNEL TIMING ---
     cudaEvent_t ev_start, ev_stop;
     cudaEventCreate(&ev_start);
@@ -146,6 +161,9 @@ int main(int argc, char* argv[]) {
     cudaEventDestroy(ev_start);
     cudaEventDestroy(ev_stop);
 
+    // --- D2H TIMER START ---
+    auto d2h_start = std::chrono::high_resolution_clock::now();
+
     // Copy results back to host
     std::vector<thrust::pair<const char*, cudf::size_type>> h_results(num_words);
     cudaMemcpy(h_results.data(), d_output.data(),
@@ -153,8 +171,9 @@ int main(int argc, char* argv[]) {
                cudaMemcpyDeviceToHost);
 
     auto total_end = std::chrono::high_resolution_clock::now();
-    // --- TOTAL TIMER END ---
+    // --- TOTAL TIMER END / D2H TIMER END ---
 
+    double d2h_ms = std::chrono::duration<double, std::milli>(total_end - d2h_start).count();
     double total_ms = std::chrono::duration<double, std::milli>(total_end - total_start).count();
 
     // Decode results: pointer into d_lemmas → offset into h_lemmas; otherwise fallback
@@ -173,10 +192,14 @@ int main(int argc, char* argv[]) {
     }
 
     double throughput = (kernel_ms > 0.f) ? (num_words / (kernel_ms / 1000.0)) : 0.0;
-    std::cerr << "Words: " << num_words
-              << "  Kernel: " << kernel_ms << " ms"
-              << "  Total (incl. H2D/D2H): " << total_ms << " ms"
-              << "  Throughput: " << static_cast<long long>(throughput) << " words/sec\n";
+    std::cerr << "Words: " << num_words << "\n"
+              << "  Preprocess (I/O+tokenize+lowercase+arrays): " << preprocess_ms << " ms\n"
+              << "  H2D (upload words+trie):                    " << h2d_ms << " ms\n"
+              << "  Kernel:                                     " << kernel_ms << " ms"
+              << "  (" << static_cast<long long>(throughput) << " words/sec)\n"
+              << "  D2H (download results):                     " << d2h_ms << " ms\n"
+              << "  GPU total (H2D+kernel+D2H):                 " << total_ms << " ms\n"
+              << "  End-to-end (preprocess+GPU):                " << (preprocess_ms + total_ms) << " ms\n";
 
     // Write output, preserving line structure
     std::ostream* out_ptr = &std::cout;
