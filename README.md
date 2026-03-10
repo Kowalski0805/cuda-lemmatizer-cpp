@@ -161,21 +161,18 @@ Variant using binary search over sorted transitions instead of linear scan.
 
 ```bash
 cd cmake-build-debug
+INPUT=../articles.txt
 
 echo "=== CPU ===" && \
-./lemmatize_cpu ../articles.txt && \
-
+./lemmatize_cpu $INPUT 1>/dev/null && \
 echo "=== GPU one-shot ===" && \
-./lemmatize_gpu ../articles.txt && \
-
+./lemmatize_gpu $INPUT 1>/dev/null && \
 echo "=== GPU loop (30s) ===" && \
-./lemmatize_gpu_loop ../articles.txt 30 && \
-
+./lemmatize_gpu_loop $INPUT 30 && \
 echo "=== GPU stride loop (30s) ===" && \
-./lemmatize_gpu_stride_loop ../articles.txt 30 && \
-
+./lemmatize_gpu_stride_loop $INPUT 30 && \
 echo "=== GPU bsearch ===" && \
-./lemmatize_gpu_bsearch ../articles.txt
+./lemmatize_gpu_bsearch $INPUT 1>/dev/null
 ```
 
 ---
