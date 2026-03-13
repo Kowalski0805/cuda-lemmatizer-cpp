@@ -224,3 +224,97 @@ target_link_libraries(lemmatize_gpu_stride_loop PRIVATE
 set_target_properties(lemmatize_gpu_stride_loop PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )
+
+# ================================
+# GPU unified memory one-shot benchmark
+# ================================
+add_executable(lemmatize_gpu_unified
+        src/cuda/bench_gpu_unified.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_unified PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_unified PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_unified PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# GPU unified memory loop benchmark
+# ================================
+add_executable(lemmatize_gpu_unified_loop
+        src/cuda/bench_gpu_unified_loop.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_unified_loop PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_unified_loop PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_unified_loop PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# GPU raw benchmark (one word/line input, metrics only)
+# ================================
+add_executable(lemmatize_gpu_raw
+        src/cuda/bench_gpu_raw.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_raw PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_raw PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_raw PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# GPU optimized benchmark (mmap, pinned memory, async streams, event sync)
+# ================================
+add_executable(lemmatize_gpu_opt
+        src/cuda/bench_gpu_opt.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_opt PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_opt PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_opt PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
