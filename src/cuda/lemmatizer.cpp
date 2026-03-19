@@ -20,6 +20,7 @@
 #include <rmm/exec_policy.hpp>
 #include "lemmatizer_kernel.cuh"
 #include "lemmatizer_kernel.h"
+#include <thrust/pair.h>
 
 struct GpuState;
 struct GpuTransition;

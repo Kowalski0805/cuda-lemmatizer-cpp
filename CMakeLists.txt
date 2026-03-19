@@ -10,7 +10,7 @@ set(CMAKE_CUDA_ARCHITECTURES 89)
 
 # Optional: make sure CUDA path is correct
 set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
-set(rapids-cmake-version 25.08)
+set(rapids-cmake-version 26.02.1)
 
 project(cuda_lemmatizer LANGUAGES CXX CUDA)
 add_compile_definitions(LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE)

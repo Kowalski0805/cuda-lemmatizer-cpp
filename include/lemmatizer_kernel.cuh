@@ -7,6 +7,7 @@
 #pragma once
 #include "structs.h"
 #include <cudf/column/column_device_view.cuh>
+#include <thrust/pair.h>
 
 __global__ void normalize_kernel(char* d_input, char* d_output,
                                  const char* dict_keys, const char* dict_vals,

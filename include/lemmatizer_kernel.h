@@ -7,6 +7,7 @@
 #pragma once
 
 #include "structs.h"
+#include <thrust/pair.h>
 
 extern "C" void launch_lookup_kernel(
     cudf::column_device_view const &d_input,
