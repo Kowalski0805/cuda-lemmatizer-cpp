@@ -298,6 +298,30 @@ set_target_properties(lemmatize_gpu_raw PROPERTIES
 )
 
 # ================================
+# GPU packed-column benchmark (index-only D2H: 4 bytes/word)
+# ================================
+add_executable(lemmatize_gpu_col
+        src/cuda/bench_gpu_col.cu
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_col PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_col PRIVATE
+        ${ICU_LIBRARIES}
+        rmm::rmm
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_col PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
 # GPU optimized benchmark (mmap, pinned memory, async streams, event sync)
 # ================================
 add_executable(lemmatize_gpu_opt
@@ -316,5 +340,25 @@ target_link_libraries(lemmatize_gpu_opt PRIVATE
 )
 
 set_target_properties(lemmatize_gpu_opt PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+add_executable(lemmatize_gpu_opt1
+        src/cuda/bench_gpu_opt1.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_opt1 PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_opt1 PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_opt1 PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )

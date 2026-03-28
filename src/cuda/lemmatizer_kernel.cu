@@ -10,6 +10,7 @@
 #include <fstream>
 #include <cudf/column/column_device_view.cuh>
 #include <cudf/strings/string_view.hpp>
+#include <thrust/pair.h>
 
 #include "structs.h"
 

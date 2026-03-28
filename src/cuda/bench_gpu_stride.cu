@@ -43,6 +43,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // --- PREPROCESS TIMER START (file I/O + tokenize + lowercase_ukr) ---
+    auto preprocess_start = std::chrono::high_resolution_clock::now();
+
     // Read and tokenize input
     std::ifstream fin(input_path);
     if (!fin) {
@@ -67,6 +70,10 @@ int main(int argc, char* argv[]) {
     }
     const int num_words = static_cast<int>(words.size());
 
+    auto preprocess_end = std::chrono::high_resolution_clock::now();
+    double preprocess_ms = std::chrono::duration<double, std::milli>(preprocess_end - preprocess_start).count();
+    // --- PREPROCESS TIMER END ---
+
     // Handle empty input
     if (num_words == 0) {
         std::ostream* out_ptr = &std::cout;
@@ -75,6 +82,9 @@ int main(int argc, char* argv[]) {
         for (size_t i = 0; i < lines.size(); ++i) *out_ptr << '\n';
         return 0;
     }
+
+    // --- PACK TIMER START (build flat char/offset arrays) ---
+    auto pack_start = std::chrono::high_resolution_clock::now();
 
     // Pack words into fixed-stride buffer: [num_words * MAX_WORD_LEN], zero-padded
     const size_t stride_bytes = static_cast<size_t>(num_words) * MAX_WORD_LEN;
@@ -91,8 +101,15 @@ int main(int argc, char* argv[]) {
         std::cerr << "[warn] " << truncated << " word(s) truncated to "
                   << MAX_WORD_LEN - 1 << " bytes\n";
 
+    double pack_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - pack_start).count();
+    // --- PACK TIMER END ---
+
     // --- TOTAL TIMER START (includes H2D, kernel, D2H) ---
     auto total_start = std::chrono::high_resolution_clock::now();
+
+    // --- H2D TIMER START ---
+    auto h2d_start = std::chrono::high_resolution_clock::now();
 
     // Allocate device buffers
     char*        d_input_dev   = nullptr;
@@ -113,6 +130,11 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(d_lemmas,      h_lemmas.data(),      h_lemmas.size(),                             cudaMemcpyHostToDevice);
     cudaMemset(d_output_dev, 0, stride_bytes);
 
+    cudaDeviceSynchronize();
+    auto h2d_end = std::chrono::high_resolution_clock::now();
+    double h2d_ms = std::chrono::duration<double, std::milli>(h2d_end - h2d_start).count();
+    // --- H2D TIMER END ---
+
     // --- KERNEL TIMING ---
     cudaEvent_t ev_start, ev_stop;
     cudaEventCreate(&ev_start);
@@ -132,6 +154,9 @@ int main(int argc, char* argv[]) {
     cudaEventDestroy(ev_start);
     cudaEventDestroy(ev_stop);
 
+    // --- D2H TIMER START ---
+    auto d2h_start = std::chrono::high_resolution_clock::now();
+
     // Copy results back
     std::vector<char> h_output(stride_bytes);
     cudaMemcpy(h_output.data(), d_output_dev, stride_bytes, cudaMemcpyDeviceToHost);
@@ -145,6 +170,7 @@ int main(int argc, char* argv[]) {
     cudaFree(d_transitions);
     cudaFree(d_lemmas);
 
+    double d2h_ms = std::chrono::duration<double, std::milli>(total_end - d2h_start).count();
     double total_ms = std::chrono::duration<double, std::milli>(total_end - total_start).count();
 
     // Decode: each slot is a null-terminated string within MAX_WORD_LEN bytes
@@ -156,10 +182,15 @@ int main(int argc, char* argv[]) {
     }
 
     double throughput = (kernel_ms > 0.f) ? (num_words / (kernel_ms / 1000.0)) : 0.0;
-    std::cerr << "Words: " << num_words
-              << "  Kernel: " << kernel_ms << " ms"
-              << "  Total (incl. H2D/D2H): " << total_ms << " ms"
-              << "  Throughput: " << static_cast<long long>(throughput) << " words/sec\n";
+    std::cerr << "Words: " << num_words << "\n"
+              << "  Preprocess (I/O+tokenize+lowercase):        " << preprocess_ms << " ms\n"
+              << "  Pack (build flat char/offset arrays):       " << pack_ms << " ms\n"
+              << "  H2D (upload words+trie):                    " << h2d_ms << " ms\n"
+              << "  Kernel:                                     " << kernel_ms << " ms"
+              << "  (" << static_cast<long long>(throughput) << " words/sec)\n"
+              << "  D2H (download results):                     " << d2h_ms << " ms\n"
+              << "  GPU total (H2D+kernel+D2H):                 " << total_ms << " ms\n"
+              << "  End-to-end (preprocess+pack+GPU):           " << (preprocess_ms + pack_ms + total_ms) << " ms\n";
 
     // Write output, preserving line structure
     std::ostream* out_ptr = &std::cout;

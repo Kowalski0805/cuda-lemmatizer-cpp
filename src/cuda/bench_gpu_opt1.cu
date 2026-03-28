@@ -1,14 +1,5 @@
-// bench_gpu_opt.cu — Optimized GPU benchmark (one word per line, metrics only)
+// bench_gpu_opt1.cu — improvement of bench_gpu_opt (one word per line, metrics only)
 //
-// Fixes applied from Nsight profiling:
-//   - Pre-warm CUDA context (eliminates 190ms first-cudaMalloc overhead)
-//   - mmap file I/O (replaces getline)
-//   - Pre-scan for buffer sizes, cudaHostAlloc BEFORE timing (eliminates 5-7s in-pipeline overhead)
-//   - Async trie H2D on stream_trie, overlapping with file load + pack
-//   - Pinned host buffers → async H2D to device_uvector (explicit GDDR6X) → D2D into cuDF
-//     device_buffer on stream_data. Ensures kernel reads GDDR6X, not host-mapped memory.
-//   - Async D2H to pinned output (33× faster than unpinned)
-//   - Event-based stream sync only (no cudaDeviceSynchronize)
 
 #include <chrono>
 #include <cstring>
@@ -42,6 +33,7 @@
 using ResultPair = thrust::pair<const char*, cudf::size_type>;
 
 int main(int argc, char* argv[]) {
+    auto start = std::chrono::high_resolution_clock::now();
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <input_file>  (one word per line)\n";
         return 1;
@@ -49,6 +41,8 @@ int main(int argc, char* argv[]) {
 
     // Pre-warm CUDA context
     { void* tmp; CUDA_CHECK(cudaMalloc(&tmp, 1)); CUDA_CHECK(cudaFree(tmp)); }
+
+    auto t0 = std::chrono::high_resolution_clock::now();
 
     // Load trie from disk
     std::vector<GpuState>      h_states;
@@ -62,6 +56,41 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::cerr << "Trie load time: " << std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::high_resolution_clock::now() - t0).count() << " ms\n";
+
+
+    t0 = std::chrono::high_resolution_clock::now();
+
+    /*
+    int    pre_N = 0;
+    size_t pre_total_chars = 0;
+    FILE* f = fopen(argv[1], "rb");
+    struct stat st; fstat(fileno(f), &st);
+    const size_t file_sz = (size_t)st.st_size;
+    char buf[1 << 20];
+    size_t n;
+    bool in_word = false;
+
+    while ((n = fread(buf, 1, sizeof(buf), f)) > 0) {
+        for (size_t i = 0; i < n; i++) {
+            if (buf[i] != '\n' && buf[i] != '\r') {
+                if (!in_word) { ++pre_N; in_word = true; }
+                ++pre_total_chars;
+            } else {
+                in_word = false;
+            }
+        }
+    }
+    fclose(f);
+
+    int fd = open(argv[1], O_RDONLY);
+    if (fd < 0) { std::cerr << "Cannot open: " << argv[1] << "\n"; return 1; }
+    const char* mapped = (const char*)mmap(nullptr, file_sz, PROT_READ, MAP_PRIVATE, fd, 0);
+    close(fd);
+    if (mapped == MAP_FAILED) { std::cerr << "mmap failed\n"; return 1; }
+    madvise((void*)mapped, file_sz, MADV_SEQUENTIAL);
+    /*/
     // --- PRE-SCAN: mmap file, count N and total_chars (outside timing, no allocations) ---
     int fd = open(argv[1], O_RDONLY);
     if (fd < 0) { std::cerr << "Cannot open: " << argv[1] << "\n"; return 1; }
@@ -85,8 +114,14 @@ int main(int argc, char* argv[]) {
         }
     }
     if (pre_N == 0) { std::cerr << "No words.\n"; munmap((void*)mapped, file_sz); return 1; }
+    //*/
+
+    std::cerr << "Pre-scan time: " << std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::high_resolution_clock::now() - t0).count() << " ms\n";
 
     // --- PRE-ALLOCATE ALL PINNED + DEVICE BUFFERS (outside timing) ---
+    t0 = std::chrono::high_resolution_clock::now();
+
     char*       h_chars;
     int32_t*    h_offsets;
     ResultPair* h_out;
@@ -102,6 +137,9 @@ int main(int argc, char* argv[]) {
     rmm::device_uvector<ResultPair>    d_out(pre_N,                    rmm::cuda_stream_default);
     auto offsets_col = cudf::make_numeric_column(
         cudf::data_type{cudf::type_id::INT32}, pre_N + 1, cudf::mask_state::UNALLOCATED);
+
+    std::cerr << "Pre-allocation time: " << std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::high_resolution_clock::now() - t0).count() << " ms\n";
 
     // --- STREAMS & EVENTS ---
     cudaStream_t stream_trie, stream_data;
@@ -129,38 +167,30 @@ int main(int argc, char* argv[]) {
     CUDA_CHECK(cudaStreamSynchronize(stream_trie));
 
     // --- LOAD TIMER: rescan mmap → fill spans ---
-    auto t0 = std::chrono::high_resolution_clock::now();
-    std::vector<std::pair<const char*, int>> spans;
-    spans.reserve(pre_N);
-    {
-        const char* p = mapped, *end = mapped + file_sz;
-        while (p < end) {
-            const char* ws = p;
-            while (p < end && *p != '\n' && *p != '\r') ++p;
-            int len = (int)(p - ws);
-            if (len > 0) spans.push_back({ws, len});
-            while (p < end && (*p == '\n' || *p == '\r')) ++p;
-        }
-    }
-    const int N = (int)spans.size();
-    double load_ms = std::chrono::duration<double, std::milli>(
-        std::chrono::high_resolution_clock::now() - t0).count();
-
     // --- PACK TIMER: mmap → pinned (one pass, no heap allocs) ---
     t0 = std::chrono::high_resolution_clock::now();
     h_offsets[0] = 0;
     size_t pos = 0;
-    for (int i = 0; i < N; ++i) {
-        auto [ws, len] = spans[i];
-        std::memcpy(h_chars + pos, ws, len);
-        pos += len;
-        h_offsets[i+1] = (int32_t)pos;
+    int N = 0;
+    const char* p = mapped, *end = mapped + file_sz;
+
+    while (p < end) {
+        const char* ws = p;
+        while (p < end && *p != '\n' && *p != '\r') ++p;
+        int len = (int)(p - ws);
+        if (len > 0) {
+            std::memcpy(h_chars + pos, ws, len);
+            h_offsets[N+1] = (int32_t)(pos += len);
+            ++N;
+        }
+        while (p < end && (*p == '\n' || *p == '\r')) ++p;
     }
     munmap((void*)mapped, file_sz);
     double pack_ms = std::chrono::duration<double, std::milli>(
         std::chrono::high_resolution_clock::now() - t0).count();
     const size_t total_chars = (size_t)h_offsets[N];
 
+    std::cerr << "pre_N: " << pre_N << " pre_total_chars: " << pre_total_chars << " N: " << N << "\n";
     // --- ASYNC DATA H2D: pinned → d_chars_raw (GDDR6X device_uvector) ---
     CUDA_CHECK(cudaMemsetAsync(d_out.data(), 0, (size_t)N * sizeof(ResultPair), stream_data));
     CUDA_CHECK(cudaEventRecord(ev_h2d_start, stream_data));
@@ -204,7 +234,6 @@ int main(int argc, char* argv[]) {
     double gpu_total = h2d_ms + kern_ms + d2h_ms;
     std::cerr
         << "Words: " << N << "\n"
-        << "  Load (mmap + find spans):               " << load_ms << " ms\n"
         << "  Pack (mmap→pinned, no heap alloc):      " << pack_ms << " ms\n"
         << "  Trie H2D (async, ran during load+pack): " << trie_ms << " ms\n"
         << "  Data H2D (pinned→GDDR6X, async):        " << h2d_ms  << " ms\n"
@@ -213,7 +242,7 @@ int main(int argc, char* argv[]) {
         << "  D2H (GDDR6X→pinned, async):             " << d2h_ms  << " ms\n"
         << "  GPU total (H2D+kernel+D2H):             " << gpu_total << " ms\n"
         << "  End-to-end (load+pack+gpu_total):       "
-        << (load_ms + pack_ms + gpu_total) << " ms\n";
+        << (pack_ms + gpu_total) << " ms\n";
 
     CUDA_CHECK(cudaFreeHost(h_chars));
     CUDA_CHECK(cudaFreeHost(h_offsets));
@@ -223,5 +252,9 @@ int main(int argc, char* argv[]) {
         cudaEventDestroy(e);
     cudaStreamDestroy(stream_trie);
     cudaStreamDestroy(stream_data);
+
+    std::cerr
+        << "  Wall time since start:                   " << std::chrono::duration<double, std::milli>(
+        std::chrono::high_resolution_clock::now() - start).count() << " ms\n";
     return 0;
 }
