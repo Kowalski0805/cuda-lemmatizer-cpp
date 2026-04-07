@@ -22,6 +22,15 @@ __global__ void lookup_kernel(
     thrust::pair<char const*, cudf::size_type>* d_output
 );
 
+__global__ void utf8_lookup_kernel(
+    cudf::column_device_view d_input,
+    int num_words,
+    const GpuState* states,
+    const Utf8Transition* transitions,
+    const char* lemmas,
+    thrust::pair<char const*, cudf::size_type>* d_output
+);
+
 __device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     cudf::column_device_view d_input,
     const int num_words,

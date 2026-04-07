@@ -143,6 +143,61 @@ __global__ void lookup_kernel(
     }
 }
 
+__global__ void utf8_lookup_kernel(
+    cudf::column_device_view d_input,
+    const int num_words,
+    const GpuState* states,
+    const Utf8Transition* transitions,
+    const char* lemmas,
+    thrust::pair<char const*, cudf::size_type>* d_output
+) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_words) return;
+
+    auto const word = d_input.element<cudf::string_view>(idx);
+    int state = 0;
+
+    const auto* p = reinterpret_cast<const unsigned char *>(word.data());
+    const unsigned char* end = p + word.size_bytes();
+
+    while (p < end) {
+        uint16_t cp;
+        if ((*p & 0x80) == 0) cp = *p++;
+        else { cp = ((*p & 0x1F) << 6) | (*(p+1) & 0x3F); p += 2; }
+
+        const GpuState& s = states[state];
+        bool found = false;
+
+        for (int j = 0; j < s.num_transitions; ++j) {
+            const Utf8Transition& t = transitions[s.transition_start_idx + j];
+            if (t.c == cp) {
+                state = t.next_state;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            cudf::string_view s = d_input.element<cudf::string_view>(idx);
+            d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
+            return;
+        }
+    }
+
+    // Final state reached — copy lemma if found
+    const GpuState& final_state = states[state];
+    if (final_state.lemma_offset >= 0) {
+        int len = 0;
+        while (lemmas[final_state.lemma_offset + len] != '\0' && len < MAX_WORD_LEN) {
+            ++len;
+        }
+        d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, len);
+    } else {
+        // No lemma — fallback
+        cudf::string_view s = d_input.element<cudf::string_view>(idx);
+        d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
+    }
+}
+
 __device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     cudf::column_device_view d_input,
     const int num_words,

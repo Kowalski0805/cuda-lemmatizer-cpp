@@ -39,6 +39,7 @@ static std::string_view cpu_lookup(
 }
 
 int main(int argc, char* argv[]) {
+    auto t0 = std::chrono::high_resolution_clock::now();
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <input_file> [output_file]\n";
         return 1;
@@ -89,6 +90,7 @@ int main(int argc, char* argv[]) {
     auto t_start = std::chrono::high_resolution_clock::now();
 
     std::vector<std::string> result_words(words.size());
+    #pragma omp parallel for schedule(dynamic, 1024)
     for (size_t i = 0; i < words.size(); ++i) {
         auto lemma = cpu_lookup(words[i], h_states, h_transitions, h_lemmas);
         result_words[i] = std::string(lemma);
@@ -101,7 +103,9 @@ int main(int argc, char* argv[]) {
     double throughput = (ms > 0.0) ? (static_cast<double>(total_words) / (ms / 1000.0)) : 0.0;
     std::cerr << "Words: " << total_words
               << "  Time: " << ms << " ms"
-              << "  Throughput: " << static_cast<long long>(throughput) << " words/sec\n";
+              << "  Throughput: " << static_cast<long long>(throughput) << " words/sec\n"
+              << "  E2E time: " << std::chrono::duration<double, std::milli>(t_end - t0).count() << " ms\n"
+            << "  E2E throughput: " << static_cast<long long>(total_words / (std::chrono::duration<double, std::milli>(t_end - t0).count() / 1000.0)) << " words/sec\n";
 
     // Write output, preserving line structure
     std::ostream* out_ptr = &std::cout;
@@ -115,14 +119,14 @@ int main(int argc, char* argv[]) {
         out_ptr = &fout;
     }
 
-    int word_idx = 0;
-    for (size_t i = 0; i < lines.size(); ++i) {
-        for (int j = 0; j < line_word_count[i]; ++j) {
-            if (j > 0) *out_ptr << ' ';
-            *out_ptr << result_words[word_idx++];
-        }
-        *out_ptr << '\n';
-    }
+    // int word_idx = 0;
+    // for (size_t i = 0; i < lines.size(); ++i) {
+    //     for (int j = 0; j < line_word_count[i]; ++j) {
+    //         if (j > 0) *out_ptr << ' ';
+    //         *out_ptr << result_words[word_idx++];
+    //     }
+    //     *out_ptr << '\n';
+    // }
 
     return 0;
 }

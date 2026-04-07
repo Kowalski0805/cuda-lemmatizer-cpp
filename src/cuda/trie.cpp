@@ -4,6 +4,7 @@
 
 #include "trie.h"
 
+#include <cstdint>
 #include <cstring>
 #include <fstream>
 #include <sstream>
@@ -241,6 +242,84 @@ void build_gpu_trie_from_csv(
     }
 
     std::cout << "Built GPU trie with " << states.size()
+              << " states, " << transitions.size()
+              << " transitions, and " << lemma_buffer.size()
+              << " bytes of lemma buffer.\n";
+}
+
+void build_utf8_gpu_trie_from_csv(
+    const std::string& path,
+    std::vector<GpuState>& states,
+    std::vector<Utf8Transition>& transitions,
+    std::vector<char>& lemma_buffer)
+{
+    std::ifstream file(path);
+    if (!file) throw std::runtime_error("Cannot open: " + path);
+
+    std::string line;
+    std::getline(file, line); // skip header
+
+    std::vector<Utf8TempTrieNode> temp_nodes;
+    temp_nodes.emplace_back();  // root
+
+    std::unordered_map<std::string, int> seen;
+    int next_offset = 0;
+
+    while (std::getline(file, line)) {
+        std::istringstream ss(line);
+        std::string wordform, lemma;
+        if (!std::getline(ss, wordform, ',') || !std::getline(ss, lemma, ',')) continue;
+        if (wordform.find('-') != std::string::npos) continue;
+
+        std::string key = lowercase_ukr(wordform);
+        if (seen.count(key)) continue;
+        seen[key] = next_offset;
+
+        // append lemma to buffer
+        int lemma_offset = next_offset;
+        for (char c : lemma) lemma_buffer.push_back(c);
+        lemma_buffer.push_back('\0');
+        next_offset = lemma_buffer.size();
+
+        // insert into trie
+        int node = 0;
+
+        const auto* p = reinterpret_cast<const unsigned char *>(key.data());
+        const unsigned char* end = p + key.size();
+        while (p < end) {
+            uint16_t cp;
+            if ((*p & 0x80) == 0) {
+                cp = *p++;                          // ASCII
+            } else {
+                cp = ((*p & 0x1F) << 6) | (*(p+1) & 0x3F);
+                p += 2;                             // Cyrillic 2-byte
+            }
+            if (!temp_nodes[node].children.count(cp)) {
+                int new_node = temp_nodes.size();
+                temp_nodes[node].children[cp] = new_node;
+                temp_nodes.emplace_back();
+            }
+            node = temp_nodes[node].children[cp];
+        }
+
+        temp_nodes[node].lemma_offset = lemma_offset;
+    }
+
+    // flatten trie into GPU structures
+    for (const auto& node : temp_nodes) {
+        GpuState gpu_state;
+        gpu_state.transition_start_idx = transitions.size();
+        gpu_state.num_transitions = node.children.size();
+        gpu_state.lemma_offset = node.lemma_offset;
+
+        for (const auto& [c, target] : node.children) {
+            transitions.push_back({c, target});
+        }
+
+        states.push_back(gpu_state);
+    }
+
+    std::cout << "Built UTF-8 GPU trie with " << states.size()
               << " states, " << transitions.size()
               << " transitions, and " << lemma_buffer.size()
               << " bytes of lemma buffer.\n";

@@ -185,10 +185,29 @@ int main_gpu() {
     std::vector<GpuTransition> h_transitions;
     std::vector<char> h_lemmas;
 
-    build_gpu_trie_from_csv("ukr_morph_dict.csv", h_states, h_transitions, h_lemmas);
+    build_gpu_trie_from_csv("../ukr_morph_dict.csv", h_states, h_transitions, h_lemmas);
     save_bin_vector("gpu_states.bin", h_states);
     save_bin_vector("gpu_transitions.bin", h_transitions);
     save_bin_vector("gpu_lemmas.bin", h_lemmas);
+
+    std::vector<GpuState> utf8_states;
+    std::vector<Utf8Transition> utf8_transitions;
+    std::vector<char> utf8_lemmas;
+    build_utf8_gpu_trie_from_csv("../ukr_morph_dict.csv", utf8_states, utf8_transitions, utf8_lemmas);
+
+    double total = 0; int nonleaf = 0;
+    for (const auto& s : utf8_states)
+        if (s.num_transitions > 0) { total += s.num_transitions; ++nonleaf; }
+    printf("Avg transitions per node: %.2f (over %d nonleaf nodes)\n", total/nonleaf, nonleaf);
+
+    save_bin_vector("../utf8_states.bin", utf8_states);
+    save_bin_vector("../utf8_transitions.bin", utf8_transitions);
+    save_bin_vector("../utf8_lemmas.bin", utf8_lemmas);
+    // clean up utf8
+    utf8_states.clear(); utf8_states.shrink_to_fit();
+    utf8_transitions.clear(); utf8_transitions.shrink_to_fit();
+    utf8_lemmas.clear(); utf8_lemmas.shrink_to_fit();
+
     auto start_load = std::chrono::high_resolution_clock::now();
     load_bin_vector("gpu_states.bin", h_states);
     load_bin_vector("gpu_transitions.bin", h_transitions);
@@ -329,6 +348,6 @@ int main_gpu() {
 
 
 int main() {
-    main_dawg();
+    // main_dawg();
     return main_gpu();
 }

@@ -7,6 +7,7 @@
 #pragma once
 #define MAX_WORD_LEN 32
 #include <unordered_map>
+#include <cstdint>
 
     struct TempTrieNode {
         std::unordered_map<char, int> children;
@@ -21,6 +22,16 @@
 
     struct GpuTransition {
         char c;
+        int next_state;
+    };
+
+    struct Utf8TempTrieNode {
+        std::unordered_map<uint16_t, int> children;
+        int lemma_offset = -1;
+    };
+
+    struct Utf8Transition {
+        uint16_t c;
         int next_state;
     };
 #endif //STRUCTS_H
