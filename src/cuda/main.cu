@@ -190,12 +190,17 @@ int main_gpu() {
     save_bin_vector("gpu_transitions.bin", h_transitions);
     save_bin_vector("gpu_lemmas.bin", h_lemmas);
 
+    double total = 0; int nonleaf = 0;
+    for (const auto& s : h_states)
+        if (s.num_transitions > 0) { total += s.num_transitions; ++nonleaf; }
+    printf("Avg transitions per node: %.2f (over %d nonleaf nodes)\n", total/nonleaf, nonleaf);
+
     std::vector<GpuState> utf8_states;
     std::vector<Utf8Transition> utf8_transitions;
     std::vector<char> utf8_lemmas;
     build_utf8_gpu_trie_from_csv("../ukr_morph_dict.csv", utf8_states, utf8_transitions, utf8_lemmas);
 
-    double total = 0; int nonleaf = 0;
+    total = 0; nonleaf = 0;
     for (const auto& s : utf8_states)
         if (s.num_transitions > 0) { total += s.num_transitions; ++nonleaf; }
     printf("Avg transitions per node: %.2f (over %d nonleaf nodes)\n", total/nonleaf, nonleaf);

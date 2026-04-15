@@ -11,6 +11,7 @@ set(CMAKE_CUDA_ARCHITECTURES 89)
 # Optional: make sure CUDA path is correct
 set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
 set(rapids-cmake-version 26.02.1)
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo")
 
 project(cuda_lemmatizer LANGUAGES CXX CUDA)
 add_compile_definitions(LIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE)
@@ -79,11 +80,13 @@ target_link_libraries(cuda_exe PRIVATE
         ${ICU_LIBRARIES}
         cudf::cudf
         lemmatizer
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
 )
 
 # ================================
 # CPU baseline lemmatizer benchmark
 # ================================
+find_package(OpenMP REQUIRED)
 add_executable(lemmatize_cpu
         src/cuda/bench_cpu.cpp
         src/cuda/icu_lowercase.cpp
@@ -97,182 +100,7 @@ target_include_directories(lemmatize_cpu PRIVATE
 
 target_link_libraries(lemmatize_cpu PRIVATE
         ${ICU_LIBRARIES}
-)
-
-# ================================
-# GPU lemmatizer benchmark
-# ================================
-add_executable(lemmatize_gpu
-        src/cuda/bench_gpu.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU stride lemmatizer benchmark
-# ================================
-add_executable(lemmatize_gpu_stride
-        src/cuda/bench_gpu_stride.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_stride PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_stride PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_stride PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU bsearch lemmatizer benchmark
-# ================================
-add_executable(lemmatize_gpu_bsearch
-        src/cuda/bench_gpu_bsearch.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/trie.cpp
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_bsearch PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_bsearch PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_bsearch PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU loop (max-throughput) benchmark
-# ================================
-add_executable(lemmatize_gpu_loop
-        src/cuda/bench_gpu_loop.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_loop PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_loop PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_loop PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU stride loop (max-throughput) benchmark
-# ================================
-add_executable(lemmatize_gpu_stride_loop
-        src/cuda/bench_gpu_stride_loop.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_stride_loop PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_stride_loop PRIVATE
-        ${ICU_LIBRARIES}
-        rmm::rmm
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_stride_loop PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU unified memory one-shot benchmark
-# ================================
-add_executable(lemmatize_gpu_unified
-        src/cuda/bench_gpu_unified.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_unified PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_unified PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_unified PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU unified memory loop benchmark
-# ================================
-add_executable(lemmatize_gpu_unified_loop
-        src/cuda/bench_gpu_unified_loop.cu
-        src/cuda/lemmatizer_kernel.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_unified_loop PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_unified_loop PRIVATE
-        ${ICU_LIBRARIES}
-        cudf::cudf
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_unified_loop PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
+        OpenMP::OpenMP_CXX
 )
 
 # ================================
@@ -294,30 +122,6 @@ target_link_libraries(lemmatize_gpu_raw PRIVATE
 )
 
 set_target_properties(lemmatize_gpu_raw PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON
-)
-
-# ================================
-# GPU packed-column benchmark (index-only D2H: 4 bytes/word)
-# ================================
-add_executable(lemmatize_gpu_col
-        src/cuda/bench_gpu_col.cu
-        src/cuda/icu_lowercase.cpp
-)
-
-target_include_directories(lemmatize_gpu_col PRIVATE
-        ${ICU_INCLUDE_DIRS}
-        include
-        src/cuda
-)
-
-target_link_libraries(lemmatize_gpu_col PRIVATE
-        ${ICU_LIBRARIES}
-        rmm::rmm
-        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-)
-
-set_target_properties(lemmatize_gpu_col PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )
 
@@ -362,3 +166,111 @@ target_link_libraries(lemmatize_gpu_opt1 PRIVATE
 set_target_properties(lemmatize_gpu_opt1 PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
 )
+
+# ================================
+# Unified GPU benchmark driver
+# ================================
+add_executable(lemmatize_gpu_driver
+        src/cuda/bench_gpu_driver.cu
+        src/cuda/lemmatizer_kernel.cu
+        src/cuda/trie.cpp
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(lemmatize_gpu_driver PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_driver PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+        OpenMP::OpenMP_CXX
+)
+
+set_target_properties(lemmatize_gpu_driver PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+
+# ================================
+add_executable(lemmatize_gpu_opt2
+        src/cuda/bench_gpu_opt2.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_opt2 PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_opt2 PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_opt2 PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+add_executable(lemmatize_gpu_opt1_utf8
+        src/cuda/bench_gpu_opt1_utf8.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_opt1_utf8 PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_opt1_utf8 PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_opt1_utf8 PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+add_executable(lemmatize_gpu_opt1_utf8_loop
+        src/cuda/bench_gpu_opt1_utf8_loop.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+
+target_include_directories(lemmatize_gpu_opt1_utf8_loop PRIVATE
+        include
+        src/cuda
+)
+
+target_link_libraries(lemmatize_gpu_opt1_utf8_loop PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+
+set_target_properties(lemmatize_gpu_opt1_utf8_loop PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+add_executable(micro src/cuda/micro.cu)
+set_target_properties(micro PROPERTIES CUDA_ARCHITECTURES 89)
+
+add_executable(micro_l1 src/cuda/micro_single.cu)
+set_target_properties(micro_l1 PROPERTIES CUDA_ARCHITECTURES 89)
+target_compile_options(micro_l1 PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-dlcm=ca>)
+target_compile_definitions(micro_l1 PRIVATE ARRAY_KB=64)
+
+add_executable(micro_l2 src/cuda/micro_single.cu)
+set_target_properties(micro_l2 PROPERTIES CUDA_ARCHITECTURES 89)
+target_compile_options(micro_l2 PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-dlcm=cg>)
+target_compile_definitions(micro_l2 PRIVATE ARRAY_MB=32)
+
+add_executable(micro_dram src/cuda/micro_single.cu)
+set_target_properties(micro_dram PROPERTIES CUDA_ARCHITECTURES 89)
+target_compile_options(micro_dram PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-dlcm=cg>)
+target_compile_definitions(micro_dram PRIVATE ARRAY_MB=256)

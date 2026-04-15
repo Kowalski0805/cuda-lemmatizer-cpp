@@ -51,6 +51,8 @@ __global__ void lookup_kernel_bsearch(
     const char* d_keys, const char* d_vals, int num_entries,
     char* d_output);
 
+__global__ void noop_kernel() {}
+
 // Col kernel: returns one int32 lemma offset per word (or -1).
 // Originally defined inline in bench_gpu_col.cu.
 __global__ void lookup_kernel_index(
@@ -98,7 +100,7 @@ __global__ void lookup_kernel_index(
 } while(0)
 
 using ResultPair = thrust::pair<const char*, cudf::size_type>;
-using Clock      = std::chrono::high_resolution_clock;
+using Clock      = std::chrono::steady_clock;
 
 static double ms_since(Clock::time_point t0) {
     return std::chrono::duration<double, std::milli>(Clock::now() - t0).count();
@@ -122,6 +124,8 @@ struct Config {
     bool    warm     = false;
     bool    verbose  = false;
     int     print    = 0;
+    int     max_words = 0;
+    bool    noop     = false;
 };
 
 static Config parse_args(int argc, char* argv[]) {
@@ -164,7 +168,9 @@ static Config parse_args(int argc, char* argv[]) {
         else if (a == "--loop")     { cfg.loop = true; }
         else if (a == "--warm")     { cfg.warm = true; }
         else if (a == "--verbose")  { cfg.verbose = true; }
+        else if (a == "--noop")     { cfg.noop = true; }
         else if (a == "--print")    { cfg.print = (int)strtol(next().c_str(), nullptr, 10); }
+        else if (a == "--words")    { cfg.max_words = (int)strtol(next().c_str(), nullptr, 10); }
         else { fprintf(stderr, "Unknown option: %s\n", a.c_str()); exit(1); }
     }
     if (cfg.memory == Memory::pinned_) cfg.input = Input::raw;  // mmap path requires one-word-per-line
@@ -191,7 +197,9 @@ static void load_trie(
 static void load_multiline(
     const std::string&       path,
     std::vector<std::string>& words,
-    std::vector<int>&         line_counts)
+    std::vector<int>&         line_counts,
+    int max_words = 0
+    )
 {
     std::ifstream fin(path);
     if (!fin) { fprintf(stderr, "Cannot open: %s\n", path.c_str()); exit(1); }
@@ -201,15 +209,21 @@ static void load_multiline(
     for (size_t i = 0; i < lines.size(); ++i) {
         std::istringstream ss(lines[i]);
         std::string tok;
-        while (ss >> tok) { words.push_back(lowercase_ukr(tok)); ++line_counts[i]; }
+        while (ss >> tok) {
+            words.push_back(lowercase_ukr(tok)); ++line_counts[i];
+            if (max_words > 0 && words.size() >= max_words) return;
+        }
     }
 }
 
-static void load_raw(const std::string& path, std::vector<std::string>& words) {
+static void load_raw(const std::string& path, std::vector<std::string>& words, int max_words = 0) {
     std::ifstream fin(path);
     if (!fin) { fprintf(stderr, "Cannot open: %s\n", path.c_str()); exit(1); }
     std::string ln;
-    while (std::getline(fin, ln)) if (!ln.empty()) words.push_back(std::move(ln));
+    while (std::getline(fin, ln)) {
+        if (!ln.empty()) words.push_back(std::move(ln));
+        if (max_words > 0 && words.size() >= max_words) return;
+    }
 }
 
 static void pack_flat(
@@ -270,11 +284,12 @@ static void run_loop(std::function<float()> kernel_fn, int num_words, double dur
         float ms = kernel_fn();
         total_ms += ms;
         if (ms > peak_ms) peak_ms = ms;
-        if (++num_iters % 100 == 0) {
-            double tp = (double)num_words * num_iters / (total_ms / 1000.0);
-            fprintf(stderr, "iter %5d  avg %.3f ms  throughput %.2fM words/sec\n",
-                    num_iters, total_ms / num_iters, tp / 1e6);
-        }
+        ++num_iters;
+        // if (++num_iters % 100 == 0) {
+        //     double tp = (double)num_words * num_iters / (total_ms / 1000.0);
+        //     fprintf(stderr, "iter %5d  avg %.3f ms  throughput %.2fM words/sec\n",
+        //             num_iters, total_ms / num_iters, tp / 1e6);
+        // }
     }
     double tp = (double)num_words * num_iters / (total_ms / 1000.0);
     fprintf(stderr, "\n=== Final ===\n"
@@ -411,9 +426,11 @@ static int run_packed(
 
     // ---- KERNEL DISPATCH ----
     auto launch = [&]() {
+        cfg.noop ? noop_kernel<<<blocks, threads>>>() :
         lookup_kernel<<<blocks, threads>>>(
             *d_input_view, N, d_states.data(), d_trans.data(), d_lemmas.data(), d_out.data());
     };
+
     auto timed_launch = [&]() -> float {
         return time_kernel_once(launch);
     };
@@ -440,23 +457,57 @@ static int run_packed(
     }
     double d2h_ms = ms_since(t0);
 
+    // // ---- DECODE ----
+    // t0 = Clock::now();
+    // std::vector<std::string> result_words(N);
+    // for (int i = 0; i < N; ++i) {
+    //     ResultPair rp = (cfg.memory == Memory::unified_)
+    //         ? d_out.data()[i]   // accessible directly (unified)
+    //         : h_results[i];
+    //     const char* gpu_ptr = rp.first;
+    //     int len = (int)rp.second;
+    //     if (gpu_ptr && len > 0) {
+    //         ptrdiff_t off = gpu_ptr - d_lemmas.data();
+    //         if (off >= 0 && (size_t)off < h_lemmas.size()) {
+    //             result_words[i] = std::string(h_lemmas.data() + off, len);
+    //             continue;
+    //         }
+    //     }
+    //     result_words[i] = words[i];
+    // }
+    // double decode_ms = ms_since(t0);
+
     // ---- DECODE ----
     t0 = Clock::now();
-    std::vector<std::string> result_words(N);
+    std::vector<char> out_chars;
+    out_chars.reserve(h_chars.size());
+    std::vector<int32_t> out_offsets(N + 1);
+    out_offsets[0] = 0;
+
     for (int i = 0; i < N; ++i) {
         ResultPair rp = (cfg.memory == Memory::unified_)
-            ? d_out.data()[i]   // accessible directly (unified)
+            ? d_out.data()[i]
             : h_results[i];
         const char* gpu_ptr = rp.first;
         int len = (int)rp.second;
+
+        const char* src;
+        size_t src_len;
         if (gpu_ptr && len > 0) {
             ptrdiff_t off = gpu_ptr - d_lemmas.data();
             if (off >= 0 && (size_t)off < h_lemmas.size()) {
-                result_words[i] = std::string(h_lemmas.data() + off, len);
-                continue;
+                src = h_lemmas.data() + off;
+                src_len = len;
+            } else {
+                src = words[i].c_str();
+                src_len = words[i].size();
             }
+        } else {
+            src = words[i].c_str();
+            src_len = words[i].size();
         }
-        result_words[i] = words[i];
+        out_chars.insert(out_chars.end(), src, src + src_len);
+        out_offsets[i + 1] = out_chars.size();
     }
     double decode_ms = ms_since(t0);
 
@@ -476,8 +527,8 @@ static int run_packed(
             kernel_ms, (long long)tp,
             d2h_ms, decode_ms, gpu_total, preprocess_ms + pack_ms + gpu_total);
 
-    if (!cfg.output_path.empty())
-        write_output(cfg.output_path, result_words, line_counts);
+    // if (!cfg.output_path.empty())
+        // write_output(cfg.output_path, result_words, line_counts);
     return 0;
 }
 
@@ -527,6 +578,7 @@ static int run_stride(
 
     // ---- KERNEL DISPATCH ----
     auto launch = [&]() {
+        cfg.noop ? noop_kernel<<<blocks, threads>>>() :
         lookup_kernel_stride<<<blocks, threads>>>(d_in, N, d_states, d_trans, d_lemmas, d_out);
     };
     auto timed_launch = [&]() -> float { return time_kernel_once(launch); };
@@ -604,7 +656,9 @@ static int run_col(
     rmm::device_uvector<GpuState>      d_states  (h_states.size(),      rmm::cuda_stream_default);
     rmm::device_uvector<GpuTransition> d_trans   (h_transitions.size(), rmm::cuda_stream_default);
     rmm::device_uvector<char>          d_lemmas  (h_lemmas.size(),      rmm::cuda_stream_default);
-    rmm::device_uvector<int32_t>       d_indices (N,                    rmm::cuda_stream_default);
+    // rmm::device_uvector<int32_t>       d_indices (N,                    rmm::cuda_stream_default);
+    int32_t* d_indices_raw;
+    CUDA_CHECK(cudaMalloc(&d_indices_raw, N * sizeof(int32_t)));
 
     cudaMemcpy(d_chars.data(),   h_chars.data(),        h_chars.size(),                              cudaMemcpyHostToDevice);
     cudaMemcpy(d_offsets.data(), h_offsets.data(),      h_offsets.size() * sizeof(int32_t),          cudaMemcpyHostToDevice);
@@ -621,22 +675,42 @@ static int run_col(
     for (int i = 0; i < 20; ++i) fprintf(stderr, "%c", h_chars[i] ? h_chars[i] : '?');
     fprintf(stderr, "\n");
 
+    if (cfg.loop) {
+        fprintf(stderr, "Preprocess: %.3f ms  Pack: %.3f ms  H2D: %.3f ms\n",
+                preprocess_ms, pack_ms, h2d_ms);
+        run_loop([&]() -> float {
+            return time_kernel_once([&]() {
+                cfg.noop ? noop_kernel<<<blocks, threads>>>() :
+                lookup_kernel_index<<<blocks, threads>>>(
+                    d_chars.data(), d_offsets.data(), N,
+                    d_states.data(), d_trans.data(), d_indices_raw);
+            });
+        }, N, cfg.duration, threads, blocks);
+        cudaFree(d_indices_raw);
+        return 0;
+    }
+
     // ---- KERNEL ----
     float kernel_ms = time_kernel_once([&]() {
+        cfg.noop ? noop_kernel<<<blocks, threads>>>() :
         lookup_kernel_index<<<blocks, threads>>>(
             d_chars.data(), d_offsets.data(), N,
-            d_states.data(), d_trans.data(), d_indices.data());
+            d_states.data(), d_trans.data(), d_indices_raw);
     });
 
+    t0 = Clock::now();
+    int32_t* h_indices;
+    CUDA_CHECK(cudaHostAlloc(&h_indices, N * sizeof(int32_t), cudaHostAllocDefault));
+    double h_alloc_ms = ms_since(t0);
     // ---- D2H (4 bytes/word) ----
     t0 = Clock::now();
-    std::vector<int32_t> h_indices(N);
-    cudaMemcpy(h_indices.data(), d_indices.data(), N * sizeof(int32_t), cudaMemcpyDeviceToHost);
-    double d2h_ms = ms_since(t0);
+    cudaMemcpy(h_indices, d_indices_raw, N * sizeof(int32_t), cudaMemcpyDeviceToHost);
+    auto d2h_ms = ms_since(t0);
 
     t0 = Clock::now();
     // ---- DECODE ----
     std::vector<std::string> result_words(N);
+    #pragma omp parallel for schedule(dynamic, 1024)
     for (int i = 0; i < N; ++i) {
         int32_t idx = h_indices[i];
         result_words[i] = (idx >= 0 && idx < h_lemmas.size())
@@ -651,15 +725,20 @@ static int run_col(
     fprintf(stderr, "Words: %d\n"
             "  Preprocess:  %.3f ms\n  Pack:        %.3f ms\n  H2D:         %.3f ms\n"
             "  Kernel:      %.3f ms  (%lld words/sec)\n"
+            "  Host alloc:     %.3f ms\n"
             "  D2H (4B/word): %.3f ms\n"
             "  Decode:       %.3f ms\n"
             "  GPU total:   %.3f ms\n"
             "  End-to-end:  %.3f ms\n",
             N, preprocess_ms, pack_ms, h2d_ms,
-            kernel_ms, (long long)tp, d2h_ms, decode_ms, gpu_total, preprocess_ms + pack_ms + gpu_total + decode_ms);
+            kernel_ms, (long long)tp, h_alloc_ms, d2h_ms, decode_ms, gpu_total, preprocess_ms + pack_ms + gpu_total + decode_ms);
 
     if (!cfg.output_path.empty())
         write_output(cfg.output_path, result_words, line_counts);
+
+    cudaFreeHost(h_indices);
+    cudaFree(d_indices_raw);
+
     return 0;
 }
 
@@ -713,6 +792,7 @@ static int run_bsearch(
 
     // ---- KERNEL ----
     float kernel_ms = time_kernel_once([&]() {
+        cfg.noop ? noop_kernel<<<blocks, threads>>>() :
         lookup_kernel_bsearch<<<blocks, threads>>>(d_in, N, d_keys, d_vals, num_entries, d_out);
     });
 
@@ -768,7 +848,10 @@ static int run_pinned(
           const char* ws = p;
           while (p < end && *p != '\n' && *p != '\r') ++p;
           int len = (int)(p - ws);
-          if (len > 0) { ++pre_N; pre_total_chars += len; }
+          if (len > 0) {
+              ++pre_N; pre_total_chars += len;
+              if (cfg.max_words > 0 && pre_N >= cfg.max_words) break;
+          }
           while (p < end && (*p == '\n' || *p == '\r')) ++p;
       } }
     if (pre_N == 0) { fprintf(stderr, "No words.\n"); munmap((void*)mapped, file_sz); return 1; }
@@ -786,7 +869,13 @@ static int run_pinned(
     rmm::device_uvector<GpuTransition> d_trans    (h_transitions.size(), rmm::cuda_stream_default);
     rmm::device_uvector<char>          d_lemmas   (h_lemmas.size(),       rmm::cuda_stream_default);
     rmm::device_uvector<char>          d_chars_raw(pre_total_chars,       rmm::cuda_stream_default);
-    rmm::device_uvector<ResultPair>    d_out      (pre_N,                 rmm::cuda_stream_default);
+    // in PRE-ALLOCATE section, alongside other device allocations
+    int32_t* d_indices_raw = nullptr;
+    if (cfg.kernel == Kernel::col)
+        CUDA_CHECK(cudaMalloc(&d_indices_raw, (size_t)pre_N * sizeof(int32_t)));
+    int32_t* h_indices = nullptr;
+    if (cfg.kernel == Kernel::col)
+        CUDA_CHECK(cudaHostAlloc(&h_indices, (size_t)pre_N * sizeof(int32_t), cudaHostAllocDefault));
     auto offsets_col = cudf::make_numeric_column(
         cudf::data_type{cudf::type_id::INT32}, pre_N + 1, cudf::mask_state::UNALLOCATED);
     if (cfg.verbose)
@@ -826,6 +915,7 @@ static int run_pinned(
             std::memcpy(h_chars + pos, ws, len);
             h_offsets[N + 1] = (int32_t)(pos += len);
             ++N;
+            if (cfg.max_words > 0 && N >= cfg.max_words) break;
         }
         while (p < end && (*p == '\n' || *p == '\r')) ++p;
     }
@@ -841,7 +931,6 @@ static int run_pinned(
     fprintf(stderr, "\n");
 
     // ---- ASYNC DATA H2D ----
-    CUDA_CHECK(cudaMemsetAsync(d_out.data(), 0, (size_t)N * sizeof(ResultPair), stream_data));
     CUDA_CHECK(cudaEventRecord(ev_h2d_start, stream_data));
     CUDA_CHECK(cudaMemcpyAsync(d_chars_raw.data(), h_chars,
         total_chars, cudaMemcpyHostToDevice, stream_data));
@@ -852,19 +941,49 @@ static int run_pinned(
     int threads = 128, blocks = (N + threads - 1) / threads;
 
     if (cfg.kernel == Kernel::col) {
-        rmm::device_uvector<int32_t> d_indices(N, rmm::cuda_stream_default);
+        // rmm::device_uvector<int32_t> d_indices(N, rmm::cuda_stream_default);
         fprintf(stderr, "total_chars: %zu N: %d\n", total_chars, N);
         CUDA_CHECK(cudaStreamWaitEvent(stream_data, ev_trie_ready));
+        CUDA_CHECK(cudaStreamSynchronize(stream_data));
+
+        if (cfg.loop) {
+            float trie_ms = 0, h2d_ms = 0;
+            CUDA_CHECK(cudaEventElapsedTime(&trie_ms, ev_trie_start, ev_trie_ready));
+            CUDA_CHECK(cudaEventElapsedTime(&h2d_ms,  ev_h2d_start,  ev_h2d_done));
+            fprintf(stderr, "Pack: %.3f ms  Trie H2D: %.3f ms  Data H2D: %.3f ms\n",
+                    pack_ms, trie_ms, h2d_ms);
+            run_loop([&]() -> float {
+                return time_kernel_once([&]() {
+                    cfg.noop ? noop_kernel<<<blocks, threads>>>() :
+                    lookup_kernel_index<<<blocks, threads>>>(
+                        d_chars_raw.data(),
+                        offsets_col->mutable_view().data<int32_t>(),
+                        N, d_states.data(), d_trans.data(), d_indices_raw);
+                });
+            }, N, cfg.duration, threads, blocks);
+            // cleanup
+            CUDA_CHECK(cudaFree(d_indices_raw));
+            CUDA_CHECK(cudaFreeHost(h_indices));
+            CUDA_CHECK(cudaFreeHost(h_chars));
+            CUDA_CHECK(cudaFreeHost(h_offsets));
+            CUDA_CHECK(cudaFreeHost(h_out));
+            for (auto* e : {ev_trie_start, ev_trie_ready, ev_h2d_start, ev_h2d_done,
+                            ev_kern_start, ev_kern_done, ev_d2h_done})
+                cudaEventDestroy(e);
+            cudaStreamDestroy(stream_trie);
+            cudaStreamDestroy(stream_data);
+            return 0;
+        }
+
         CUDA_CHECK(cudaEventRecord(ev_kern_start, stream_data));
+        cfg.noop ? noop_kernel<<<blocks, threads>>>() :
         lookup_kernel_index<<<blocks, threads, 0, stream_data>>>(
             d_chars_raw.data(),
             offsets_col->mutable_view().data<int32_t>(),
-            N, d_states.data(), d_trans.data(), d_indices.data());
+            N, d_states.data(), d_trans.data(), d_indices_raw);
         CUDA_CHECK(cudaEventRecord(ev_kern_done, stream_data));
 
-        // D2H — 4 bytes/word
-        std::vector<int32_t> h_indices(N);
-        CUDA_CHECK(cudaMemcpyAsync(h_indices.data(), d_indices.data(),
+        CUDA_CHECK(cudaMemcpyAsync(h_indices, d_indices_raw,
             (size_t)N * sizeof(int32_t), cudaMemcpyDeviceToHost, stream_data));
         CUDA_CHECK(cudaEventRecord(ev_d2h_done, stream_data));
         CUDA_CHECK(cudaStreamSynchronize(stream_data));
@@ -889,25 +1008,27 @@ static int run_pinned(
                 d2h_ms, gpu_total, pack_ms + gpu_total);
 
         // if --print, print X words at start and end
-        if (cfg.print > 0) {
-            int to_print = std::min(cfg.print, (int)h_indices.size());
-            fprintf(stderr, "First %d words:\n", to_print);
-            for (int i = 0; i < to_print; ++i) {
-                int32_t idx = h_indices[i];
-                const char* lemma = (idx >= 0) ? (h_lemmas.data() + idx) : "(no match)";
-                fprintf(stderr, "  %s\n", lemma);
-            }
-            if ((size_t)to_print < h_indices.size()) {
-                fprintf(stderr, "Last %d words:\n", to_print);
-                for (int i = (int)h_indices.size() - to_print; i < (int)h_indices.size(); ++i) {
-                    int32_t idx = h_indices[i];
-                    const char* lemma = (idx >= 0) ? (h_lemmas.data() + idx) : "(no match)";
-                    fprintf(stderr, "  %s\n", lemma);
-                }
-            }
-        }
+        // if (cfg.print > 0) {
+        //     int to_print = std::min(cfg.print, (int)h_indices);
+        //     fprintf(stderr, "First %d words:\n", to_print);
+        //     for (int i = 0; i < to_print; ++i) {
+        //         int32_t idx = h_indices[i];
+        //         const char* lemma = (idx >= 0) ? (h_lemmas.data() + idx) : "(no match)";
+        //         fprintf(stderr, "  %s\n", lemma);
+        //     }
+        //     if ((size_t)to_print < h_indices.size()) {
+        //         fprintf(stderr, "Last %d words:\n", to_print);
+        //         for (int i = (int)h_indices.size() - to_print; i < (int)h_indices.size(); ++i) {
+        //             int32_t idx = h_indices[i];
+        //             const char* lemma = (idx >= 0) ? (h_lemmas.data() + idx) : "(no match)";
+        //             fprintf(stderr, "  %s\n", lemma);
+        //         }
+        //     }
+        // }
 
         // cleanup and return before packed path runs
+        CUDA_CHECK(cudaFree(d_indices_raw));
+        CUDA_CHECK(cudaFreeHost(h_indices));
         CUDA_CHECK(cudaFreeHost(h_chars));
         CUDA_CHECK(cudaFreeHost(h_offsets));
         CUDA_CHECK(cudaFreeHost(h_out));
@@ -917,20 +1038,24 @@ static int run_pinned(
         cudaStreamDestroy(stream_trie);
         cudaStreamDestroy(stream_data);
         return 0;
-    } else {
-        auto input_col = cudf::make_strings_column(
-            N, std::move(offsets_col),
-            rmm::device_buffer{d_chars_raw.data(), total_chars, rmm::cuda_stream_default},
-            0, rmm::device_buffer{});
-        auto d_input_view = cudf::column_device_view::create(input_col->view());
-
-        // ---- KERNEL ----
-        CUDA_CHECK(cudaStreamWaitEvent(stream_data, ev_trie_ready));
-        CUDA_CHECK(cudaEventRecord(ev_kern_start, stream_data));
-        lookup_kernel<<<blocks, threads, 0, stream_data>>>(
-            *d_input_view, N, d_states.data(), d_trans.data(), d_lemmas.data(), d_out.data());
-        CUDA_CHECK(cudaEventRecord(ev_kern_done, stream_data));
     }
+    rmm::device_uvector<ResultPair>    d_out      (pre_N,                 rmm::cuda_stream_default);
+
+    CUDA_CHECK(cudaMemsetAsync(d_out.data(), 0, (size_t)N * sizeof(ResultPair), stream_data));
+
+    auto input_col = cudf::make_strings_column(
+        N, std::move(offsets_col),
+        rmm::device_buffer{d_chars_raw.data(), total_chars, rmm::cuda_stream_default},
+        0, rmm::device_buffer{});
+    auto d_input_view = cudf::column_device_view::create(input_col->view());
+
+    // ---- KERNEL ----
+    CUDA_CHECK(cudaStreamWaitEvent(stream_data, ev_trie_ready));
+    CUDA_CHECK(cudaEventRecord(ev_kern_start, stream_data));
+    cfg.noop ? noop_kernel<<<blocks, threads>>>() :
+    lookup_kernel<<<blocks, threads, 0, stream_data>>>(
+        *d_input_view, N, d_states.data(), d_trans.data(), d_lemmas.data(), d_out.data());
+    CUDA_CHECK(cudaEventRecord(ev_kern_done, stream_data));
 
     // ---- ASYNC D2H ----
     CUDA_CHECK(cudaMemcpyAsync(h_out, d_out.data(),
@@ -1002,9 +1127,9 @@ int main(int argc, char* argv[]) {
     std::vector<std::string> words;
     std::vector<int>         line_counts;
     if (cfg.input == Input::multiline)
-        load_multiline(cfg.input_path, words, line_counts);
+        load_multiline(cfg.input_path, words, line_counts, cfg.max_words);
     else
-        load_raw(cfg.input_path, words);
+        load_raw(cfg.input_path, words, cfg.max_words);
     double preprocess_ms = ms_since(t0);
 
     if (words.empty()) { fprintf(stderr, "No words.\n"); return 1; }
