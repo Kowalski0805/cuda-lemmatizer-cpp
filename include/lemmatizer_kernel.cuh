@@ -15,7 +15,7 @@ __global__ void normalize_kernel(char* d_input, char* d_output,
 
 __global__ void lookup_kernel(
     cudf::column_device_view d_input,
-    int num_words,
+    size_t num_words,
     const GpuState* states,
     const GpuTransition* transitions,
     const char* lemmas,
@@ -24,16 +24,26 @@ __global__ void lookup_kernel(
 
 __global__ void utf8_lookup_kernel(
     cudf::column_device_view d_input,
-    int num_words,
+    size_t num_words,
     const GpuState* states,
     const Utf8Transition* transitions,
     const char* lemmas,
     thrust::pair<char const*, cudf::size_type>* d_output
 );
 
+__global__ void lookup_kernel_raw(
+    const char*    __restrict__ chars,
+    const uint32_t* __restrict__ offsets,
+    size_t num_words,
+    const GpuState* states,
+    const GpuTransition* transitions,
+    const char* lemmas,
+    thrust::pair<char const*, cudf::size_type>* d_output
+);
+
 __device__ thrust::pair<char const*, cudf::size_type> d_lookup_kernel(
     cudf::column_device_view d_input,
-    const int num_words,
+    int num_words,
     const GpuState* states,
     const GpuTransition* transitions,
     const char* lemmas,

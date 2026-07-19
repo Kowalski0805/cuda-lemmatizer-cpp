@@ -93,7 +93,7 @@ __global__ void normalize_kernel(char* d_input, char* d_output, const char* dict
 
 __global__ void lookup_kernel(
     cudf::column_device_view d_input,
-    const int num_words,
+    const size_t num_words,
     const GpuState* states,
     const GpuTransition* transitions,
     const char* lemmas,
@@ -121,9 +121,7 @@ __global__ void lookup_kernel(
         }
 
         if (!found) {
-            // Fallback to input if word not found
-            cudf::string_view s = d_input.element<cudf::string_view>(idx);
-            d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
+            d_output[idx] = thrust::make_pair(word.data(), word.size_bytes());
             return;
         }
     }
@@ -138,14 +136,13 @@ __global__ void lookup_kernel(
         d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, len);
     } else {
         // No lemma — fallback
-        cudf::string_view s = d_input.element<cudf::string_view>(idx);
-        d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
+        d_output[idx] = thrust::make_pair(word.data(), word.size_bytes());
     }
 }
 
 __global__ void utf8_lookup_kernel(
     cudf::column_device_view d_input,
-    const int num_words,
+    const size_t num_words,
     const GpuState* states,
     const Utf8Transition* transitions,
     const char* lemmas,
@@ -195,6 +192,47 @@ __global__ void utf8_lookup_kernel(
         // No lemma — fallback
         cudf::string_view s = d_input.element<cudf::string_view>(idx);
         d_output[idx] = thrust::make_pair(s.data(), s.size_bytes());
+    }
+}
+
+__global__ void lookup_kernel_raw(
+    const char*    __restrict__ chars,
+    const uint32_t* __restrict__ offsets,
+    const size_t num_words,
+    const GpuState* states,
+    const GpuTransition* transitions,
+    const char* lemmas,
+    thrust::pair<char const*, cudf::size_type>* d_output)
+{
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_words) return;
+
+    const char* word_data = chars + offsets[idx];
+    const int   word_len  = (int)(offsets[idx+1] - offsets[idx]);
+
+    int state = 0;
+    for (int i = 0; i < word_len; ++i) {
+        char ch = word_data[i];
+        const GpuState& s = states[state];
+        bool found = false;
+        for (int j = 0; j < s.num_transitions; ++j) {
+            const GpuTransition& t = transitions[s.transition_start_idx + j];
+            if (t.c == ch) { state = t.next_state; found = true; break; }
+        }
+        if (!found) {
+            d_output[idx] = thrust::make_pair(word_data, word_len);
+            return;
+        }
+    }
+
+    const GpuState& final_state = states[state];
+    if (final_state.lemma_offset >= 0) {
+        int len = 0;
+        while (lemmas[final_state.lemma_offset + len] != '\0' && len < MAX_WORD_LEN)
+            ++len;
+        d_output[idx] = thrust::make_pair(lemmas + final_state.lemma_offset, len);
+    } else {
+        d_output[idx] = thrust::make_pair(word_data, word_len);
     }
 }
 

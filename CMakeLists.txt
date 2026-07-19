@@ -274,3 +274,34 @@ set_target_properties(micro_dram PROPERTIES CUDA_ARCHITECTURES 89)
 target_compile_options(micro_dram PRIVATE
         $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-dlcm=cg>)
 target_compile_definitions(micro_dram PRIVATE ARRAY_MB=256)
+
+# ================================
+add_executable(lemmatize_gpu_opt3
+        src/cuda/bench_gpu_opt3.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+target_include_directories(lemmatize_gpu_opt3 PRIVATE
+        include
+        src/cuda
+)
+target_link_libraries(lemmatize_gpu_opt3 PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+set_target_properties(lemmatize_gpu_opt3 PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+add_executable(lemmatize_gpu_cudf
+        src/cuda/bench_gpu_cudf.cu
+        src/cuda/lemmatizer_kernel.cu
+)
+target_include_directories(lemmatize_gpu_cudf PRIVATE include src/cuda)
+target_link_libraries(lemmatize_gpu_cudf PRIVATE
+        cudf::cudf
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+)
+set_target_properties(lemmatize_gpu_cudf PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+)

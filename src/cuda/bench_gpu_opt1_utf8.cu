@@ -32,6 +32,9 @@
 
 using ResultPair = thrust::pair<const char*, cudf::size_type>;
 
+__global__ void noop_kernel() {}
+
+
 int main(int argc, char* argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
     if (argc < 2) {
@@ -208,6 +211,9 @@ int main(int argc, char* argv[]) {
         rmm::device_buffer{d_chars_raw.data(), total_chars, rmm::cuda_stream_default},
         0, rmm::device_buffer{});
     auto d_input_view = cudf::column_device_view::create(input_col->view());
+    // int threads = 128, blocks = (N + threads - 1) / threads;
+
+    noop_kernel<<<1,1>>>();
 
     // --- KERNEL: waits for data H2D (stream ordering) + trie (event) ---
     CUDA_CHECK(cudaStreamWaitEvent(stream_data, ev_trie_ready));
