@@ -51,6 +51,17 @@ void init_trie_data() {
     is_initialized = true;
 }
 
+// Device-side trie, for callers that traverse it themselves rather than through
+// lemmatize_batch. Initializes on first use exactly as lemmatize_batch does.
+void get_trie_device_ptrs(GpuState const** states,
+                          GpuTransition const** transitions,
+                          char const** lemmas) {
+    init_trie_data();
+    *states = d_states;
+    *transitions = d_transitions;
+    *lemmas = d_lemmas;
+}
+
 std::unique_ptr<cudf::column> lemmatize_batch(cudf::column_view const& strs) {
     init_trie_data();
 

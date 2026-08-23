@@ -1,0 +1,35 @@
+loaded 2000000 words (205706 unique, type/token 0.1029) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: lenalpha | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 7 refinement passes beyond the initial sort)
+
+hit rate: 1719725 / 2000000 tokens recognised (85.99%)
+  baseline             checksum 83bfc76702d9e7a6
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000      1.094      1.090    1.005     1.00x       1827.6
+2 gpu-sort-8B             0.323      0.446      0.444    1.011     2.45x       4486.5
+2b gpu-full               5.093      0.437      0.435    1.012     2.50x       4577.6
+3 gpu-prefix              0.190      0.558      0.556    1.009     1.96x       3585.9
+4 gpu-partition           0.489      1.280      1.277    1.007     0.85x       1562.5
+6 sort+compact            1.778      0.184      0.182    1.007     5.96x      10891.0
+6b sort-2B+compact        1.478      0.708      0.705    1.007     1.55x       2823.8
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B               0.5 reuses
+  2b gpu-full                 7.7 reuses
+  3 gpu-prefix                0.4 reuses
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact              2.0 reuses
+  6b sort-2B+compact          3.8 reuses
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup    3.220 ms   total    3.220 ms   kernel    621.1 Mw/s   e2e    621.1 Mw/s
+  stream-nobins        checksum 83bfc76702d9e7a6
+5 streaming+bins       prep    0.000 ms   lookup    4.162 ms   total    4.162 ms   kernel    480.5 Mw/s   e2e    480.5 Mw/s
+  stream+bins          checksum 83bfc76702d9e7a6

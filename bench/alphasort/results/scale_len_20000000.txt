@@ -1,0 +1,35 @@
+loaded 20000000 words (1142294 unique, type/token 0.0571) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: len | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 12 refinement passes beyond the initial sort)
+
+hit rate: 17039995 / 20000000 tokens recognised (85.20%)
+  baseline             checksum 1831053e46925c96
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000     10.684     10.677    1.064     1.00x       1871.9
+2 gpu-sort-8B             7.034     14.412     14.113    1.070     0.74x       1387.8
+2b gpu-full             104.488     11.285     11.280    1.035     0.95x       1772.3
+3 gpu-prefix              3.856     14.115     14.112    1.043     0.76x       1416.9
+4 gpu-partition           4.686     20.673     19.776    1.055     0.52x        967.5
+6 sort+compact           18.109     11.339     11.329    1.075     0.94x       1763.8
+6b sort-2B+compact       13.404     11.357     11.331    1.089     0.94x       1761.1
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B          never (no lookup gain)
+  2b gpu-full            never (no lookup gain)
+  3 gpu-prefix           never (no lookup gain)
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact         never (no lookup gain)
+  6b sort-2B+compact     never (no lookup gain)
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   25.819 ms   total   25.819 ms   kernel    774.6 Mw/s   e2e    774.6 Mw/s
+  stream-nobins        checksum 1831053e46925c96
+5 streaming+bins       prep    0.000 ms   lookup   41.467 ms   total   41.467 ms   kernel    482.3 Mw/s   e2e    482.3 Mw/s
+  stream+bins          checksum 1831053e46925c96

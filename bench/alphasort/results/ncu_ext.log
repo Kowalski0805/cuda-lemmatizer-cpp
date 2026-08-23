@@ -1,0 +1,15 @@
+=== ncu n=1000000 ===
+  rows: 70  (expect 70)
+=== ncu n=2000000 ===
+  rows: 70  (expect 70)
+=== ncu n=5000000 ===
+  rows: 70  (expect 70)
+=== ncu n=10000000 ===
+  rows: 70  (expect 70)
+=== ncu n=20000000 ===
+  rows: 70  (expect 70)
+=== ncu n=35000000 ===
+  rows: 70  (expect 70)
+=== ncu n=50000000 ===
+  rows: 70  (expect 70)
+done

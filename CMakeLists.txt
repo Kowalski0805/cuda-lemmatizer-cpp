@@ -42,6 +42,8 @@ include_directories(
 # ================================
 add_library(lemmatizer SHARED
         src/cuda/GpuLemmatizer.cpp
+        src/cuda/batch_stats.cpp
+        src/cuda/fused_lemmatize.cu
         src/cuda/lemmatizer.cpp
         src/cuda/lemmatizer_kernel.cu
         src/cuda/trie.cpp
@@ -60,6 +62,27 @@ target_link_libraries(lemmatizer PRIVATE
 
 set_target_properties(lemmatizer PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON
+)
+
+# ================================
+# Batch-size probe: drives the JNI pipeline from C++
+# ================================
+add_executable(batch_probe
+        src/cuda/batch_probe.cpp
+        src/cuda/icu_lowercase.cpp
+)
+
+target_include_directories(batch_probe PRIVATE
+        ${ICU_INCLUDE_DIRS}
+        include
+        src/cuda
+)
+
+target_link_libraries(batch_probe PRIVATE
+        ${ICU_LIBRARIES}
+        cudf::cudf
+        lemmatizer
+        /usr/lib/x86_64-linux-gnu/libstdc++.so.6
 )
 
 # ================================

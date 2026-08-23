@@ -1,0 +1,59 @@
+lemmatization batch-size summary
+================================
+
+first call (excluded below: carries one-time init)
+  tokens                      50000
+  total, ms                   384.7   of which lookup 271.7
+
+calls                            11
+sentences                   1308339
+tokens                     15700000
+wall time, ms                 240.8
+throughput, Mtok/s             65.2
+
+tokens per call
+  p0                         50000
+  p25                       200000
+  p50                      1000000
+  p75                      2500000
+  p90                      4000000
+  p99                      4000000
+  p100                     4000000
+  mean                      1427273
+
+token-weighted batch size (half the tokens arrive in
+batches at most this large -- the statistic that selects
+the regime, since a few large calls can carry most of the work)
+  p50                      4000000
+  p90                      4000000
+
+against the Section 4.7 break-even of 8200000 tokens
+  calls below                      11  (100.0 %)
+  tokens in those calls      15700000  (100.0 %)
+  tokens at or above                0  (0.0 %)
+
+recommended configuration: A3, prefix sort without compaction.
+  Most tokens arrive in batches inside the single-pass window, where
+  ordering repays itself with no reuse and no extra device memory.
+
+mean stage split, ms per call
+  split                       6.442
+  explode                     2.675
+  lookup                      4.709
+  groupby                     5.935
+  join                        2.127
+  total                      21.889
+
+lookup is 21.5 % of pipeline time, so the end-to-end gain
+from a faster traversal is bounded by Amdahl's law:
+  traversal 1.25x           1.04x end to end
+  traversal 1.94x           1.12x end to end
+  traversal 3.33x           1.18x end to end
+  traversal made free       1.27x end to end
+The 1.25x and 3.33x rows are A3 and A6 of Table 4.1; the last is
+the ceiling on any possible improvement to the traversal kernel.
+
+Stage timings are taken with the pipeline synchronized between
+stages and are therefore pessimistic in total; batch sizes are not
+affected. The lookup row is the kernel this study optimizes; the
+others bound how much end-to-end gain any ordering can deliver.

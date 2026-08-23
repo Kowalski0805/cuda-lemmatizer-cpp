@@ -1,0 +1,35 @@
+loaded 10000000 words (688368 unique, type/token 0.0688) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: len | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 11 refinement passes beyond the initial sort)
+
+hit rate: 8542156 / 10000000 tokens recognised (85.42%)
+  baseline             checksum abc89f3b3a7b5eab
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000      5.384      5.378    1.151     1.00x       1857.5
+2 gpu-sort-8B             3.434      6.915      6.912    1.056     0.78x       1446.2
+2b gpu-full              45.137      4.988      4.986    1.109     1.08x       2004.7
+3 gpu-prefix              1.875      6.926      6.915    1.055     0.78x       1443.8
+4 gpu-partition           2.337      9.584      9.571    1.062     0.56x       1043.4
+6 sort+compact            8.862      5.420      5.408    1.184     0.99x       1844.9
+6b sort-2B+compact        6.417      5.415      5.405    1.072     0.99x       1846.9
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B          never (no lookup gain)
+  2b gpu-full               114.2 reuses
+  3 gpu-prefix           never (no lookup gain)
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact         never (no lookup gain)
+  6b sort-2B+compact     never (no lookup gain)
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   13.032 ms   total   13.032 ms   kernel    767.3 Mw/s   e2e    767.3 Mw/s
+  stream-nobins        checksum abc89f3b3a7b5eab
+5 streaming+bins       prep    0.000 ms   lookup   20.030 ms   total   20.030 ms   kernel    499.3 Mw/s   e2e    499.3 Mw/s
+  stream+bins          checksum abc89f3b3a7b5eab

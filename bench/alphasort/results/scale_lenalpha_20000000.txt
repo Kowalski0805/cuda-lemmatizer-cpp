@@ -1,0 +1,35 @@
+loaded 20000000 words (1142294 unique, type/token 0.0571) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: lenalpha | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 11 refinement passes beyond the initial sort)
+
+hit rate: 17039995 / 20000000 tokens recognised (85.20%)
+  baseline             checksum 1831053e46925c96
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000     10.684     10.683    1.001     1.00x       1871.9
+2 gpu-sort-8B             7.395     11.123     11.118    1.068     0.96x       1798.0
+2b gpu-full              70.418     11.274     11.269    1.086     0.95x       1774.1
+3 gpu-prefix              4.184     10.360     10.340    1.033     1.03x       1930.5
+4 gpu-partition           5.219     15.842     15.819    1.025     0.67x       1262.4
+6 sort+compact           23.237      3.585      3.564    1.177     2.98x       5579.3
+6b sort-2B+compact       14.700      8.588      8.576    1.004     1.24x       2328.9
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B          never (no lookup gain)
+  2b gpu-full            never (no lookup gain)
+  3 gpu-prefix               12.9 reuses
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact              3.3 reuses
+  6b sort-2B+compact          7.0 reuses
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   25.553 ms   total   25.553 ms   kernel    782.7 Mw/s   e2e    782.7 Mw/s
+  stream-nobins        checksum 1831053e46925c96
+5 streaming+bins       prep    0.000 ms   lookup   35.291 ms   total   35.291 ms   kernel    566.7 Mw/s   e2e    566.7 Mw/s
+  stream+bins          checksum 1831053e46925c96

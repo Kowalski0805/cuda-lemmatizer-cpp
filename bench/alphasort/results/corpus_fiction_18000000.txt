@@ -1,0 +1,35 @@
+loaded 18000000 words (656092 unique, type/token 0.0364) from fiction_pp.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: alpha | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 22 refinement passes beyond the initial sort)
+
+hit rate: 17058879 / 18000000 tokens recognised (94.77%)
+  baseline             checksum a82413e41d9af12d
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 7 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000     10.423      9.889    1.077     1.00x       1727.0
+2 gpu-sort-8B             6.577     10.344      9.694    1.068     1.01x       1740.1
+2b gpu-full             100.729     10.519      9.879    1.075     0.99x       1711.3
+3 gpu-prefix              3.705      8.144      7.810    1.086     1.28x       2210.2
+4 gpu-partition           6.906      6.058      5.828    1.073     1.72x       2971.1
+6 sort+compact           19.378      2.925      2.916    1.119     3.56x       6154.1
+6b sort-2B+compact       10.903      3.082      3.071    1.105     3.38x       5840.6
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B              83.8 reuses
+  2b gpu-full            never (no lookup gain)
+  3 gpu-prefix                1.6 reuses
+  4 gpu-partition             1.6 reuses
+  6 sort+compact              2.6 reuses
+  6b sort-2B+compact          1.5 reuses
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   20.193 ms   total   20.193 ms   kernel    891.4 Mw/s   e2e    891.4 Mw/s
+  stream-nobins        checksum a82413e41d9af12d
+5 streaming+bins       prep    0.000 ms   lookup   22.346 ms   total   22.346 ms   kernel    805.5 Mw/s   e2e    805.5 Mw/s
+  stream+bins          checksum a82413e41d9af12d

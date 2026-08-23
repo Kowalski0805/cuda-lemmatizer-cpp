@@ -1,0 +1,35 @@
+loaded 35000000 words (1688852 unique, type/token 0.0483) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: lenalpha | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 20 refinement passes beyond the initial sort)
+
+hit rate: 29477730 / 35000000 tokens recognised (84.22%)
+  baseline             checksum 01268e335b8662ca
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000     18.333     18.329    1.000     1.00x       1909.2
+2 gpu-sort-8B            12.753     20.467     20.347    1.020     0.90x       1710.1
+2b gpu-full             207.709     20.626     20.620    1.002     0.89x       1696.9
+3 gpu-prefix              7.370     18.855     18.846    1.040     0.97x       1856.3
+4 gpu-partition           9.108     27.597     27.571    1.016     0.66x       1268.2
+6 sort+compact           41.835      7.544      7.539    1.005     2.43x       4639.6
+6b sort-2B+compact       25.491     15.001     14.981    1.004     1.22x       2333.2
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B          never (no lookup gain)
+  2b gpu-full            never (no lookup gain)
+  3 gpu-prefix           never (no lookup gain)
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact              3.9 reuses
+  6b sort-2B+compact          7.7 reuses
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   43.807 ms   total   43.807 ms   kernel    799.0 Mw/s   e2e    799.0 Mw/s
+  stream-nobins        checksum 01268e335b8662ca
+5 streaming+bins       prep    0.000 ms   lookup   60.955 ms   total   60.955 ms   kernel    574.2 Mw/s   e2e    574.2 Mw/s
+  stream+bins          checksum 01268e335b8662ca

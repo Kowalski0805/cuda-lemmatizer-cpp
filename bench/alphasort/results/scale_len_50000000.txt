@@ -1,0 +1,35 @@
+loaded 49999989 words (2172988 unique, type/token 0.0435) from wiki_sample_50m.txt [lowercased]
+real trie: 9351209 states, 9351208 transitions, 85853615 lemma bytes (260.2 MB on device)
+
+key mode: len | prefix bytes: 4 | bin bits: 16 | batch: 2000000 | streams: 4 | reps: 3
+
+  (2b: 21 refinement passes beyond the initial sort)
+
+hit rate: 41898555 / 49999989 tokens recognised (83.80%)
+  baseline             checksum 5b4a5255ebd3298b
+all 7 orderings reproduce the baseline result
+
+warming up (2000 ms), then 5 interleaved rounds x 3 reps...
+
+variant                 prep ms  lookup ms    best ms  max/min  speedup  kernel Mw/s
+0 baseline                0.000     25.870     25.868    1.041     1.00x       1932.8
+2 gpu-sort-8B            17.529     34.369     34.361    1.041     0.75x       1454.8
+2b gpu-full             392.174     30.105     30.078    1.016     0.86x       1660.8
+3 gpu-prefix              9.724     34.413     34.377    1.055     0.75x       1453.0
+4 gpu-partition          11.717     49.252     48.275    1.047     0.53x       1015.2
+6 sort+compact           44.043     27.718     27.715    1.047     0.93x       1803.9
+6b sort-2B+compact       32.288     27.734     27.731    1.001     0.93x       1802.8
+
+break-even reuse count (prep / lookup saving vs baseline):
+  2 gpu-sort-8B          never (no lookup gain)
+  2b gpu-full            never (no lookup gain)
+  3 gpu-prefix           never (no lookup gain)
+  4 gpu-partition        never (no lookup gain)
+  6 sort+compact         never (no lookup gain)
+  6b sort-2B+compact     never (no lookup gain)
+
+streaming pipeline (includes H2D; compare the two rows to each other, not to the table above):
+5 streaming-nobins     prep    0.000 ms   lookup   61.224 ms   total   61.224 ms   kernel    816.7 Mw/s   e2e    816.7 Mw/s
+  stream-nobins        checksum 5b4a5255ebd3298b
+5 streaming+bins       prep    0.000 ms   lookup  156.160 ms   total  156.160 ms   kernel    320.2 Mw/s   e2e    320.2 Mw/s
+  stream+bins          checksum 5b4a5255ebd3298b

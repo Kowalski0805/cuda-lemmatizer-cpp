@@ -173,3 +173,31 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 *.bin
+
+### Project-specific
+# Out-of-tree build trees (cmake-build-* is covered above)
+build-instr/
+
+# Benchmark binaries (no extension, so the rules above miss them)
+bench/alphasort/bench_synth
+bench/alphasort/bench_real
+noop_test
+
+# ...but the benchmark's own Makefile is source, not CMake output
+!bench/alphasort/Makefile
+
+# docx generator dependencies
+paper/node_modules/
+
+# Corpora and derived dictionaries: hundreds of MB to gigabytes, regenerable
+# from the source dumps. Kept out of the repository deliberately.
+*.dawg
+articles*.txt
+fiction*.txt
+wiki_*.txt
+wiki_dump*.txt
+dict_*.txt
+long_words.txt
+short_words.txt
+ukr_morph_dict.csv
+*.err
