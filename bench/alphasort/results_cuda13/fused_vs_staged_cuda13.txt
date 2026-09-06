@@ -1,0 +1,38 @@
+note: LEMMATIZER_BATCH_LOG is unset; the run will proceed but nothing will be recorded.
+loading up to 10000000 tokens from fiction_pp.txt ...
+loaded 10000000 distinct token slots
+
+      tokens    sentences    staged ms     fused ms   speedup identical
+Kernel execution time: 0.73744 ms
+      200000        16667       369.37         2.53   145.84x yes
+Kernel execution time: 0.737568 ms
+     1000000        83334        23.49         4.78     4.92x yes
+Kernel execution time: 3.34358 ms
+     4000000       333334        51.16        11.59     4.41x yes
+Kernel execution time: 7.8912 ms
+    10000000       833334       108.57        24.69     4.40x yes
+Kernel execution time: 0.177152 ms
+      200000        16667        13.12         1.86     7.07x yes
+Kernel execution time: 0.704512 ms
+     1000000        83334        21.74         4.95     4.39x yes
+Kernel execution time: 3.66928 ms
+     4000000       333334        49.69        12.32     4.03x yes
+Kernel execution time: 7.6329 ms
+    10000000       833334       110.78        25.67     4.31x yes
+Kernel execution time: 0.187648 ms
+      200000        16667        13.11         1.82     7.19x yes
+Kernel execution time: 0.690176 ms
+     1000000        83334        23.78         4.86     4.89x yes
+Kernel execution time: 2.69107 ms
+     4000000       333334        48.47        10.85     4.47x yes
+Kernel execution time: 7.15674 ms
+    10000000       833334       102.03        24.90     4.10x yes
+Kernel execution time: 0.161152 ms
+      200000        16667        12.37         1.73     7.16x yes
+Kernel execution time: 0.690368 ms
+     1000000        83334        22.15         4.59     4.83x yes
+Kernel execution time: 3.15597 ms
+     4000000       333334        49.39        10.53     4.69x yes
+Kernel execution time: 6.62426 ms
+    10000000       833334       103.25        24.90     4.15x yes
+done

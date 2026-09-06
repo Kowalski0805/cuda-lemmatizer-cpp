@@ -177,6 +177,7 @@ fabric.properties
 ### Project-specific
 # Out-of-tree build trees (cmake-build-* is covered above)
 build-instr/
+build-cuda13/
 
 # Benchmark binaries (no extension, so the rules above miss them)
 bench/alphasort/bench_synth

@@ -8,8 +8,12 @@ set(CMAKE_CUDA_STANDARD 20)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_ARCHITECTURES 89)
 
-# Optional: make sure CUDA path is correct
-set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
+# Optional: make sure CUDA path is correct.
+# Default is 12.8 (matches the cuda12_* RAPIDS build in the base conda env);
+# override with -DCMAKE_CUDA_COMPILER=... to build against a cuda13_* RAPIDS env.
+if(NOT DEFINED CMAKE_CUDA_COMPILER)
+  set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.8/bin/nvcc)
+endif()
 set(rapids-cmake-version 26.02.1)
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo")
 

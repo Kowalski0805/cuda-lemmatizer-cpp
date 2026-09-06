@@ -26,6 +26,7 @@
 #endif
 
 #include <cub/cub.cuh>
+#include <thrust/iterator/counting_iterator.h>  // cub::CountingInputIterator removed in CCCL 3.0 (CUDA 13)
 
 #include <algorithm>
 #include <chrono>
@@ -561,7 +562,7 @@ static Perm permGpuFullSort(const WordsDev& D, int keyMode) {
 
     // Run starts = positions with head flag set.
     {
-      cub::CountingInputIterator<uint32_t> cnt(0);
+      thrust::counting_iterator<uint32_t> cnt(0);
       size_t bytes = 0;
       CUDA_CHECK(cub::DeviceSelect::Flagged(nullptr, bytes, cnt, dHead,
                                             dStarts, dNumRuns, n));
