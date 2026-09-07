@@ -222,10 +222,20 @@ its glob `ncu_ext_*.csv` matched the committed `ncu_ext_fiction.csv`, whose name
 has no numeric suffix, and the sort key raised before any analysis. Fixed;
 verified to reproduce Table 4.7 exactly.
 
-**Unverified:** the Chapter 3 docx was checked structurally only (14 `oMath`
-elements, no empty bases, no literal `|`) — this machine has no Word,
-LibreOffice or pandoc. Open it once and confirm equations (1), (10) and (13)
-render; those use `MathSum`, which caused blank output in an earlier session.
+**Mostly verified, 2026-09-07.** pandoc **is** installed now (3.7.0.2), so the
+Chapter 3 docx was converted and inspected: all **15** `oMath` expressions carry
+substantive content, and the three sum blocks are well-formed in the OMML —
+`chr='∑'` with sub, sup where applicable, and a non-empty base in every case.
+Two of the three come out mangled *by pandoc* (`C_A2b = C_radix(8) + ,` and
+`η_bal = (1/S)·  / max n_s`), and both are the sums that have a subscript but
+**no** superscript — `∑_{d≥1}` and `∑_s`. That is legal OMML which Word renders;
+pandoc's reader drops the base along with the absent limit. Converter
+limitation, not a document defect.
+Still worth thirty seconds in Word, since `MathSum` did produce blanks in an
+earlier session. Open
+`\\wsl.localhost\Ubuntu-22.04\home\kowalski0805\UANLP\cuda_exe\paper\chapter3_methodology_v2.docx`
+or run `explorer.exe "$(wslpath -w paper/chapter3_methodology_v2.docx)"`, and
+check eq. (1) plus the two sub-only sums.
 
 ---
 
