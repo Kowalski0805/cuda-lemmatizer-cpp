@@ -519,7 +519,7 @@ R([
 
 R([
   { b: "An unexplained pipeline regression." },
-  " In the streamed configuration A5, enabling the partition makes the pipeline slower (24.3 ms against 21.9 ms for the same pipeline without it), the opposite of the one-shot result. The partition work is issued on the copy stream and appears to serialize against the transfer it was meant to overlap. The effect is reported rather than resolved, and A5 is accordingly excluded from the recommendations of Section 4.7.",
+  " In the streamed configuration A5, enabling the partition makes the pipeline slower, the opposite of the one-shot result. The penalty is not the fixed one an earlier single measurement suggested. Across fourteen runs spanning seven corpus sizes it is present in every one, averages 20.6 %, and grows with scale: between 8 and 17 % up to 35 M tokens, then 52.8 % and 64.7 % at 50 M. The partition work is issued on the copy stream and appears to serialize against the transfer it was meant to overlap, and a penalty that grows with the volume transferred is what that mechanism predicts — which makes the explanation more credible than the fixed offset did, without making it established. The effect is reported rather than resolved, and A5 is accordingly excluded from the recommendations of Section 4.7.",
 ]);
 
 const doc = new Document({
