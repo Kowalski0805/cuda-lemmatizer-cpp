@@ -1,6 +1,6 @@
 # alpha/len ordering paper — status and plan to completion
 
-Status as of 2026-08-15. Hardware: RTX 4080 SUPER (16 GB, 64 MB L2), Ryzen
+Status as of 2026-09-07. Hardware: RTX 4080 SUPER (16 GB, 64 MB L2), Ryzen
 7800X3D, CUDA 12.8, driver 596.21, WSL2.
 
 ---
@@ -145,11 +145,13 @@ summary, which prints the regime recommendation itself.
 references `lowercase_ukr` without providing it. Run with
 `LD_LIBRARY_PATH=$PWD/build-instr`.
 
-**Open items before submission:** two remaining anomalies (§3.6 — A5's
-streaming regression is understood and merely needs writing up; A1's 0.89 %
-shortfall is not), and the JNI batch-size instrumentation (§4). The corpus
-sweep is **DONE** (§3.7b) and settled the generality objection. None blocks
-writing.
+**Open items before submission:** the JNI batch-size instrumentation (§4) and
+the second-device experiment (§5.4 of the chapter — the L2-capacity prediction
+is still untested and remains the single most valuable run outstanding). The
+corpus sweep is **DONE** (§3.7b) and settled the generality objection. Both
+anomalies were re-measured on 2026-09-07 and both are real, not artifacts —
+see §3.6, where the numbers are now much better than the ones this note used
+to carry. None blocks writing.
 
 **Chapter revisions from §3.7 — DONE.** All three edits are applied and both
 documents rebuilt:
@@ -181,6 +183,44 @@ memory: author lists, venues and years are plausible but none was checked. The
 claims attributed to each work are the load-bearing part and should be checked
 too, particularly Balaji & Lucia (2018), Zhang et al. (2011, G-Streamline) and
 Zhou & Ross (2003), which carry the positioning argument of §2.5.
+
+**Session of 2026-09-07 — measurement protocol, and one retraction.**
+
+*Medians.* Repeatability across process launches had never been measured. It is
+0.29 % median spread, 0.65 % at the ninetieth percentile, but **one launch in
+135** runs 6–16 % high (six excursions in 812 timings). Two mechanisms are
+excluded by measurement, not assumption: five of the six moved exactly one of
+the seven algorithms while the other six held to 0.3 %, which rules out a clock
+excursion; and the trie's device addresses are byte-identical across launches
+(deterministic allocation sequence), which rules out allocation-dependent cache
+conflict. Transient contention from another client of the device remains, and
+WSL2 does not allow it to be excluded. Recorded as a third item in Chapter 3
+§3.6. Table 4.4 and Fig 4.2 are now **medians of five launches**
+(`results_medians/`, `results/scale_alpha_medians.csv`); four of twenty-four
+cells moved beyond rounding, and A2's crossing moved 27 M → 32 M because its
+single 35 M measurement had been 4.6 % high.
+
+*CUDA 13.* The port was tested end to end and changes nothing — see
+[[cuda-toolkit-pin]] and `results_cuda13/COMPARISON.md`. All thirteen kernels
+compile to byte-identical SASS under 12.8 and 13.0; the ordering crossover and
+the fusion speedups reproduce. Staying on 12.8 through submission, because
+regenerating every table to reach the same numbers buys nothing. `bench.cu`
+carries the two-line CCCL 3.0 patch, and `CMakeLists.txt` now accepts
+`-DCMAKE_CUDA_COMPILER`.
+
+*Retracted.* An earlier claim in this session that repeatability was ~20 %,
+inferred from CUDA 12.8-vs-13.0 differences on the grounds that the kernels are
+byte-identical, was **wrong** — identical code does not make a difference noise.
+Under a position-balanced design the toolkit difference is ≤0.1 %. The three
+paper edits that rested on it (a §4.10 bound, a §4.9 fold split, a Chapter 3
+qualification of the 13.1 % held-out error) were reverted in commit `a01c067`.
+The lesson is in §3.6's opening sentence already: single runs produce
+self-consistent but spurious results.
+
+*Also.* `paper/validate_model_ext.py` could not run from a clean checkout —
+its glob `ncu_ext_*.csv` matched the committed `ncu_ext_fiction.csv`, whose name
+has no numeric suffix, and the sort key raised before any analysis. Fixed;
+verified to reproduce Table 4.7 exactly.
 
 **Unverified:** the Chapter 3 docx was checked structurally only (14 `oMath`
 elements, no empty bases, no literal `|`) — this machine has no Word,
@@ -476,14 +516,21 @@ sentence is the paper's thesis.
 
 ### 3.4 The scale law (sweep: wiki, 1 M → 50 M tokens, one corpus)
 
-Per-token lookup cost, ns/token — the table the paper is built on:
+Per-token lookup cost, ns/token — the table the paper is built on.
+**Medians of five launches as of 2026-09-07**; the single-run values this table
+used to carry are in brackets where they differed:
 
 | tokens | uniq | 0 base | 2 sort-8B | 3 prefix | 4 partition | 6 s+c | 6b coarse+c |
 |---|---|---|---|---|---|---|---|
-| 1 M | 143 K | 0.56 | 0.18 | 0.21 | 0.28 | 0.09 | 0.15 |
-| 5 M | 425 K | 0.54 | 0.31 | 0.28 | 0.29 | 0.09 | 0.14 |
-| 20 M | 1.14 M | 0.54 | 0.50 | 0.42 | 0.36 | 0.16 | 0.16 |
-| 50 M | 2.17 M | 0.52 | 0.57 | 0.46 | 0.38 | 0.21 | **0.16** |
+| 1 M | 143 K | 0.56 | 0.18 | 0.21 | 0.27 [0.28] | 0.09 | 0.15 |
+| 5 M | 425 K | 0.54 | 0.31 | 0.28 | 0.30 [0.29] | 0.09 | 0.14 |
+| 20 M | 1.14 M | 0.53 [0.54] | 0.50 | 0.42 | 0.35 [0.36] | 0.16 | 0.16 |
+| 50 M | 2.17 M | 0.52 | 0.55 [0.57] | 0.45 [0.46] | 0.36 [0.38] | 0.21 | **0.17** [0.16] |
+
+Intermediate scales, medians of five (used by Fig 4.2):
+2 M — 0.547 / 0.170 / 0.193 / 0.260 / 0.106 / 0.149;
+10 M — 0.538 / 0.429 / 0.364 / 0.333 / 0.116 / 0.148;
+35 M — 0.524 / 0.530 / 0.441 / 0.357 / 0.193 / 0.164.
 
 Three facts, each worth a figure:
 
@@ -492,12 +539,12 @@ Three facts, each worth a figure:
    bound, already at its asymptote by 1 M tokens. This is why it is so hard to
    beat, and it reframes the whole problem.
 2. **Every ordering degrades with scale, and fine ordering degrades fastest.**
-   Variant 2 goes 0.18 → 0.57 and *crosses the baseline*: at 35 M and 50 M
-   tokens, exact 8-byte sorting is a **net loss even ignoring prep**
-   (0.95×, 0.92×). Ordering precision is not merely useless at scale — it is
-   harmful.
+   Variant 2 goes 0.18 → 0.55 and *crosses the baseline* near **32 M tokens**
+   (was interpolated at 27 M before the medians re-measurement): at 35 M and
+   50 M, exact 8-byte sorting is a **net loss even ignoring prep** (0.99×,
+   0.95×). Ordering precision is not merely useless at scale — it is harmful.
 3. **Coarse ordering + compaction is the only scale-invariant strategy.**
-   Variant 6b holds 0.15 → 0.16 ns/token over the full range, and **overtakes
+   Variant 6b holds 0.15 → 0.17 ns/token over the full range, and **overtakes
    fine ordering (6) at ~20 M tokens**, ending at 3.15× where 6 has decayed to
    2.47×. The optimum precision is one letter, at every scale tested.
 
@@ -718,16 +765,31 @@ independent data.
 
 ### 3.6 Open anomalies
 
-- `5 streaming+bins` (24.3 ms) is *slower* than `5 streaming-nobins`
-  (21.9 ms). Partition work sits on the copy stream, serialised with H2D.
-  Either move it to a third stream or accept and explain it.
+- ~~`5 streaming+bins` (24.3 ms) is *slower* than `5 streaming-nobins`
+  (21.9 ms)~~ **CONFIRMED AND WORSE, 2026-09-07.** Re-measured over 14
+  independent runs across seven scales and two toolkits: the penalty is
+  sign-consistent 14/14, mean **+20.6 %**, range +7.4 % to +64.7 %. It is not a
+  fixed ~11 % oddity but grows with scale — +8 to +17 % to 35 M, then **+52.8 %
+  and +64.7 % at 50 M**. Partition work sits on the copy stream, serialised
+  with H2D. Either move it to a third stream or accept and explain it; the
+  write-up should state the scale dependence, which the current +11 % framing
+  understates badly.
 - Variant 2b needs **22 refinement passes** on fiction vs 6 on articles. The
   loop runs until the longest colliding group resolves, and the loader admits
   tokens up to 250 B, so a handful of pathological tokens set the cost. Report
   the distribution, or cap word length and say so.
-- `1 cpu-sort` lands at 0.89–0.93× — slightly *below* baseline, consistently
-  across key modes. Same ordering as 2b but worse; worth one look at whether
-  the perm upload or tie order explains it.
+- ~~`1 cpu-sort` lands at 0.89–0.93×~~ **CONFIRMED, 2026-09-07.** Three fresh
+  runs at 18.3 M fiction give 0.92, 0.88, 0.92× — the recorded range exactly.
+  A1 and A2b produce the *same* exact ordering, yet A1 is 8–12 % slower, and
+  A1's own run-to-run spread is **5.2 %** where every other variant sits at
+  ≤0.34 %. That variance asymmetry supports the clock-parking explanation
+  already in §3.6: the multi-second host sort parks the clocks and A1's lookup
+  is timed on a ramping device. Note the 0.89 is a *ratio*, not a percentage;
+  the old summary line above mis-stated it as "0.89 %". At 1 M and 5 M, where
+  ordering still pays, A1 tracks A2b to 0.4 % and 5.7 % and is 2.94× and 1.59×
+  *faster* than baseline — the sub-unity ratio appears only at 18.3 M, where
+  exact ordering is a net loss anyway, which is the paper's main finding rather
+  than an anomaly.
 
 ---
 
@@ -823,7 +885,8 @@ deciding.
     - Fig 4.1 the two opposing trends against ordering precision, with
       traversal time beneath (§4.3)
     - Fig 4.2 ns/token against corpus size, log abscissa, A2's crossing of the
-      baseline interpolated at **27 M tokens** (§4.6)
+      baseline interpolated at **32 M tokens** (§4.6) — was 27 M until the
+      medians re-measurement of 2026-09-07; see §3.6
     - Fig 4.3 single-pass speedup with the operating window shaded to the
       8.2 M break-even (§4.7)
 
