@@ -41,7 +41,8 @@ MET = {
 }
 
 C, SCALES = {}, []
-for path in sorted(glob.glob(f"{RES}/ncu_ext_*.csv"),
+for path in sorted([q for q in glob.glob(f"{RES}/ncu_ext_*.csv")
+                    if re.search(r"_(\d+)\.csv$", q)],
                    key=lambda p: int(re.search(r"_(\d+)\.csv$", p).group(1))):
     n = int(re.search(r"_(\d+)\.csv$", path).group(1))
     per = {}

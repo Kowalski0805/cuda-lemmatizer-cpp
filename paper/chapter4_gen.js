@@ -486,7 +486,12 @@ T(
 );
 
 R([
-  { b: "Two limits are conceded." },
+  { b: "The validation set resolves unevenly." },
+  " The held-out error of 13.1 % averages over seven folds whose measurements do not all carry the same weight, because the repeatability bound of Section 4.10 varies by an order of magnitude across the scale grid. At 5 M tokens the measured variation reaches 19.8 % and every one of the seven held-out errors falls below it; at 10 M it reaches 14.9 % and six of seven do. Those two folds cannot discriminate between a model that is correct and one that is merely inside the noise, and they are — not coincidentally — the two folds on which Eq. (3\u2032) scores best, at 8.6 % and 10.1 %. Restricting attention to the four folds whose variation is at or below 4.5 %, namely 1 M, 2 M, 35 M and 50 M, raises the held-out error to 15.0 %. The structural conclusion is unaffected, since Eq. (3) stands at 34.5 % and the null model at 66.9 % on the same folds, but two consequences follow for the arithmetic. The figure to quote for Eq. (3\u2032) is 15.0 % on the resolving folds rather than 13.1 % overall; and the 1.5 points bought by an explicit DRAM term are smaller than the fold-to-fold spread of Eq. (3\u2032) itself, which runs from 8.6 % to 16.3 %, so that term is declined on evidence and not only on parsimony.",
+]);
+
+R([
+  { b: "Two further limits are conceded." },
   " σ is measured on the kernel it describes, so Eq. (3′) explains and interpolates but does not forecast: the causal chain runs from corpus size to L2 residency to latency exposure to time, and this study measures its endpoints but not its middle link. And the model must not be used to resolve close comparisons — the two compacted algorithms differ by under 20 % beyond 35 M tokens, and which of them a fitted model selects there is not stable across the families of Table 4.7. The A6-to-A6b crossover is an experimental finding, not a prediction of the model.",
 ]);
 
