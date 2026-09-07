@@ -106,7 +106,7 @@ SERIES = [
     ("6 sort+compact",     "A6 sort + compact", "#1b4965", "D", "--"),
     ("6b sort-2B+compact", "A6b coarse + compact", "#5fa8d3", "P", "--"),
 ]
-d = load("scale_alpha")
+d = load("scale_alpha_medians")   # medians of five runs; see Section 3.6
 fig, ax = plt.subplots(figsize=(5.4, 3.4))
 for key, label, colour, marker, ls in SERIES:
     pts = sorted(d[key].items())
@@ -121,8 +121,8 @@ ax.xaxis.set_major_formatter(FuncFormatter(
 ax.set_xticks([1e6, 2e6, 5e6, 1e7, 2e7, 3.5e7, 5e7])
 ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.24), ncol=3,
           frameon=False, columnspacing=1.4, handletextpad=0.5)
-ax.annotate("A2 crosses the baseline near 27 M tokens:\nexact ordering is a net loss thereafter",
-            xy=(2.7e7, 0.545), xytext=(1.15e6, 0.615), fontsize=7.5,
+ax.annotate("A2 crosses the baseline near 32 M tokens:\nexact ordering is a net loss thereafter",
+            xy=(3.2e7, 0.532), xytext=(1.15e6, 0.615), fontsize=7.5,
             color="#bc4b51", ha="left",
             arrowprops=dict(arrowstyle="->", color="#bc4b51", lw=0.8,
                             connectionstyle="arc3,rad=-0.15"))

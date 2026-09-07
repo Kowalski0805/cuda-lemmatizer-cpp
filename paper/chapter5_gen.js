@@ -167,7 +167,7 @@ R([
   { b: "Ordering precision is worth nothing beyond one letter, and eventually less than nothing." },
   " Across the ladder from exact ordering down to a single-pass partition on one leading letter, traversal time falls as precision ",
   { i: "decreases" },
-  ": 10.46, 9.93, 8.03 and 5.89 ms on 18.3 million tokens. An exact ordering produced entirely on the device is slower than no ordering at all, and beyond approximately 27 million tokens it remains a net loss even when its preparation is charged nothing. The cost of ordering is not merely unrecovered at high precision; the ordering itself becomes harmful.",
+  ": 10.46, 9.93, 8.03 and 5.89 ms on 18.3 million tokens. An exact ordering produced entirely on the device is slower than no ordering at all, and beyond approximately 32 million tokens it remains a net loss even when its preparation is charged nothing. The cost of ordering is not merely unrecovered at high precision; the ordering itself becomes harmful.",
 ], { noIndent: true });
 
 R([

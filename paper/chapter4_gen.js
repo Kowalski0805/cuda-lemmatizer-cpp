@@ -335,21 +335,21 @@ R([
 T(
   [
     ["Tokens", "A0", "A2 sort-8B", "A3 prefix", "A4 partition", "A6 s+c", "A6b coarse+c"],
-    ["1 M", "0.56", "0.18", "0.21", "0.28", "0.09", "0.15"],
-    ["5 M", "0.54", "0.31", "0.28", "0.29", "0.09", "0.14"],
-    ["20 M", "0.54", "0.50", "0.42", "0.36", "0.16", "0.16"],
-    ["50 M", "0.52", "0.57", "0.46", "0.38", "0.21", "0.16"],
+    ["1 M", "0.56", "0.18", "0.21", "0.27", "0.09", "0.15"],
+    ["5 M", "0.54", "0.31", "0.28", "0.30", "0.09", "0.14"],
+    ["20 M", "0.53", "0.50", "0.42", "0.35", "0.16", "0.16"],
+    ["50 M", "0.52", "0.55", "0.45", "0.36", "0.21", "0.17"],
   ],
-  "Table 4.4 — Traversal cost in nanoseconds per token, wiki corpus. The baseline is scale-invariant; every ordering degrades, fine orderings fastest. A2 crosses the baseline between 20 M and 35 M tokens and is a net loss thereafter even before preparation is charged."
+  "Table 4.4 — Traversal cost in nanoseconds per token, wiki corpus, each entry the median of five independent process launches (Section 3.6). The baseline is scale-invariant; every ordering degrades, fine orderings fastest. A2 crosses the baseline between 20 M and 35 M tokens and is a net loss thereafter even before preparation is charged."
 );
 
 F(
   "fig4_2_scale.png", 0.7765,
-  "Figure 4.2 — Per-token traversal cost against corpus size, logarithmic abscissa, wiki corpus, alphabetical key. The baseline is flat across a fiftyfold range; every ordering rises, the finest fastest, and A2 crosses the baseline near 27 M tokens. Only A6b, one letter of precision followed by compaction, holds its cost constant."
+  "Figure 4.2 — Per-token traversal cost against corpus size, logarithmic abscissa, wiki corpus, alphabetical key. The baseline is flat across a fiftyfold range; every ordering rises, the finest fastest, and A2 crosses the baseline near 32 M tokens. Only A6b, one letter of precision followed by compaction, holds its cost constant."
 );
 
 R([
-  "A6b is the only ordering whose per-token cost is also scale-invariant (0.15 → 0.16 ns), and it overtakes A6 at approximately 20 M tokens. The optimum precision falls to one letter by 20 M tokens, and the margin by which it is optimal widens with corpus size — precisely the prediction, reached by the opposite route.",
+  "A6b is the only ordering whose per-token cost is also scale-invariant (0.15 → 0.17 ns), and it overtakes A6 at approximately 20 M tokens. The optimum precision falls to one letter by 20 M tokens, and the margin by which it is optimal widens with corpus size — precisely the prediction, reached by the opposite route.",
 ]);
 
 R([

@@ -740,7 +740,7 @@ R([
 H2("3.6. Measurement protocol");
 
 R([
-  "Two features of the protocol are not conventional and are stated explicitly, because in the course of this study each of them, when omitted, produced a self-consistent but entirely spurious result.",
+  "Three features of the protocol are not conventional and are stated explicitly, because in the course of this study each of them, when omitted, produced a self-consistent but entirely spurious result.",
 ], { noIndent: true });
 
 R([
@@ -757,6 +757,11 @@ R([
   " Preparation cost must be measured with the same discipline as traversal. Timed once, the first construction of each ordering absorbs CUDA module loading and first-allocation costs, which are incurred once per process rather than once per batch; this inflates the apparent preparation cost and, through criterion (8), directly biases the break-even estimate that the study exists to produce. Preparation is therefore built ",
   { i: "k" },
   " times per variant with the median reported. Adopting this changed the estimated single-pass break-even corpus size by 28 % and removed a non-monotonicity from the curve.",
+]);
+
+R([
+  { b: "Process-level repeatability." },
+  " The round-robin discipline above controls variation within a process; variation between processes was measured separately, by launching the same binary repeatedly with the order of corpus sizes rotated so that position in the sequence cannot alias onto scale. Over 812 timings spanning seven algorithms and three corpus sizes, the median spread of an algorithm's traversal time across launches is 0.29 % and the ninetieth percentile 0.65 %, so a single measurement is ordinarily reliable to well under one per cent. Six of the 812, however — one in 135 — lie between 6 and 16 % above their median. Two mechanisms can be excluded by measurement rather than assumed away: five of the six excursions affected exactly one of the seven algorithms timed in that process while the remaining six stayed within 0.3 % of their medians, which rules out a clock or thermal excursion, since that would move all seven together; and the device addresses returned for the trie are byte-identical across launches, the allocation sequence being deterministic, which rules out allocation-dependent cache conflict. They are attributed to transient contention from other clients of the device, which the virtualized host of Section 4.10 does not permit to be excluded. The consequence for the protocol is that a single launch is not sufficient for a published figure: the traversal costs of Table 4.4 and Figure 4.2 are medians of five independent launches, and adopting this moved four of the twenty-four cells by more than rounding, the largest by 5.3 %, and moved the corpus size at which exact ordering ceases to pay from 27 to 32 million tokens.",
 ]);
 
 R([
