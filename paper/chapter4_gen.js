@@ -486,12 +486,7 @@ T(
 );
 
 R([
-  { b: "The validation set resolves unevenly." },
-  " The held-out error of 13.1 % averages over seven folds whose measurements do not all carry the same weight, because the repeatability bound of Section 4.10 varies by an order of magnitude across the scale grid. At 5 M tokens the measured variation reaches 19.8 % and every one of the seven held-out errors falls below it; at 10 M it reaches 14.9 % and six of seven do. Those two folds cannot discriminate between a model that is correct and one that is merely inside the noise, and they are — not coincidentally — the two folds on which Eq. (3\u2032) scores best, at 8.6 % and 10.1 %. Restricting attention to the four folds whose variation is at or below 4.5 %, namely 1 M, 2 M, 35 M and 50 M, raises the held-out error to 15.0 %. The structural conclusion is unaffected, since Eq. (3) stands at 34.5 % and the null model at 66.9 % on the same folds, but two consequences follow for the arithmetic. The figure to quote for Eq. (3\u2032) is 15.0 % on the resolving folds rather than 13.1 % overall; and the 1.5 points bought by an explicit DRAM term are smaller than the fold-to-fold spread of Eq. (3\u2032) itself, which runs from 8.6 % to 16.3 %, so that term is declined on evidence and not only on parsimony.",
-]);
-
-R([
-  { b: "Two further limits are conceded." },
+  { b: "Two limits are conceded." },
   " σ is measured on the kernel it describes, so Eq. (3′) explains and interpolates but does not forecast: the causal chain runs from corpus size to L2 residency to latency exposure to time, and this study measures its endpoints but not its middle link. And the model must not be used to resolve close comparisons — the two compacted algorithms differ by under 20 % beyond 35 M tokens, and which of them a fitted model selects there is not stable across the families of Table 4.7. The A6-to-A6b crossover is an experimental finding, not a prediction of the model.",
 ]);
 
@@ -501,11 +496,6 @@ R([
   { b: "Single device and single cache capacity." },
   " All measurements come from one GPU with 64 MB of L2. The model of Section 3.3 attributes the scale dependence of the optimum to working set against cache capacity, but only one capacity has been observed; the predicted shift of the crossover with L2 size is untested. This is the most serious limitation and the first that further work should address.",
 ], { noIndent: true });
-
-R([
-  { b: "Measurement repeatability." },
-  " The traversal kernels compile to byte-identical machine code under CUDA 12.8 and 13.0 — verified instruction for instruction on all thirteen kernels of the benchmark, the three traversal variants among them — so the difference between the two toolkits' lookup times for the same algorithm at the same scale measures run-to-run variation and nothing else. Taking that difference across the scale grid therefore calibrates the repeatability of every figure in this chapter at no additional cost. The largest is 19.8 %, and all eight differences at or above 4 % fall inside the spread the run itself reports, so the instrumentation does not understate its own variance; but differences below roughly twenty per cent at the five- to ten-million-token scales are not resolvable by a single run. Two statements in Section 4.6 sit at or under that bound and should be read as unresolved rather than established: the ordering of A3 against A4 at 5 M tokens, which differ by 0.01 ns per token where A4's variation alone reaches 19.8 %, and the location of the crossover at which A6b overtakes A6, which is placed at approximately 20 M tokens but cannot be pinned closer than the range 10 M to 35 M. The two invariance claims of the same section are affected in the opposite direction: the baseline's drift from 0.56 to 0.52 ns and A6b's from 0.15 to 0.16 ns are both smaller than the measured variation, so the assertion that neither depends on scale is supported by this bound rather than weakened by it.",
-]);
 
 R([
   { b: "Single dictionary and single lookup structure." },
