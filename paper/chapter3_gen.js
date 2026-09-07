@@ -430,10 +430,10 @@ EQ(
 
 R([
   "with α and β the only free parameters. On the same folds this scores ",
-  { b: "13.1 % against Eq. (3)'s 34.5 %, with one parameter fewer" },
+  { b: "13.1 % overall, and 15.0 % on the folds whose measurements resolve it, against Eq. (3)'s 34.5 %, with one parameter fewer" },
   ", and it absorbs the divergence factor rather than competing with it: dividing Eq. (3′) by ",
   { i: "e" },
-  " makes the fit worse (23.9 %), so warp efficiency is not an independent term of the cost but one of the mechanisms by which a warp comes to expose latency. The cache hit rates likewise cease to earn their place once σ is present; adding an explicit DRAM term to Eq. (3′) improves it only from 13.1 % to 11.6 %.",
+  " makes the fit worse (23.9 %), so warp efficiency is not an independent term of the cost but one of the mechanisms by which a warp comes to expose latency. The cache hit rates likewise cease to earn their place once σ is present; adding an explicit DRAM term to Eq. (3′) improves it only from 13.1 % to 11.6 %, which is smaller than the fold-to-fold spread of Eq. (3′) itself and is declined accordingly — Section 4.9 gives the resolution argument.",
 ]);
 
 R([
