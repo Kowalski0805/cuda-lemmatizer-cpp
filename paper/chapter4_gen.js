@@ -349,7 +349,7 @@ F(
 );
 
 R([
-  "A6b is the only ordering whose per-token cost is also scale-invariant (0.15 → 0.16 ns), and it overtakes A6 at approximately 20 M tokens. The optimum precision is one letter at every scale tested, and the margin by which it is optimal widens with corpus size — precisely the prediction, reached by the opposite route.",
+  "A6b is the only ordering whose per-token cost is also scale-invariant (0.15 → 0.16 ns), and it overtakes A6 at approximately 20 M tokens. The optimum precision falls to one letter by 20 M tokens, and the margin by which it is optimal widens with corpus size — precisely the prediction, reached by the opposite route.",
 ]);
 
 R([
