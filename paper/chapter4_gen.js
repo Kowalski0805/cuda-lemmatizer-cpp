@@ -498,6 +498,11 @@ R([
 ], { noIndent: true });
 
 R([
+  { b: "Measurement repeatability." },
+  " The traversal kernels compile to byte-identical machine code under CUDA 12.8 and 13.0 — verified instruction for instruction on all thirteen kernels of the benchmark, the three traversal variants among them — so the difference between the two toolkits' lookup times for the same algorithm at the same scale measures run-to-run variation and nothing else. Taking that difference across the scale grid therefore calibrates the repeatability of every figure in this chapter at no additional cost. The largest is 19.8 %, and all eight differences at or above 4 % fall inside the spread the run itself reports, so the instrumentation does not understate its own variance; but differences below roughly twenty per cent at the five- to ten-million-token scales are not resolvable by a single run. Two statements in Section 4.6 sit at or under that bound and should be read as unresolved rather than established: the ordering of A3 against A4 at 5 M tokens, which differ by 0.01 ns per token where A4's variation alone reaches 19.8 %, and the location of the crossover at which A6b overtakes A6, which is placed at approximately 20 M tokens but cannot be pinned closer than the range 10 M to 35 M. The two invariance claims of the same section are affected in the opposite direction: the baseline's drift from 0.56 to 0.52 ns and A6b's from 0.15 to 0.16 ns are both smaller than the measured variation, so the assertion that neither depends on scale is supported by this bound rather than weakened by it.",
+]);
+
+R([
   { b: "Single dictionary and single lookup structure." },
   " The trie is fixed at 9.35 M states with the branching structure of Ukrainian morphology, and traversal is byte-wise with a linear transition scan. Whether the findings concern tries specifically or pointer-chasing dictionary lookup generally is not established.",
 ]);
